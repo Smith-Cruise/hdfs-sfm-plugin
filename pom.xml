@@ -50,6 +50,19 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <!--必须与 settings.xml 的 id 一致-->
+            <id>SmithCruise-sfm-hdfs-maven</id>
+            <name>maven</name>
+            <url>https://smithcruise-maven.pkg.coding.net/repository/sfm-hdfs/maven/</url>
+        </repository>
+        <snapshotRepository>
+            <id>SmithCruise-sfm-hdfs-maven</id>
+            <name>maven-snapshot</name>
+            <url>https://smithcruise-maven.pkg.coding.net/repository/sfm-hdfs/maven/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
