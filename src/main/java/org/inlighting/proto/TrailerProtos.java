@@ -6,17 +6,17 @@ package org.inlighting.proto;
 public final class TrailerProtos {
   private TrailerProtos() {}
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistryLite registry) {
+      org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite registry) {
   }
 
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
+      org.apache.hadoop.thirdparty.protobuf.ExtensionRegistry registry) {
     registerAllExtensions(
-        (com.google.protobuf.ExtensionRegistryLite) registry);
+        (org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite) registry);
   }
   public interface TrailerOrBuilder extends
       // @@protoc_insertion_point(interface_extends:hadoop.hdfs.sfm.Trailer)
-      com.google.protobuf.MessageOrBuilder {
+      org.apache.hadoop.thirdparty.protobuf.MessageOrBuilder {
 
     /**
      * <pre>
@@ -41,7 +41,7 @@ public final class TrailerProtos {
      *
      * <code>required string mergedFilename = 1;</code>
      */
-    com.google.protobuf.ByteString
+    org.apache.hadoop.thirdparty.protobuf.ByteString
         getMergedFilenameBytes();
 
     /**
@@ -64,7 +64,7 @@ public final class TrailerProtos {
     /**
      * <code>required string minKey = 3;</code>
      */
-    com.google.protobuf.ByteString
+    org.apache.hadoop.thirdparty.protobuf.ByteString
         getMinKeyBytes();
 
     /**
@@ -78,7 +78,7 @@ public final class TrailerProtos {
     /**
      * <code>required string maxKey = 4;</code>
      */
-    com.google.protobuf.ByteString
+    org.apache.hadoop.thirdparty.protobuf.ByteString
         getMaxKeyBytes();
 
     /**
@@ -110,12 +110,12 @@ public final class TrailerProtos {
    * Protobuf type {@code hadoop.hdfs.sfm.Trailer}
    */
   public  static final class Trailer extends
-      com.google.protobuf.GeneratedMessageV3 implements
+      org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:hadoop.hdfs.sfm.Trailer)
       TrailerOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use Trailer.newBuilder() to construct.
-    private Trailer(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    private Trailer(org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private Trailer() {
@@ -125,21 +125,21 @@ public final class TrailerProtos {
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
+    public final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
     private Trailer(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+      org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet.Builder unknownFields =
+          org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -149,7 +149,7 @@ public final class TrailerProtos {
               done = true;
               break;
             case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
+              org.apache.hadoop.thirdparty.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
               mergedFilename_ = bs;
               break;
@@ -160,13 +160,13 @@ public final class TrailerProtos {
               break;
             }
             case 26: {
-              com.google.protobuf.ByteString bs = input.readBytes();
+              org.apache.hadoop.thirdparty.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
               minKey_ = bs;
               break;
             }
             case 34: {
-              com.google.protobuf.ByteString bs = input.readBytes();
+              org.apache.hadoop.thirdparty.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
               maxKey_ = bs;
               break;
@@ -190,23 +190,23 @@ public final class TrailerProtos {
             }
           }
         }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+      } catch (org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
+        throw new org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
+    public static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.inlighting.proto.TrailerProtos.internal_static_hadoop_hdfs_sfm_Trailer_descriptor;
     }
 
     @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return org.inlighting.proto.TrailerProtos.internal_static_hadoop_hdfs_sfm_Trailer_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
@@ -238,8 +238,8 @@ public final class TrailerProtos {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
+        org.apache.hadoop.thirdparty.protobuf.ByteString bs = 
+            (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
           mergedFilename_ = s;
@@ -254,17 +254,17 @@ public final class TrailerProtos {
      *
      * <code>required string mergedFilename = 1;</code>
      */
-    public com.google.protobuf.ByteString
+    public org.apache.hadoop.thirdparty.protobuf.ByteString
         getMergedFilenameBytes() {
       java.lang.Object ref = mergedFilename_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
+        org.apache.hadoop.thirdparty.protobuf.ByteString b = 
+            org.apache.hadoop.thirdparty.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         mergedFilename_ = b;
         return b;
       } else {
-        return (com.google.protobuf.ByteString) ref;
+        return (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
       }
     }
 
@@ -299,8 +299,8 @@ public final class TrailerProtos {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
+        org.apache.hadoop.thirdparty.protobuf.ByteString bs = 
+            (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
           minKey_ = s;
@@ -311,17 +311,17 @@ public final class TrailerProtos {
     /**
      * <code>required string minKey = 3;</code>
      */
-    public com.google.protobuf.ByteString
+    public org.apache.hadoop.thirdparty.protobuf.ByteString
         getMinKeyBytes() {
       java.lang.Object ref = minKey_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
+        org.apache.hadoop.thirdparty.protobuf.ByteString b = 
+            org.apache.hadoop.thirdparty.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         minKey_ = b;
         return b;
       } else {
-        return (com.google.protobuf.ByteString) ref;
+        return (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
       }
     }
 
@@ -341,8 +341,8 @@ public final class TrailerProtos {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
+        org.apache.hadoop.thirdparty.protobuf.ByteString bs = 
+            (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
           maxKey_ = s;
@@ -353,17 +353,17 @@ public final class TrailerProtos {
     /**
      * <code>required string maxKey = 4;</code>
      */
-    public com.google.protobuf.ByteString
+    public org.apache.hadoop.thirdparty.protobuf.ByteString
         getMaxKeyBytes() {
       java.lang.Object ref = maxKey_;
       if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
+        org.apache.hadoop.thirdparty.protobuf.ByteString b = 
+            org.apache.hadoop.thirdparty.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         maxKey_ = b;
         return b;
       } else {
-        return (com.google.protobuf.ByteString) ref;
+        return (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
       }
     }
 
@@ -433,19 +433,19 @@ public final class TrailerProtos {
     }
 
     @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
+    public void writeTo(org.apache.hadoop.thirdparty.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (((bitField0_ & 0x00000001) != 0)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, mergedFilename_);
+        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.writeString(output, 1, mergedFilename_);
       }
       if (((bitField0_ & 0x00000002) != 0)) {
         output.writeUInt32(2, kvsLength_);
       }
       if (((bitField0_ & 0x00000004) != 0)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, minKey_);
+        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.writeString(output, 3, minKey_);
       }
       if (((bitField0_ & 0x00000008) != 0)) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, maxKey_);
+        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.writeString(output, 4, maxKey_);
       }
       if (((bitField0_ & 0x00000010) != 0)) {
         output.writeUInt32(5, bloomFilterLength_);
@@ -463,24 +463,24 @@ public final class TrailerProtos {
 
       size = 0;
       if (((bitField0_ & 0x00000001) != 0)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, mergedFilename_);
+        size += org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.computeStringSize(1, mergedFilename_);
       }
       if (((bitField0_ & 0x00000002) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
+        size += org.apache.hadoop.thirdparty.protobuf.CodedOutputStream
           .computeUInt32Size(2, kvsLength_);
       }
       if (((bitField0_ & 0x00000004) != 0)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, minKey_);
+        size += org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.computeStringSize(3, minKey_);
       }
       if (((bitField0_ & 0x00000008) != 0)) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, maxKey_);
+        size += org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.computeStringSize(4, maxKey_);
       }
       if (((bitField0_ & 0x00000010) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
+        size += org.apache.hadoop.thirdparty.protobuf.CodedOutputStream
           .computeUInt32Size(5, bloomFilterLength_);
       }
       if (((bitField0_ & 0x00000020) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
+        size += org.apache.hadoop.thirdparty.protobuf.CodedOutputStream
           .computeUInt32Size(6, version_);
       }
       size += unknownFields.getSerializedSize();
@@ -570,71 +570,71 @@ public final class TrailerProtos {
 
     public static org.inlighting.proto.TrailerProtos.Trailer parseFrom(
         java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static org.inlighting.proto.TrailerProtos.Trailer parseFrom(
         java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static org.inlighting.proto.TrailerProtos.Trailer parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        org.apache.hadoop.thirdparty.protobuf.ByteString data)
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static org.inlighting.proto.TrailerProtos.Trailer parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        org.apache.hadoop.thirdparty.protobuf.ByteString data,
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static org.inlighting.proto.TrailerProtos.Trailer parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static org.inlighting.proto.TrailerProtos.Trailer parseFrom(
         byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static org.inlighting.proto.TrailerProtos.Trailer parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
     public static org.inlighting.proto.TrailerProtos.Trailer parseFrom(
         java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static org.inlighting.proto.TrailerProtos.Trailer parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
     public static org.inlighting.proto.TrailerProtos.Trailer parseDelimitedFrom(
         java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static org.inlighting.proto.TrailerProtos.Trailer parseFrom(
-        com.google.protobuf.CodedInputStream input)
+        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
     public static org.inlighting.proto.TrailerProtos.Trailer parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -654,7 +654,7 @@ public final class TrailerProtos {
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -669,16 +669,16 @@ public final class TrailerProtos {
      * Protobuf type {@code hadoop.hdfs.sfm.Trailer}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:hadoop.hdfs.sfm.Trailer)
         org.inlighting.proto.TrailerProtos.TrailerOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.inlighting.proto.TrailerProtos.internal_static_hadoop_hdfs_sfm_Trailer_descriptor;
       }
 
       @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.inlighting.proto.TrailerProtos.internal_static_hadoop_hdfs_sfm_Trailer_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -691,12 +691,12 @@ public final class TrailerProtos {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
+        if (org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
@@ -719,7 +719,7 @@ public final class TrailerProtos {
       }
 
       @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
+      public org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return org.inlighting.proto.TrailerProtos.internal_static_hadoop_hdfs_sfm_Trailer_descriptor;
       }
@@ -778,34 +778,34 @@ public final class TrailerProtos {
       }
       @java.lang.Override
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.setField(field, value);
       }
       @java.lang.Override
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
       @java.lang.Override
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          org.apache.hadoop.thirdparty.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
       @java.lang.Override
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
       @java.lang.Override
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
       @java.lang.Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
+      public Builder mergeFrom(org.apache.hadoop.thirdparty.protobuf.Message other) {
         if (other instanceof org.inlighting.proto.TrailerProtos.Trailer) {
           return mergeFrom((org.inlighting.proto.TrailerProtos.Trailer)other);
         } else {
@@ -870,13 +870,13 @@ public final class TrailerProtos {
 
       @java.lang.Override
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
+          org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         org.inlighting.proto.TrailerProtos.Trailer parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        } catch (org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (org.inlighting.proto.TrailerProtos.Trailer) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
@@ -909,8 +909,8 @@ public final class TrailerProtos {
       public java.lang.String getMergedFilename() {
         java.lang.Object ref = mergedFilename_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
+          org.apache.hadoop.thirdparty.protobuf.ByteString bs =
+              (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           if (bs.isValidUtf8()) {
             mergedFilename_ = s;
@@ -927,17 +927,17 @@ public final class TrailerProtos {
        *
        * <code>required string mergedFilename = 1;</code>
        */
-      public com.google.protobuf.ByteString
+      public org.apache.hadoop.thirdparty.protobuf.ByteString
           getMergedFilenameBytes() {
         java.lang.Object ref = mergedFilename_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
+          org.apache.hadoop.thirdparty.protobuf.ByteString b = 
+              org.apache.hadoop.thirdparty.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           mergedFilename_ = b;
           return b;
         } else {
-          return (com.google.protobuf.ByteString) ref;
+          return (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
         }
       }
       /**
@@ -978,7 +978,7 @@ public final class TrailerProtos {
        * <code>required string mergedFilename = 1;</code>
        */
       public Builder setMergedFilenameBytes(
-          com.google.protobuf.ByteString value) {
+          org.apache.hadoop.thirdparty.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1033,8 +1033,8 @@ public final class TrailerProtos {
       public java.lang.String getMinKey() {
         java.lang.Object ref = minKey_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
+          org.apache.hadoop.thirdparty.protobuf.ByteString bs =
+              (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           if (bs.isValidUtf8()) {
             minKey_ = s;
@@ -1047,17 +1047,17 @@ public final class TrailerProtos {
       /**
        * <code>required string minKey = 3;</code>
        */
-      public com.google.protobuf.ByteString
+      public org.apache.hadoop.thirdparty.protobuf.ByteString
           getMinKeyBytes() {
         java.lang.Object ref = minKey_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
+          org.apache.hadoop.thirdparty.protobuf.ByteString b = 
+              org.apache.hadoop.thirdparty.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           minKey_ = b;
           return b;
         } else {
-          return (com.google.protobuf.ByteString) ref;
+          return (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
         }
       }
       /**
@@ -1086,7 +1086,7 @@ public final class TrailerProtos {
        * <code>required string minKey = 3;</code>
        */
       public Builder setMinKeyBytes(
-          com.google.protobuf.ByteString value) {
+          org.apache.hadoop.thirdparty.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1109,8 +1109,8 @@ public final class TrailerProtos {
       public java.lang.String getMaxKey() {
         java.lang.Object ref = maxKey_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
+          org.apache.hadoop.thirdparty.protobuf.ByteString bs =
+              (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           if (bs.isValidUtf8()) {
             maxKey_ = s;
@@ -1123,17 +1123,17 @@ public final class TrailerProtos {
       /**
        * <code>required string maxKey = 4;</code>
        */
-      public com.google.protobuf.ByteString
+      public org.apache.hadoop.thirdparty.protobuf.ByteString
           getMaxKeyBytes() {
         java.lang.Object ref = maxKey_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
+          org.apache.hadoop.thirdparty.protobuf.ByteString b = 
+              org.apache.hadoop.thirdparty.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           maxKey_ = b;
           return b;
         } else {
-          return (com.google.protobuf.ByteString) ref;
+          return (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
         }
       }
       /**
@@ -1162,7 +1162,7 @@ public final class TrailerProtos {
        * <code>required string maxKey = 4;</code>
        */
       public Builder setMaxKeyBytes(
-          com.google.protobuf.ByteString value) {
+          org.apache.hadoop.thirdparty.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1237,13 +1237,13 @@ public final class TrailerProtos {
       }
       @java.lang.Override
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
       @java.lang.Override
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -1261,23 +1261,23 @@ public final class TrailerProtos {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<Trailer>
-        PARSER = new com.google.protobuf.AbstractParser<Trailer>() {
+    @java.lang.Deprecated public static final org.apache.hadoop.thirdparty.protobuf.Parser<Trailer>
+        PARSER = new org.apache.hadoop.thirdparty.protobuf.AbstractParser<Trailer>() {
       @java.lang.Override
       public Trailer parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
+          org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
         return new Trailer(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<Trailer> parser() {
+    public static org.apache.hadoop.thirdparty.protobuf.Parser<Trailer> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<Trailer> getParserForType() {
+    public org.apache.hadoop.thirdparty.protobuf.Parser<Trailer> getParserForType() {
       return PARSER;
     }
 
@@ -1288,17 +1288,17 @@ public final class TrailerProtos {
 
   }
 
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
     internal_static_hadoop_hdfs_sfm_Trailer_descriptor;
   private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_hadoop_hdfs_sfm_Trailer_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
+  public static org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
+  private static  org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
     java.lang.String[] descriptorData = {
@@ -1309,22 +1309,22 @@ public final class TrailerProtos {
       "(\r\022\017\n\007version\030\006 \002(\rB(\n\024org.inlighting.pr" +
       "otoB\rTrailerProtos\240\001\001"
     };
-    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
+    org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
+        new org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public org.apache.hadoop.thirdparty.protobuf.ExtensionRegistry assignDescriptors(
+              org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor root) {
             descriptor = root;
             return null;
           }
         };
-    com.google.protobuf.Descriptors.FileDescriptor
+    org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
+        new org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
     internal_static_hadoop_hdfs_sfm_Trailer_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_hadoop_hdfs_sfm_Trailer_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_hadoop_hdfs_sfm_Trailer_descriptor,
         new java.lang.String[] { "MergedFilename", "KvsLength", "MinKey", "MaxKey", "BloomFilterLength", "Version", });
   }

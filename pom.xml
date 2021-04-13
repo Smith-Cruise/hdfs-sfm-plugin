@@ -16,12 +16,6 @@
             <scope>provided</scope>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>com.google.protobuf</groupId>-->
-<!--            <artifactId>protobuf-java</artifactId>-->
-<!--            <version>3.15.8</version>-->
-<!--        </dependency>-->
-
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-hdfs</artifactId>
@@ -57,8 +51,6 @@
             <url>https://smithcruise-maven.pkg.coding.net/repository/sfm-hdfs/maven/</url>
         </snapshotRepository>
     </distributionManagement>
-
-
 
     <build>
         <plugins>
