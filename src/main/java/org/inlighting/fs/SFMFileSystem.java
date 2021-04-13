@@ -230,8 +230,12 @@ public class SFMFileSystem extends FileSystem {
     }
 
     @Override
-    public FileStatus getFileStatus(Path f) throws IOException {
-        return null;
+    public FileStatus getFileStatus(Path path) throws IOException {
+        checkValidSFMURI(path);
+        loadSFMInformation(path.toUri());
+
+        // todo
+        return new FileStatus(0, true, 1, 128*1024*1024, 0, path);
     }
 
     @Override
