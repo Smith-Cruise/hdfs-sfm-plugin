@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+option java_package = "org.inlighting.proto";
+option java_outer_classname = "KVsProtos";
+option java_generate_equals_and_hash = true;
+package hadoop.hdfs.sfm;
+
+message KV {
+  required string filename = 1;
+  // offset should be long
+  optional uint64 offset = 2;
+  optional uint32 length = 3;
+  required bool tombstone = 4;
+}
+
+message KVs {
+  repeated KV kv = 1;
+}

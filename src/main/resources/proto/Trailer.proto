@@ -1,0 +1,20 @@
+syntax = "proto2";
+
+option java_package = "org.inlighting.proto";
+option java_outer_classname = "TrailerProtos";
+option java_generate_equals_and_hash = true;
+package hadoop.hdfs.sfm;
+
+// trailer has two version
+// 1-> normal index
+//
+// 2-> delete index
+// delete index KVs refer to DeleteKVs
+message Trailer {
+  required string mergedFilename = 1; // Each index has the same merged file.
+  required uint32 kvsLength = 2;
+  required string minKey = 3;
+  required string maxKey = 4;
+  required uint32 bloomFilterLength = 5;
+  required uint32 version = 6;
+}

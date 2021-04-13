@@ -1,0 +1,11 @@
+syntax = "proto2";
+
+option java_package = "org.inlighting.proto";
+option java_outer_classname = "BloomFilterProtos";
+option java_generate_equals_and_hash = true;
+package hadoop.hdfs.sfm;
+
+message BloomFilter {
+  required uint32 numHashFunctions = 1;
+  repeated fixed64 bitset = 2;
+}
