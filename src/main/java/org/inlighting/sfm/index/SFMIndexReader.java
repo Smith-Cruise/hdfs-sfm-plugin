@@ -1,17 +1,17 @@
-package org.inlighting.index;
+package org.inlighting.sfm.index;
 
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.util.LineReader;
-import org.inlighting.SFMConstants;
-import org.inlighting.fs.SFMFsDataInputStream;
-import org.inlighting.proto.BloomFilterProtos;
-import org.inlighting.proto.KVsProtos;
-import org.inlighting.proto.TrailerProtos;
-import org.inlighting.util.BloomFilter;
-import org.inlighting.util.BloomFilterIO;
-import org.inlighting.util.LruCache;
-import org.inlighting.util.SFMUtil;
+import org.inlighting.sfm.SFMConstants;
+import org.inlighting.sfm.fs.SFMFsDataInputStream;
+import org.inlighting.sfm.proto.BloomFilterProtos;
+import org.inlighting.sfm.proto.KVsProtos;
+import org.inlighting.sfm.proto.TrailerProtos;
+import org.inlighting.sfm.util.BloomFilter;
+import org.inlighting.sfm.util.BloomFilterIO;
+import org.inlighting.sfm.util.LruCache;
+import org.inlighting.sfm.util.SFMUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +74,7 @@ public class SFMIndexReader {
         return new SFMIndexReader(fs, sfmBasePath);
     }
 
-    public FileStatus[] listFiles() throws IOException {
+    public FileStatus[] listStatus() throws IOException {
         List<KV> kvList = new LinkedList<>();
         for (int i=0; i<masterIndexList.size(); i++) {
             IndexMetadata indexMetadata = loadIndexMetadataLazily(i);
@@ -107,7 +107,13 @@ public class SFMIndexReader {
         return fileStatus;
     }
 
-    public FSDataInputStream read(String filename, int bufferSize) throws IOException {
+    public FileStatus getFileStatus(String filename) throws IOException {
+        SFMFileStatus sfmFileStatus = getSFMFileStatus(filename);
+        return new FileStatus(sfmFileStatus.length, false, REPLICATION,
+                BLOCK_SIZE, 0, new Path(SFM_BASE_PATH + "/" + filename));
+    }
+
+    private SFMFileStatus getSFMFileStatus(String filename) throws IOException {
         List<Integer> probablyIndices = searchProbablyIndex(filename);
         if (probablyIndices.size() == 0) {
             throw new FileNotFoundException(String.format("%s didn't existed.", filename));
@@ -129,8 +135,8 @@ public class SFMIndexReader {
                     KV kv = binarySearch(kvs, filename);
                     if (kv != null) {
                         if (! kv.tombstone) {
-                            return new SFMFsDataInputStream(FS, new Path(SFM_BASE_PATH + "/" +indexMetadata.mergedFilename),
-                                    kv.offset, kv.length, bufferSize);
+                            return new SFMFileStatus(filename, indexMetadata.mergedFilename, kv.offset, kv.length);
+
                         } else {
                             throw new FileNotFoundException(String.format("%s is already delete", filename));
                         }
@@ -142,6 +148,12 @@ public class SFMIndexReader {
         }
 
         throw new FileNotFoundException(String.format("%s didn't exist.", filename));
+    }
+
+    public FSDataInputStream read(String filename, int bufferSize) throws IOException {
+        SFMFileStatus sfmFileStatus = getSFMFileStatus(filename);
+        return new SFMFsDataInputStream(FS, new Path(SFM_BASE_PATH + "/" +sfmFileStatus.mergedFilename),
+                sfmFileStatus.offset, sfmFileStatus.length, bufferSize);
     }
 
     private IndexMetadata loadIndexMetadataLazily(int indexId) throws IOException {
@@ -284,7 +296,6 @@ public class SFMIndexReader {
         }
     }
 
-
     private String getKey(List<KV> kvs, int index) {
         return kvs.get(index).filename;
     }
@@ -347,6 +358,23 @@ public class SFMIndexReader {
             this.offset = offset;
             this.length = length;
             this.tombstone = tombstone;
+        }
+    }
+
+    private class SFMFileStatus {
+        private String filename;
+
+        private String mergedFilename;
+
+        private long offset;
+
+        private int length;
+
+        public SFMFileStatus(String filename, String mergedFilename, long offset, int length) {
+            this.filename = filename;
+            this.mergedFilename = mergedFilename;
+            this.offset = offset;
+            this.length = length;
         }
     }
 }

@@ -1,6 +1,5 @@
-package org.inlighting.util;
+package org.inlighting.sfm.util;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.fs.Path;
 
 import java.io.IOException;
@@ -24,15 +23,27 @@ public class SFMUtil {
     }
 
     public static void checkValidSFM(Path path) throws IOException {
-        checkValidSFM(path.toUri().getPath());
+        checkValidSFM(path.toUri());
     }
 
     public static void checkValidSFM(URI uri) throws IOException {
+        checkSchema(uri);
         checkValidSFM(uri.getPath());
+    }
+
+    private static void checkSchema(URI uri) throws IOException {
+        if (uri.getScheme() != null) {
+            if (! uri.getScheme().equals("sfm")) {
+                throw new IOException("Illegal schema");
+            }
+        }
     }
 
     public static String getFilename(String path) throws IOException {
         checkValidSFM(path);
+        if (path.endsWith(".sfm") || path.endsWith(".sfm/")) {
+            return null;
+        }
         String regex = "(?<=.sfm/).+";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(path);
@@ -43,25 +54,14 @@ public class SFMUtil {
         }
     }
 
-    public static String getFilename(URI uri) throws IOException {
-        return getFilename(uri.getPath());
+    public static String getFilename(Path path) throws IOException {
+        return getFilename(path.toUri());
     }
 
-//    public static String getSFMName(String path) throws IOException {
-//        checkValidSFM(path);
-//        String regex = "/.+.sfm";
-//        Pattern p = Pattern.compile(regex);
-//        Matcher m = p.matcher(path);
-//        if (! m.find()) {
-//            throw new IOException("Cannot get SFM name.");
-//        }
-//        String tmp = m.group();
-//        return StringUtils.substringAfterLast(tmp, "/");
-//    }
-//
-//    public static String getSFMName(URI uri) throws IOException {
-//        return getSFMName(uri.getPath());
-//    }
+    public static String getFilename(URI uri) throws IOException {
+        checkSchema(uri);
+        return getFilename(uri.getPath());
+    }
 
     public static String getSFMBasePath(String path) throws IOException {
         checkValidSFM(path);
@@ -74,7 +74,12 @@ public class SFMUtil {
         return m.group();
     }
 
+    public static String getSFMBasePath(Path path) throws IOException {
+        return getSFMBasePath(path.toUri());
+    }
+
     public static String getSFMBasePath(URI uri) throws IOException {
+        checkSchema(uri);
         return getSFMBasePath(uri.getPath());
     }
 

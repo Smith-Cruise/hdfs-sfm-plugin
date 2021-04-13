@@ -1,4 +1,4 @@
-package org.inlighting.util;
+package org.inlighting.sfm.util;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

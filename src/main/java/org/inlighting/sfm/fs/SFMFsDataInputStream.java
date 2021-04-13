@@ -1,4 +1,4 @@
-package org.inlighting.fs;
+package org.inlighting.sfm.fs;
 
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;

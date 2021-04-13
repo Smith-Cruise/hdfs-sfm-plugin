@@ -1,9 +1,9 @@
-package org.inlighting.fs;
+package org.inlighting.sfm.fs;
 
 
-import org.inlighting.SFMConstants;
-import org.inlighting.merger.FileEntity;
-import org.inlighting.merger.SFMerger;
+import org.inlighting.sfm.SFMConstants;
+import org.inlighting.sfm.merger.FileEntity;
+import org.inlighting.sfm.merger.SFMerger;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;

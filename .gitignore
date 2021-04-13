@@ -1,3 +1,4 @@
 .idea/
 hdfs-sfm-plugin.iml
 target/
+.DS_Store

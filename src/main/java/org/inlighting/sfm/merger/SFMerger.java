@@ -1,12 +1,12 @@
-package org.inlighting.merger;
+package org.inlighting.sfm.merger;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.inlighting.SFMConstants;
-import org.inlighting.index.SFMIndexBuilder;
+import org.inlighting.sfm.SFMConstants;
+import org.inlighting.sfm.index.SFMIndexBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

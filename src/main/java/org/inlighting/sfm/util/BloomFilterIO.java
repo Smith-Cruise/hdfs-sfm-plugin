@@ -1,6 +1,6 @@
-package org.inlighting.util;
+package org.inlighting.sfm.util;
 
-import org.inlighting.proto.BloomFilterProtos;
+import org.inlighting.sfm.proto.BloomFilterProtos;
 
 public class BloomFilterIO {
 

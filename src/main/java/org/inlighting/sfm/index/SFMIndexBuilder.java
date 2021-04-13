@@ -1,17 +1,17 @@
-package org.inlighting.index;
+package org.inlighting.sfm.index;
 
 import org.apache.hadoop.thirdparty.protobuf.CodedOutputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.inlighting.SFMConstants;
-import org.inlighting.proto.BloomFilterProtos;
-import org.inlighting.proto.KVsProtos;
-import org.inlighting.proto.TrailerProtos;
-import org.inlighting.util.BloomFilter;
-import org.inlighting.util.BloomFilterIO;
-import org.inlighting.util.SFMUtil;
+import org.inlighting.sfm.SFMConstants;
+import org.inlighting.sfm.proto.BloomFilterProtos;
+import org.inlighting.sfm.proto.KVsProtos;
+import org.inlighting.sfm.proto.TrailerProtos;
+import org.inlighting.sfm.util.BloomFilter;
+import org.inlighting.sfm.util.BloomFilterIO;
+import org.inlighting.sfm.util.SFMUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

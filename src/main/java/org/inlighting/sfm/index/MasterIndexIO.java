@@ -1,4 +1,4 @@
-package org.inlighting.index;
+package org.inlighting.sfm.index;
 
 public class MasterIndexIO {
 

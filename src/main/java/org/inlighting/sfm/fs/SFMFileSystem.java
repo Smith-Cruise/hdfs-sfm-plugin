@@ -1,17 +1,17 @@
-package org.inlighting.fs;
+package org.inlighting.sfm.fs;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
 import org.apache.hadoop.fs.permission.FsPermission;
 
 import org.apache.hadoop.util.Progressable;
-import org.inlighting.SFMConstants;
-import org.inlighting.index.SFMIndexReader;
-import org.inlighting.merger.FileEntity;
-import org.inlighting.merger.SFMerger;
-import org.inlighting.merger.SFMergerFactory;
-import org.inlighting.util.LruCache;
-import org.inlighting.util.SFMUtil;
+import org.inlighting.sfm.SFMConstants;
+import org.inlighting.sfm.index.SFMIndexReader;
+import org.inlighting.sfm.merger.FileEntity;
+import org.inlighting.sfm.merger.SFMerger;
+import org.inlighting.sfm.merger.SFMergerFactory;
+import org.inlighting.sfm.util.LruCache;
+import org.inlighting.sfm.util.SFMUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -200,7 +200,7 @@ public class SFMFileSystem extends FileSystem {
             throw new IOException("Path should end with .sfm");
         }
         loadSFMInformation(path.toUri());
-        return curSFMReader.listFiles();
+        return curSFMReader.listStatus();
     }
 
     @Override
@@ -234,8 +234,12 @@ public class SFMFileSystem extends FileSystem {
         checkValidSFMURI(path);
         loadSFMInformation(path.toUri());
 
-        // todo
-        return new FileStatus(0, true, 1, 128*1024*1024, 0, path);
+        String filename = SFMUtil.getFilename(path);
+        if (filename != null) {
+            return curSFMReader.getFileStatus(filename);
+        } else {
+            return underLyingFS.getFileStatus(path);
+        }
     }
 
     @Override

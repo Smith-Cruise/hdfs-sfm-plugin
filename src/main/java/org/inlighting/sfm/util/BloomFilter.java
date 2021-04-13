@@ -1,4 +1,4 @@
-package org.inlighting.util;
+package org.inlighting.sfm.util;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package org.inlighting.merger;
+package org.inlighting.sfm.merger;
 
 import org.apache.hadoop.fs.FileSystem;
 

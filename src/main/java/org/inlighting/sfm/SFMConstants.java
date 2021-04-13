@@ -1,4 +1,4 @@
-package org.inlighting;
+package org.inlighting.sfm;
 
 public class SFMConstants {
 

@@ -1,4 +1,4 @@
-package org.inlighting.merger;
+package org.inlighting.sfm.merger;
 
 public class FileEntity implements Comparable<FileEntity> {
     private String sfmBasePath;

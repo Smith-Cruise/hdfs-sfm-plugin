@@ -1,4 +1,4 @@
-package org.inlighting.util;
+package org.inlighting.sfm.util;
 
 public class Murmur3 {
     // from 64-bit linear congruential generator

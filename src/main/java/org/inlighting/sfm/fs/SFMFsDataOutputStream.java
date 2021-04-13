@@ -1,8 +1,8 @@
-package org.inlighting.fs;
+package org.inlighting.sfm.fs;
 
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
-import org.inlighting.merger.SFMerger;
+import org.inlighting.sfm.merger.SFMerger;
 
 import java.io.IOException;
 
