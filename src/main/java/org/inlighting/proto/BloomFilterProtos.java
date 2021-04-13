@@ -6,56 +6,50 @@ package org.inlighting.proto;
 public final class BloomFilterProtos {
   private BloomFilterProtos() {}
   public static void registerAllExtensions(
-      org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite registry) {
+      com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
   public static void registerAllExtensions(
-      org.apache.hadoop.thirdparty.protobuf.ExtensionRegistry registry) {
+      com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions(
-        (org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite) registry);
+        (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface BloomFilterOrBuilder extends
       // @@protoc_insertion_point(interface_extends:hadoop.hdfs.sfm.BloomFilter)
-      org.apache.hadoop.thirdparty.protobuf.MessageOrBuilder {
+      com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>required uint32 numHashFunctions = 1;</code>
-     * @return Whether the numHashFunctions field is set.
      */
     boolean hasNumHashFunctions();
     /**
      * <code>required uint32 numHashFunctions = 1;</code>
-     * @return The numHashFunctions.
      */
     int getNumHashFunctions();
 
     /**
      * <code>repeated fixed64 bitset = 2;</code>
-     * @return A list containing the bitset.
      */
     java.util.List<java.lang.Long> getBitsetList();
     /**
      * <code>repeated fixed64 bitset = 2;</code>
-     * @return The count of bitset.
      */
     int getBitsetCount();
     /**
      * <code>repeated fixed64 bitset = 2;</code>
-     * @param index The index of the element to return.
-     * @return The bitset at the given index.
      */
     long getBitset(int index);
   }
   /**
    * Protobuf type {@code hadoop.hdfs.sfm.BloomFilter}
    */
-  public static final class BloomFilter extends
-      org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3 implements
+  public  static final class BloomFilter extends
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:hadoop.hdfs.sfm.BloomFilter)
       BloomFilterOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use BloomFilter.newBuilder() to construct.
-    private BloomFilter(org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    private BloomFilter(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private BloomFilter() {
@@ -63,28 +57,21 @@ public final class BloomFilterProtos {
     }
 
     @java.lang.Override
-    @SuppressWarnings({"unused"})
-    protected java.lang.Object newInstance(
-        UnusedPrivateParameter unused) {
-      return new BloomFilter();
-    }
-
-    @java.lang.Override
-    public final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet
+    public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
     private BloomFilter(
-        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
-      org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet.Builder unknownFields =
-          org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet.newBuilder();
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -128,10 +115,10 @@ public final class BloomFilterProtos {
             }
           }
         }
-      } catch (org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException e) {
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException(
+        throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000002) != 0)) {
@@ -141,13 +128,13 @@ public final class BloomFilterProtos {
         makeExtensionsImmutable();
       }
     }
-    public static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
+    public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.inlighting.proto.BloomFilterProtos.internal_static_hadoop_hdfs_sfm_BloomFilter_descriptor;
     }
 
     @java.lang.Override
-    protected org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return org.inlighting.proto.BloomFilterProtos.internal_static_hadoop_hdfs_sfm_BloomFilter_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
@@ -159,43 +146,34 @@ public final class BloomFilterProtos {
     private int numHashFunctions_;
     /**
      * <code>required uint32 numHashFunctions = 1;</code>
-     * @return Whether the numHashFunctions field is set.
      */
-    @java.lang.Override
     public boolean hasNumHashFunctions() {
       return ((bitField0_ & 0x00000001) != 0);
     }
     /**
      * <code>required uint32 numHashFunctions = 1;</code>
-     * @return The numHashFunctions.
      */
-    @java.lang.Override
     public int getNumHashFunctions() {
       return numHashFunctions_;
     }
 
     public static final int BITSET_FIELD_NUMBER = 2;
-    private org.apache.hadoop.thirdparty.protobuf.Internal.LongList bitset_;
+    private com.google.protobuf.Internal.LongList bitset_;
     /**
      * <code>repeated fixed64 bitset = 2;</code>
-     * @return A list containing the bitset.
      */
-    @java.lang.Override
     public java.util.List<java.lang.Long>
         getBitsetList() {
       return bitset_;
     }
     /**
      * <code>repeated fixed64 bitset = 2;</code>
-     * @return The count of bitset.
      */
     public int getBitsetCount() {
       return bitset_.size();
     }
     /**
      * <code>repeated fixed64 bitset = 2;</code>
-     * @param index The index of the element to return.
-     * @return The bitset at the given index.
      */
     public long getBitset(int index) {
       return bitset_.getLong(index);
@@ -217,7 +195,7 @@ public final class BloomFilterProtos {
     }
 
     @java.lang.Override
-    public void writeTo(org.apache.hadoop.thirdparty.protobuf.CodedOutputStream output)
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (((bitField0_ & 0x00000001) != 0)) {
         output.writeUInt32(1, numHashFunctions_);
@@ -235,7 +213,7 @@ public final class BloomFilterProtos {
 
       size = 0;
       if (((bitField0_ & 0x00000001) != 0)) {
-        size += org.apache.hadoop.thirdparty.protobuf.CodedOutputStream
+        size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(1, numHashFunctions_);
       }
       {
@@ -292,71 +270,71 @@ public final class BloomFilterProtos {
 
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
         java.nio.ByteBuffer data)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
         java.nio.ByteBuffer data,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
-        org.apache.hadoop.thirdparty.protobuf.ByteString data)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
-        org.apache.hadoop.thirdparty.protobuf.ByteString data,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(byte[] data)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
         byte[] data,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
         java.io.InputStream input,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseDelimitedFrom(
         java.io.InputStream input,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
-        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input)
+        com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
-        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -376,7 +354,7 @@ public final class BloomFilterProtos {
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -384,16 +362,16 @@ public final class BloomFilterProtos {
      * Protobuf type {@code hadoop.hdfs.sfm.BloomFilter}
      */
     public static final class Builder extends
-        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:hadoop.hdfs.sfm.BloomFilter)
         org.inlighting.proto.BloomFilterProtos.BloomFilterOrBuilder {
-      public static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.inlighting.proto.BloomFilterProtos.internal_static_hadoop_hdfs_sfm_BloomFilter_descriptor;
       }
 
       @java.lang.Override
-      protected org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.inlighting.proto.BloomFilterProtos.internal_static_hadoop_hdfs_sfm_BloomFilter_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -406,12 +384,12 @@ public final class BloomFilterProtos {
       }
 
       private Builder(
-          org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+        if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
@@ -426,7 +404,7 @@ public final class BloomFilterProtos {
       }
 
       @java.lang.Override
-      public org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
+      public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return org.inlighting.proto.BloomFilterProtos.internal_static_hadoop_hdfs_sfm_BloomFilter_descriptor;
       }
@@ -470,34 +448,34 @@ public final class BloomFilterProtos {
       }
       @java.lang.Override
       public Builder setField(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.setField(field, value);
       }
       @java.lang.Override
       public Builder clearField(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field) {
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
       @java.lang.Override
       public Builder clearOneof(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.OneofDescriptor oneof) {
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
       @java.lang.Override
       public Builder setRepeatedField(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
       @java.lang.Override
       public Builder addRepeatedField(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
       @java.lang.Override
-      public Builder mergeFrom(org.apache.hadoop.thirdparty.protobuf.Message other) {
+      public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof org.inlighting.proto.BloomFilterProtos.BloomFilter) {
           return mergeFrom((org.inlighting.proto.BloomFilterProtos.BloomFilter)other);
         } else {
@@ -536,13 +514,13 @@ public final class BloomFilterProtos {
 
       @java.lang.Override
       public Builder mergeFrom(
-          org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
-          org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         org.inlighting.proto.BloomFilterProtos.BloomFilter parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException e) {
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (org.inlighting.proto.BloomFilterProtos.BloomFilter) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
@@ -557,24 +535,18 @@ public final class BloomFilterProtos {
       private int numHashFunctions_ ;
       /**
        * <code>required uint32 numHashFunctions = 1;</code>
-       * @return Whether the numHashFunctions field is set.
        */
-      @java.lang.Override
       public boolean hasNumHashFunctions() {
         return ((bitField0_ & 0x00000001) != 0);
       }
       /**
        * <code>required uint32 numHashFunctions = 1;</code>
-       * @return The numHashFunctions.
        */
-      @java.lang.Override
       public int getNumHashFunctions() {
         return numHashFunctions_;
       }
       /**
        * <code>required uint32 numHashFunctions = 1;</code>
-       * @param value The numHashFunctions to set.
-       * @return This builder for chaining.
        */
       public Builder setNumHashFunctions(int value) {
         bitField0_ |= 0x00000001;
@@ -584,7 +556,6 @@ public final class BloomFilterProtos {
       }
       /**
        * <code>required uint32 numHashFunctions = 1;</code>
-       * @return This builder for chaining.
        */
       public Builder clearNumHashFunctions() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -593,7 +564,7 @@ public final class BloomFilterProtos {
         return this;
       }
 
-      private org.apache.hadoop.thirdparty.protobuf.Internal.LongList bitset_ = emptyLongList();
+      private com.google.protobuf.Internal.LongList bitset_ = emptyLongList();
       private void ensureBitsetIsMutable() {
         if (!((bitField0_ & 0x00000002) != 0)) {
           bitset_ = mutableCopy(bitset_);
@@ -602,7 +573,6 @@ public final class BloomFilterProtos {
       }
       /**
        * <code>repeated fixed64 bitset = 2;</code>
-       * @return A list containing the bitset.
        */
       public java.util.List<java.lang.Long>
           getBitsetList() {
@@ -611,24 +581,18 @@ public final class BloomFilterProtos {
       }
       /**
        * <code>repeated fixed64 bitset = 2;</code>
-       * @return The count of bitset.
        */
       public int getBitsetCount() {
         return bitset_.size();
       }
       /**
        * <code>repeated fixed64 bitset = 2;</code>
-       * @param index The index of the element to return.
-       * @return The bitset at the given index.
        */
       public long getBitset(int index) {
         return bitset_.getLong(index);
       }
       /**
        * <code>repeated fixed64 bitset = 2;</code>
-       * @param index The index to set the value at.
-       * @param value The bitset to set.
-       * @return This builder for chaining.
        */
       public Builder setBitset(
           int index, long value) {
@@ -639,8 +603,6 @@ public final class BloomFilterProtos {
       }
       /**
        * <code>repeated fixed64 bitset = 2;</code>
-       * @param value The bitset to add.
-       * @return This builder for chaining.
        */
       public Builder addBitset(long value) {
         ensureBitsetIsMutable();
@@ -650,20 +612,17 @@ public final class BloomFilterProtos {
       }
       /**
        * <code>repeated fixed64 bitset = 2;</code>
-       * @param values The bitset to add.
-       * @return This builder for chaining.
        */
       public Builder addAllBitset(
           java.lang.Iterable<? extends java.lang.Long> values) {
         ensureBitsetIsMutable();
-        org.apache.hadoop.thirdparty.protobuf.AbstractMessageLite.Builder.addAll(
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
             values, bitset_);
         onChanged();
         return this;
       }
       /**
        * <code>repeated fixed64 bitset = 2;</code>
-       * @return This builder for chaining.
        */
       public Builder clearBitset() {
         bitset_ = emptyLongList();
@@ -673,13 +632,13 @@ public final class BloomFilterProtos {
       }
       @java.lang.Override
       public final Builder setUnknownFields(
-          final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
       @java.lang.Override
       public final Builder mergeUnknownFields(
-          final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -697,23 +656,23 @@ public final class BloomFilterProtos {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final org.apache.hadoop.thirdparty.protobuf.Parser<BloomFilter>
-        PARSER = new org.apache.hadoop.thirdparty.protobuf.AbstractParser<BloomFilter>() {
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<BloomFilter>
+        PARSER = new com.google.protobuf.AbstractParser<BloomFilter>() {
       @java.lang.Override
       public BloomFilter parsePartialFrom(
-          org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
-          org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
         return new BloomFilter(input, extensionRegistry);
       }
     };
 
-    public static org.apache.hadoop.thirdparty.protobuf.Parser<BloomFilter> parser() {
+    public static com.google.protobuf.Parser<BloomFilter> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public org.apache.hadoop.thirdparty.protobuf.Parser<BloomFilter> getParserForType() {
+    public com.google.protobuf.Parser<BloomFilter> getParserForType() {
       return PARSER;
     }
 
@@ -724,17 +683,17 @@ public final class BloomFilterProtos {
 
   }
 
-  private static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_hadoop_hdfs_sfm_BloomFilter_descriptor;
   private static final 
-    org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_hadoop_hdfs_sfm_BloomFilter_fieldAccessorTable;
 
-  public static org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor
+  public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
   }
-  private static  org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor
+  private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
     java.lang.String[] descriptorData = {
@@ -743,14 +702,22 @@ public final class BloomFilterProtos {
       "nctions\030\001 \002(\r\022\016\n\006bitset\030\002 \003(\006B,\n\024org.inl" +
       "ighting.protoB\021BloomFilterProtos\240\001\001"
     };
-    descriptor = org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
+        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
+            descriptor = root;
+            return null;
+          }
+        };
+    com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
-        new org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor[] {
-        });
+        new com.google.protobuf.Descriptors.FileDescriptor[] {
+        }, assigner);
     internal_static_hadoop_hdfs_sfm_BloomFilter_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_hadoop_hdfs_sfm_BloomFilter_fieldAccessorTable = new
-      org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_hadoop_hdfs_sfm_BloomFilter_descriptor,
         new java.lang.String[] { "NumHashFunctions", "Bitset", });
   }
