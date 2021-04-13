@@ -1,6 +1,6 @@
 package org.inlighting.index;
 
-import com.google.protobuf.CodedOutputStream;
+import org.apache.hadoop.thirdparty.protobuf.CodedOutputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;

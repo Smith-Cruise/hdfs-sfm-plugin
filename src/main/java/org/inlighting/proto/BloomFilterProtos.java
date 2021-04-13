@@ -6,17 +6,17 @@ package org.inlighting.proto;
 public final class BloomFilterProtos {
   private BloomFilterProtos() {}
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistryLite registry) {
+      org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite registry) {
   }
 
   public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
+      org.apache.hadoop.thirdparty.protobuf.ExtensionRegistry registry) {
     registerAllExtensions(
-        (com.google.protobuf.ExtensionRegistryLite) registry);
+        (org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite) registry);
   }
   public interface BloomFilterOrBuilder extends
       // @@protoc_insertion_point(interface_extends:hadoop.hdfs.sfm.BloomFilter)
-      com.google.protobuf.MessageOrBuilder {
+      org.apache.hadoop.thirdparty.protobuf.MessageOrBuilder {
 
     /**
      * <code>required uint32 numHashFunctions = 1;</code>
@@ -50,12 +50,12 @@ public final class BloomFilterProtos {
    * Protobuf type {@code hadoop.hdfs.sfm.BloomFilter}
    */
   public static final class BloomFilter extends
-      com.google.protobuf.GeneratedMessageV3 implements
+      org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:hadoop.hdfs.sfm.BloomFilter)
       BloomFilterOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use BloomFilter.newBuilder() to construct.
-    private BloomFilter(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    private BloomFilter(org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private BloomFilter() {
@@ -70,21 +70,21 @@ public final class BloomFilterProtos {
     }
 
     @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
+    public final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
     private BloomFilter(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
+      org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet.Builder unknownFields =
+          org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -128,10 +128,10 @@ public final class BloomFilterProtos {
             }
           }
         }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+      } catch (org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
+        throw new org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000002) != 0)) {
@@ -141,13 +141,13 @@ public final class BloomFilterProtos {
         makeExtensionsImmutable();
       }
     }
-    public static final com.google.protobuf.Descriptors.Descriptor
+    public static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return org.inlighting.proto.BloomFilterProtos.internal_static_hadoop_hdfs_sfm_BloomFilter_descriptor;
     }
 
     @java.lang.Override
-    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
       return org.inlighting.proto.BloomFilterProtos.internal_static_hadoop_hdfs_sfm_BloomFilter_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
@@ -175,7 +175,7 @@ public final class BloomFilterProtos {
     }
 
     public static final int BITSET_FIELD_NUMBER = 2;
-    private com.google.protobuf.Internal.LongList bitset_;
+    private org.apache.hadoop.thirdparty.protobuf.Internal.LongList bitset_;
     /**
      * <code>repeated fixed64 bitset = 2;</code>
      * @return A list containing the bitset.
@@ -217,7 +217,7 @@ public final class BloomFilterProtos {
     }
 
     @java.lang.Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
+    public void writeTo(org.apache.hadoop.thirdparty.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (((bitField0_ & 0x00000001) != 0)) {
         output.writeUInt32(1, numHashFunctions_);
@@ -235,7 +235,7 @@ public final class BloomFilterProtos {
 
       size = 0;
       if (((bitField0_ & 0x00000001) != 0)) {
-        size += com.google.protobuf.CodedOutputStream
+        size += org.apache.hadoop.thirdparty.protobuf.CodedOutputStream
           .computeUInt32Size(1, numHashFunctions_);
       }
       {
@@ -292,71 +292,71 @@ public final class BloomFilterProtos {
 
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
         java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
         java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        org.apache.hadoop.thirdparty.protobuf.ByteString data)
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        org.apache.hadoop.thirdparty.protobuf.ByteString data,
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
         byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
         java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseDelimitedFrom(
         java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
-        com.google.protobuf.CodedInputStream input)
+        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
     public static org.inlighting.proto.BloomFilterProtos.BloomFilter parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
+        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
+      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -376,7 +376,7 @@ public final class BloomFilterProtos {
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -384,16 +384,16 @@ public final class BloomFilterProtos {
      * Protobuf type {@code hadoop.hdfs.sfm.BloomFilter}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:hadoop.hdfs.sfm.BloomFilter)
         org.inlighting.proto.BloomFilterProtos.BloomFilterOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
+      public static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return org.inlighting.proto.BloomFilterProtos.internal_static_hadoop_hdfs_sfm_BloomFilter_descriptor;
       }
 
       @java.lang.Override
-      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
         return org.inlighting.proto.BloomFilterProtos.internal_static_hadoop_hdfs_sfm_BloomFilter_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
@@ -406,12 +406,12 @@ public final class BloomFilterProtos {
       }
 
       private Builder(
-          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
+        if (org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
@@ -426,7 +426,7 @@ public final class BloomFilterProtos {
       }
 
       @java.lang.Override
-      public com.google.protobuf.Descriptors.Descriptor
+      public org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
         return org.inlighting.proto.BloomFilterProtos.internal_static_hadoop_hdfs_sfm_BloomFilter_descriptor;
       }
@@ -470,34 +470,34 @@ public final class BloomFilterProtos {
       }
       @java.lang.Override
       public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.setField(field, value);
       }
       @java.lang.Override
       public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
+          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
       @java.lang.Override
       public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+          org.apache.hadoop.thirdparty.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
       @java.lang.Override
       public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
       @java.lang.Override
       public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
+          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
       @java.lang.Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
+      public Builder mergeFrom(org.apache.hadoop.thirdparty.protobuf.Message other) {
         if (other instanceof org.inlighting.proto.BloomFilterProtos.BloomFilter) {
           return mergeFrom((org.inlighting.proto.BloomFilterProtos.BloomFilter)other);
         } else {
@@ -536,13 +536,13 @@ public final class BloomFilterProtos {
 
       @java.lang.Override
       public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
+          org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
         org.inlighting.proto.BloomFilterProtos.BloomFilter parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        } catch (org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException e) {
           parsedMessage = (org.inlighting.proto.BloomFilterProtos.BloomFilter) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
@@ -593,7 +593,7 @@ public final class BloomFilterProtos {
         return this;
       }
 
-      private com.google.protobuf.Internal.LongList bitset_ = emptyLongList();
+      private org.apache.hadoop.thirdparty.protobuf.Internal.LongList bitset_ = emptyLongList();
       private void ensureBitsetIsMutable() {
         if (!((bitField0_ & 0x00000002) != 0)) {
           bitset_ = mutableCopy(bitset_);
@@ -656,7 +656,7 @@ public final class BloomFilterProtos {
       public Builder addAllBitset(
           java.lang.Iterable<? extends java.lang.Long> values) {
         ensureBitsetIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+        org.apache.hadoop.thirdparty.protobuf.AbstractMessageLite.Builder.addAll(
             values, bitset_);
         onChanged();
         return this;
@@ -673,13 +673,13 @@ public final class BloomFilterProtos {
       }
       @java.lang.Override
       public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
       @java.lang.Override
       public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
+          final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -697,23 +697,23 @@ public final class BloomFilterProtos {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final com.google.protobuf.Parser<BloomFilter>
-        PARSER = new com.google.protobuf.AbstractParser<BloomFilter>() {
+    @java.lang.Deprecated public static final org.apache.hadoop.thirdparty.protobuf.Parser<BloomFilter>
+        PARSER = new org.apache.hadoop.thirdparty.protobuf.AbstractParser<BloomFilter>() {
       @java.lang.Override
       public BloomFilter parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
+          org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
+          org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
         return new BloomFilter(input, extensionRegistry);
       }
     };
 
-    public static com.google.protobuf.Parser<BloomFilter> parser() {
+    public static org.apache.hadoop.thirdparty.protobuf.Parser<BloomFilter> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public com.google.protobuf.Parser<BloomFilter> getParserForType() {
+    public org.apache.hadoop.thirdparty.protobuf.Parser<BloomFilter> getParserForType() {
       return PARSER;
     }
 
@@ -724,17 +724,17 @@ public final class BloomFilterProtos {
 
   }
 
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
     internal_static_hadoop_hdfs_sfm_BloomFilter_descriptor;
   private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+    org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_hadoop_hdfs_sfm_BloomFilter_fieldAccessorTable;
 
-  public static com.google.protobuf.Descriptors.FileDescriptor
+  public static org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
   }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
+  private static  org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
     java.lang.String[] descriptorData = {
@@ -743,14 +743,14 @@ public final class BloomFilterProtos {
       "nctions\030\001 \002(\r\022\016\n\006bitset\030\002 \003(\006B,\n\024org.inl" +
       "ighting.protoB\021BloomFilterProtos\240\001\001"
     };
-    descriptor = com.google.protobuf.Descriptors.FileDescriptor
+    descriptor = org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
+        new org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor[] {
         });
     internal_static_hadoop_hdfs_sfm_BloomFilter_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_hadoop_hdfs_sfm_BloomFilter_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_hadoop_hdfs_sfm_BloomFilter_descriptor,
         new java.lang.String[] { "NumHashFunctions", "Bitset", });
   }
