@@ -321,6 +321,14 @@ public class SFMIndexReader {
         return null;
     }
 
+    public long getBlockSize() {
+        return BLOCK_SIZE;
+    }
+
+    public short getReplication() {
+        return REPLICATION;
+    }
+
     private class IndexMetadata {
 
         private int indexId;

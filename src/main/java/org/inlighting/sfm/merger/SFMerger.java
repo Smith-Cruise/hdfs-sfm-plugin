@@ -24,6 +24,8 @@ public class SFMerger implements Closeable {
 
     // class info
 
+    private final short REPLICATION;
+
     private final long BLOCK_SIZE;
 
     private final Map<String, List<FileEntity>> MERGED_MAP;
@@ -37,9 +39,10 @@ public class SFMerger implements Closeable {
     // underlying filesystem
     private final FileSystem FS;
 
-    public SFMerger(FileSystem fs, long blockSize) throws IOException {
+    public SFMerger(FileSystem fs, short replication, long blockSize) throws IOException {
         LOG.debug(String.format("Launch SFMerger, underlying FS: %s, block size %d", fs.getScheme(), blockSize));
         FS = fs;
+        REPLICATION = replication;
         BLOCK_SIZE = blockSize;
         MERGED_MAP = new ConcurrentHashMap<>(5);
         MERGED_MAP_SIZE = new ConcurrentHashMap<>(5);

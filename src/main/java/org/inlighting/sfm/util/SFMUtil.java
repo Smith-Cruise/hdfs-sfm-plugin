@@ -7,40 +7,21 @@ import java.net.URI;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/*
+* 除了专门检测的会校验 sfm uri 是否合法，别的都不会校验
+* */
 public class SFMUtil {
 
-    public static void checkValidSFM(String path) throws IOException {
-        Path tmp = new Path(path);
-        if (! tmp.isAbsolute()) {
-            throw new IOException("SFM path must be an absolute path.");
-        }
+    // Only check path contains .sfm
+    public static boolean isValidSFMPath(URI uri) {
         String regex = "(?<=/).+.sfm";
         Pattern p = Pattern.compile(regex);
-        Matcher m = p.matcher(path);
-        if (! m.find()) {
-            throw new IOException("Illegal SFM path.");
-        }
+        Matcher m = p.matcher(uri.getPath());
+        return m.find();
     }
 
-    public static void checkValidSFM(Path path) throws IOException {
-        checkValidSFM(path.toUri());
-    }
-
-    public static void checkValidSFM(URI uri) throws IOException {
-        checkSchema(uri);
-        checkValidSFM(uri.getPath());
-    }
-
-    private static void checkSchema(URI uri) throws IOException {
-        if (uri.getScheme() != null) {
-            if (! uri.getScheme().equals("sfm")) {
-                throw new IOException("Illegal schema");
-            }
-        }
-    }
-
-    public static String getFilename(String path) throws IOException {
-        checkValidSFM(path);
+    public static String getFilename(URI uri) throws IOException {
+        String path = uri.getPath();
         if (path.endsWith(".sfm") || path.endsWith(".sfm/")) {
             return null;
         }
@@ -54,17 +35,8 @@ public class SFMUtil {
         }
     }
 
-    public static String getFilename(Path path) throws IOException {
-        return getFilename(path.toUri());
-    }
-
-    public static String getFilename(URI uri) throws IOException {
-        checkSchema(uri);
-        return getFilename(uri.getPath());
-    }
-
-    public static String getSFMBasePath(String path) throws IOException {
-        checkValidSFM(path);
+    public static String getSFMBasePath(URI uri) throws IOException {
+        String path = uri.getPath();
         String regex = "/.+.sfm";
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(path);
@@ -72,15 +44,6 @@ public class SFMUtil {
             throw new IOException("Cannot get SFM name path.");
         }
         return m.group();
-    }
-
-    public static String getSFMBasePath(Path path) throws IOException {
-        return getSFMBasePath(path.toUri());
-    }
-
-    public static String getSFMBasePath(URI uri) throws IOException {
-        checkSchema(uri);
-        return getSFMBasePath(uri.getPath());
     }
 
     public static byte getUnsignedByte (int a) {
