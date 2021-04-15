@@ -18,4 +18,13 @@ public class OtherTests {
         }
         fs.close();
     }
+
+    @Test
+    void tmpRead() throws IOException {
+        Path qualifiedSFMPath = new Path("sfm://single.lab.com:9000/batch.sfm/1618298781195.txt");
+        FileSystem fs = qualifiedSFMPath.getFileSystem(new Configuration());
+        fs.open(qualifiedSFMPath);
+        System.out.println(fs.exists(qualifiedSFMPath));
+        fs.close();
+    }
 }

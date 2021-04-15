@@ -53,6 +53,7 @@ public class SFMFileSystem extends FileSystem {
 
     @Override
     public void initialize(URI name, Configuration conf) throws IOException {
+        LOG.debug("Initialize SFM FileSystem.");
         super.initialize(name, conf);
         setConf(conf);
 
