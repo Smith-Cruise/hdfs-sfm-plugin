@@ -27,4 +27,17 @@ public class OtherTests {
         System.out.println(fs.exists(qualifiedSFMPath));
         fs.close();
     }
+
+    @Test
+    void listRead() throws IOException {
+        Path qualifiedSFMPath = new Path("sfm://single.lab.com:9000/test.sfm");
+        FileSystem fs = qualifiedSFMPath.getFileSystem(new Configuration());
+        FileStatus[] fileStatuses = fs.listStatus(qualifiedSFMPath);
+        for (FileStatus fileStatus: fileStatuses) {
+            FSDataInputStream in = fs.open(fileStatus.getPath());
+            byte[] bytes = new byte[100];
+            in.read(bytes);
+        }
+        fs.close();
+    }
 }

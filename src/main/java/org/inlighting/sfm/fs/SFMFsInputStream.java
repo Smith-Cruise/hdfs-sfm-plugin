@@ -167,7 +167,7 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
         if (pos < 0) {
             throw new IOException(String.format("Negative position: %d", pos));
         }
-        final long length = mergedStart - mergedEnd;
+        final long length = mergedEnd - mergedStart;
         if (pos > length) {
             throw new IOException(String.format("Position %d larger than length %d", pos, length));
         }
