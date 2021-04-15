@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.util.*;
 
 public class SFMIndexReader {
@@ -107,6 +108,38 @@ public class SFMIndexReader {
         return new FileStatus(sfmFileStatus.length, false,
                 FS.getDefaultReplication(new Path(SFM_BASE_PATH)),
                 FS.getDefaultBlockSize(sfmBasePath), 0, sfmBasePath);
+    }
+
+    public BlockLocation[] getFileBlockLocations(String filename, long start,
+                                                 long len) throws IOException {
+        SFMFileStatus sfmFileStatus = getSFMFileStatus(filename);
+        BlockLocation[] locations = FS.getFileBlockLocations(new Path(SFM_BASE_PATH, sfmFileStatus.mergedFilename),
+                sfmFileStatus.offset + start, len);
+
+        long fileOffsetInSFM = sfmFileStatus.offset;
+        long end = start + len;
+        for (BlockLocation location: locations) {
+            long sfmBlockStart = location.getOffset() - fileOffsetInSFM;
+            long sfmBlockEnd = sfmBlockStart + location.getLength();
+
+            if (start > sfmBlockStart) {
+                // desired range starts after beginning of this har block
+                // fix offset to beginning of relevant range (relative to desired file)
+                location.setOffset(start);
+                // fix length to relevant portion of har block
+                location.setLength(location.getLength() - (start - sfmBlockStart));
+            } else {
+                // desired range includes beginning of this har block
+                location.setOffset(sfmBlockStart);
+            }
+
+            if (sfmBlockEnd > end) {
+                // range ends before end of this har block
+                // fix length to remove irrelevant portion at the end
+                location.setLength(location.getLength() - (sfmBlockEnd - end));
+            }
+        }
+        return locations;
     }
 
     private SFMFileStatus getSFMFileStatus(String filename) throws IOException {

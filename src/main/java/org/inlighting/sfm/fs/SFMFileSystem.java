@@ -108,19 +108,24 @@ public class SFMFileSystem extends FileSystem {
         return underLyingFS.getHomeDirectory();
     }
 
-//    @Override
-//    public BlockLocation[] getFileBlockLocations(FileStatus file, long start,
-//                                                 long len) throws IOException {
-//        // todo
-//       throw new IOException("Unsupported");
-//    }
-//
-//    @Override
-//    public BlockLocation[] getFileBlockLocations(Path p,
-//                                                 final long start, final long len) throws IOException {
-//        // todo
-//        throw new IOException("Unsupported");
-//    }
+    @Override
+    public BlockLocation[] getFileBlockLocations(FileStatus file, long start,
+                                                 long len) throws IOException {
+        if (start < 0 || len < 0) {
+            throw new IllegalArgumentException("Invalid start or len parameter");
+        }
+
+        Path absF = fixRelativePart(file.getPath());
+        checkPath(absF);
+        loadSFMInformation(absF.toUri());
+        String filename = SFMUtil.getFilename(absF.toUri());
+        if (filename != null) {
+           return curSFMReader.getFileBlockLocations(filename, start, len);
+        } else {
+            return underLyingFS.getFileBlockLocations(new Path("hdfs", absF.toUri().getAuthority(), absF.toUri().getPath()),
+                    start, len);
+        }
+    }
 
     @Override
     public FSDataInputStream open(Path f, int bufferSize) throws IOException {
