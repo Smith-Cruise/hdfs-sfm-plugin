@@ -74,7 +74,7 @@ public class SFMIndexReader {
         return new SFMIndexReader(fs, sfmBasePath);
     }
 
-    public FileStatus[] listStatus() throws IOException {
+    public List<KV> listStatus() throws IOException {
         List<KV> kvList = new LinkedList<>();
         for (int i=0; i<masterIndexList.size(); i++) {
             IndexMetadata indexMetadata = loadIndexMetadataLazily(i);
@@ -87,24 +87,18 @@ public class SFMIndexReader {
         while (kvIterator.hasNext()) {
             KV kv = kvIterator.next();
 
-            if (EXISTED_MAP.containsKey(kv.filename)) {
+            if (EXISTED_MAP.containsKey(kv.getFilename())) {
                 kvIterator.remove();
             } else {
-                EXISTED_MAP.put(kv.filename, kv.tombstone);
-                if (kv.tombstone) {
+                EXISTED_MAP.put(kv.getFilename(), kv.isTombstone());
+                if (kv.isTombstone()) {
                     kvIterator.remove();
                 }
             }
         }
+        return kvList;
 
-        FileStatus[] fileStatus = new FileStatus[kvList.size()];
-        final Path sfmBasePath = new Path(SFM_BASE_PATH);
-        int i = 0;
-        for (KV kv: kvList) {
-            fileStatus[i] = new FileStatus(kv.length, false, REPLICATION, BLOCK_SIZE, 0, new Path(sfmBasePath, kv.filename));
-            i++;
-        }
-        return fileStatus;
+
     }
 
     public FileStatus getFileStatus(String filename) throws IOException {
@@ -136,8 +130,8 @@ public class SFMIndexReader {
                     // binary search filename
                     KV kv = binarySearch(kvs, filename);
                     if (kv != null) {
-                        if (! kv.tombstone) {
-                            return new SFMFileStatus(filename, indexMetadata.mergedFilename, kv.offset, kv.length);
+                        if (! kv.isTombstone()) {
+                            return new SFMFileStatus(filename, indexMetadata.mergedFilename, kv.getOffset(), kv.getLength());
 
                         } else {
                             throw new FileNotFoundException(String.format("%s is already delete", filename));
@@ -299,7 +293,7 @@ public class SFMIndexReader {
     }
 
     private String getKey(List<KV> kvs, int index) {
-        return kvs.get(index).filename;
+        return kvs.get(index).getFilename();
     }
 
     private KV binarySearch(List<KV> kvs, String key) {
@@ -331,6 +325,10 @@ public class SFMIndexReader {
         return REPLICATION;
     }
 
+    public String getSFMBasePath() {
+        return SFM_BASE_PATH;
+    }
+
     private class IndexMetadata {
 
         private int indexId;
@@ -352,23 +350,6 @@ public class SFMIndexReader {
         private int bloomFilterLength;
 
         private int kvsLength;
-    }
-
-    private class KV {
-        private String filename;
-
-        private long offset;
-
-        private int length;
-
-        private boolean tombstone;
-
-        public KV(String filename, long offset, int length, boolean tombstone) {
-            this.filename = filename;
-            this.offset = offset;
-            this.length = length;
-            this.tombstone = tombstone;
-        }
     }
 
     private class SFMFileStatus {

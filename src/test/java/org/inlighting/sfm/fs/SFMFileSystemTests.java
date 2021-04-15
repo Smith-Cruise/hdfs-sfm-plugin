@@ -80,6 +80,43 @@ public class SFMFileSystemTests {
     }
 
     @Test
+    void listStatusTest() throws IOException {
+        {
+            FileSystem fs = sfmPath.getFileSystem(hdfsConfiguration);
+            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
+            out.writeInt(5);
+            out.close();
+
+            out = fs.create(new Path(sfmBasePath + "/delete.txt"));
+            out.writeBytes("HelloWorld");
+            out.close();
+
+            out = fs.create(new Path(sfmBasePath + "/b.txt"));
+            out.writeBytes("HelloWorld");
+            out.close();
+
+            out = fs.create(new Path(sfmBasePath + "/a.txt"));
+            out.writeBytes("a.txt");
+            out.close();
+
+            fs.delete(new Path(sfmBasePath + "/delete.txt"), false);
+            fs.close();
+        }
+
+        {
+            FileSystem fs = sfmPath.getFileSystem(hdfsConfiguration);
+            FileStatus[] fileStatuses = fs.listStatus(sfmPath);
+            assertEquals(2, fileStatuses.length);
+            assertEquals("a.txt".getBytes(StandardCharsets.UTF_8).length, fileStatuses[1].getLen());
+            assertEquals(sfmPath+"/a.txt", fileStatuses[1].getPath().toString());
+            assertEquals("HelloWorld".getBytes(StandardCharsets.UTF_8).length, fileStatuses[0].getLen());
+            assertEquals(sfmPath+"/b.txt", fileStatuses[0].getPath().toString());
+            fs.close();
+        }
+
+    }
+
+    @Test
     void makeQualifiedTest() throws IOException {
         FileSystem fs = sfmPath.getFileSystem(hdfsConfiguration);
         Path path = new Path("/hello");

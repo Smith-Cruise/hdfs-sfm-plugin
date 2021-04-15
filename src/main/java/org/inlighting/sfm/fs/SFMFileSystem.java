@@ -8,6 +8,7 @@ import org.apache.hadoop.hdfs.*;
 import org.apache.hadoop.net.NetUtils;
 import org.apache.hadoop.util.Progressable;
 import org.inlighting.sfm.SFMConstants;
+import org.inlighting.sfm.index.KV;
 import org.inlighting.sfm.index.SFMIndexReader;
 import org.inlighting.sfm.merger.FileEntity;
 import org.inlighting.sfm.merger.SFMerger;
@@ -206,7 +207,19 @@ public class SFMFileSystem extends FileSystem {
             throw new IOException("Path should end with .sfm");
         }
         loadSFMInformation(uri);
-        return curSFMReader.listStatus();
+
+        List<KV> kvList = curSFMReader.listStatus();
+        final String sfmBasePath = curSFMReader.getSFMBasePath();
+        FileStatus[] fileStatus = new FileStatus[kvList.size()];
+        int i = 0;
+        for (KV kv: kvList) {
+            final Path filePath = makeQualified(new Path(sfmBasePath, kv.getFilename()));
+            fileStatus[i] = new FileStatus(kv.getLength(), false,
+                   getDefaultReplication(filePath), getDefaultBlockSize(filePath),
+                    0, filePath);
+            i++;
+        }
+        return fileStatus;
     }
 
     @Override

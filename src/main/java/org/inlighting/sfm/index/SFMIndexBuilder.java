@@ -96,18 +96,18 @@ public class SFMIndexBuilder implements Closeable {
 
         INDEX_LIST.forEach(kv -> {
             KVsProtos.KV.Builder kvBuilder = KVsProtos.KV.newBuilder();
-            if (! kv.tombstone) {
-                kvBuilder.setFilename(kv.filename);
-                kvBuilder.setOffset(kv.offset);
-                kvBuilder.setLength(kv.length);
+            if (! kv.isTombstone()) {
+                kvBuilder.setFilename(kv.getFilename());
+                kvBuilder.setOffset(kv.getOffset());
+                kvBuilder.setLength(kv.getLength());
                 kvBuilder.setTombstone(false);
             } else {
-                kvBuilder.setFilename(kv.filename);
+                kvBuilder.setFilename(kv.getFilename());
                 kvBuilder.setTombstone(true);
             }
 
             kvsBuilder.addKv(kvBuilder.build());
-            bloomFilter.addString(kv.filename);
+            bloomFilter.addString(kv.getFilename());
         });
 
         // write index
@@ -168,23 +168,6 @@ public class SFMIndexBuilder implements Closeable {
             if (maxKey.compareTo(key) < 0) {
                 maxKey = key;
             }
-        }
-    }
-
-    private class KV {
-        private String filename;
-
-        private long offset;
-
-        private int length;
-
-        private boolean tombstone;
-
-        public KV(String filename, long offset, int length, boolean tombstone) {
-            this.filename = filename;
-            this.offset = offset;
-            this.length = length;
-            this.tombstone = tombstone;
         }
     }
 }
