@@ -108,19 +108,19 @@ public class SFMFileSystem extends FileSystem {
         return underLyingFS.getHomeDirectory();
     }
 
-    @Override
-    public BlockLocation[] getFileBlockLocations(FileStatus file, long start,
-                                                 long len) throws IOException {
-        // todo
-       throw new IOException("Unsupported");
-    }
-
-    @Override
-    public BlockLocation[] getFileBlockLocations(Path p,
-                                                 final long start, final long len) throws IOException {
-        // todo
-        throw new IOException("Unsupported");
-    }
+//    @Override
+//    public BlockLocation[] getFileBlockLocations(FileStatus file, long start,
+//                                                 long len) throws IOException {
+//        // todo
+//       throw new IOException("Unsupported");
+//    }
+//
+//    @Override
+//    public BlockLocation[] getFileBlockLocations(Path p,
+//                                                 final long start, final long len) throws IOException {
+//        // todo
+//        throw new IOException("Unsupported");
+//    }
 
     @Override
     public FSDataInputStream open(Path f, int bufferSize) throws IOException {
