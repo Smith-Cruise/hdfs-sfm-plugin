@@ -109,8 +109,10 @@ public class SFMIndexReader {
 
     public FileStatus getFileStatus(String filename) throws IOException {
         SFMFileStatus sfmFileStatus = getSFMFileStatus(filename);
-        return new FileStatus(sfmFileStatus.length, false, REPLICATION,
-                BLOCK_SIZE, 0, new Path(SFM_BASE_PATH + "/" + filename));
+        final Path sfmBasePath = new Path(SFM_BASE_PATH);
+        return new FileStatus(sfmFileStatus.length, false,
+                FS.getDefaultReplication(new Path(SFM_BASE_PATH)),
+                FS.getDefaultBlockSize(sfmBasePath), 0, sfmBasePath);
     }
 
     private SFMFileStatus getSFMFileStatus(String filename) throws IOException {

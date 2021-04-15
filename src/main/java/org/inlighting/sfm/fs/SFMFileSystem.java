@@ -227,6 +227,7 @@ public class SFMFileSystem extends FileSystem {
         underLyingFS.close();
         LOG.debug("Underlying FileSystem closed.");
         closed = true;
+        super.close();
     }
 
     @Override
@@ -248,10 +249,25 @@ public class SFMFileSystem extends FileSystem {
 
         String filename = SFMUtil.getFilename(uri);
         if (filename != null) {
-            return curSFMReader.getFileStatus(filename);
+            // file
+            FileStatus fileStatus = curSFMReader.getFileStatus(filename);
+            fileStatus.setPath(makeQualified(f));
+            return fileStatus;
         } else {
-            return underLyingFS.getFileStatus(absF);
+            // dir
+            return new FileStatus(0, true, getDefaultReplication(f), getDefaultBlockSize(f),
+                    0, makeQualified(f));
         }
+    }
+
+    @Override
+    public long getDefaultBlockSize(Path f) {
+        return underLyingFS.getDefaultBlockSize(f);
+    }
+
+    @Override
+    public short getDefaultReplication(Path path) {
+        return underLyingFS.getDefaultReplication(path);
     }
 
     @Override
@@ -336,7 +352,6 @@ public class SFMFileSystem extends FileSystem {
         Path absF = fixRelativePart(path);
         return absF.makeQualified(uri, workingDir);
     }
-
 
     // path must be absolute path, and will ignore schema and authority automatically
     private void loadSFMInformation(URI uri) throws IOException {

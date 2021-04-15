@@ -1,7 +1,5 @@
 package org.inlighting.sfm.util;
 
-import org.apache.hadoop.fs.Path;
-
 import java.io.IOException;
 import java.net.URI;
 import java.util.regex.Matcher;
