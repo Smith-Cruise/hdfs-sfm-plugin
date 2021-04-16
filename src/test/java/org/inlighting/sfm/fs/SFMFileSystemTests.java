@@ -111,7 +111,6 @@ public class SFMFileSystemTests {
             assertEquals(qualifiedSFMPath+"/b.txt", fileStatuses[0].getPath().toString());
             fs.close();
         }
-
     }
 
     @Test
@@ -119,5 +118,6 @@ public class SFMFileSystemTests {
         FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
         Path path = new Path("/hello");
         assertEquals("sfm://"+authority+"/hello", fs.makeQualified(path).toString());
+        fs.close();
     }
 }

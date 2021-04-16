@@ -279,11 +279,15 @@ public class SFMFileSystem extends FileSystem {
             // file
             SFMFileStatus sfmFileStatus = curSFMReader.getFileStatus(filename);
             final Path filePath = makeQualified(new Path(curSFMBasePath, sfmFileStatus.getFilename()));
-            return new FileStatus(sfmFileStatus.getLength(), true, curSFMReader.getReplication(),
+            return new FileStatus(sfmFileStatus.getLength(), false, curSFMReader.getReplication(),
                     curSFMReader.getBlockSize(), sfmFileStatus.getModificationTime(), filePath);
         } else {
             // dir, handle by underlyingFS
-            return underLyingFS.getFileStatus(absF);
+            FileStatus fileStatus = underLyingFS.getFileStatus(absF);
+            // replace schema from hdfs to sfm
+            URI tmpURI = fileStatus.getPath().toUri();
+            fileStatus.setPath(new Path(getScheme(), tmpURI.getAuthority(), tmpURI.getPath()));
+            return fileStatus;
         }
     }
 
