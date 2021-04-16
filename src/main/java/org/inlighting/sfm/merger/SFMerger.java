@@ -110,15 +110,16 @@ public class SFMerger implements Closeable {
         LOG.debug(String.format("Write index: %s, write path: %s", sfmBasePath, mergeFilePath.toUri().getPath()));
 
         FileStatus fileStatus;
-        long startOffset;
+        // used for append
+        long baseOffset;
         try {
             LOG.debug("Merged file existed, append it.");
             fileStatus = FS.getFileStatus(mergeFilePath);
-            startOffset = fileStatus.getLen();
+            baseOffset = fileStatus.getLen();
         } catch (FileNotFoundException e) {
             LOG.debug("Merged file didn't existed, create it.");
             fileStatus = null;
-            startOffset = 0;
+            baseOffset = 0;
         }
 
         FSDataOutputStream outputStream;
@@ -127,6 +128,7 @@ public class SFMerger implements Closeable {
         } else {
             outputStream = FS.create(mergeFilePath);
         }
+        long prevPos = outputStream.getPos();
 
         List<FileEntity> files = MERGED_MAP.get(sfmBasePath);
         Collections.sort(files);
@@ -152,7 +154,7 @@ public class SFMerger implements Closeable {
                 // add file
                 File f = new File(TMP_FOLDER + "/" + file.getTmpStoreName());
                 if (! f.exists()) {
-                    throw new FileNotFoundException(String.format("File %s do not existed.", file.getFilename()));
+                    throw new FileNotFoundException(String.format("Local file %s do not existed.", file.getFilename()));
                 }
                 // write file to hdfs.
                 byte[] tmpBytes = new byte[1024];
@@ -163,13 +165,14 @@ public class SFMerger implements Closeable {
                 }
 
                 // write index to indexBuilder
-                sfmIndexBuilder.add(file.getFilename(), startOffset, (int) file.getFilesSize(), file.getModificationTime());
-                startOffset += outputStream.getPos();
+                sfmIndexBuilder.add(file.getFilename(), baseOffset + prevPos, (int) file.getFilesSize(), file.getModificationTime(),
+                        file.getNanoTime());
+                prevPos = outputStream.getPos();
                 in.close();
                 deleteFile(f);
             } else {
                 // delete file
-                sfmIndexBuilder.addDelete(file.getFilename(), file.getModificationTime());
+                sfmIndexBuilder.addDelete(file.getFilename(), file.getModificationTime(), file.getNanoTime());
             }
 
         }

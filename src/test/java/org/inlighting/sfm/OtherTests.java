@@ -11,6 +11,10 @@ public class OtherTests {
     @Test
     void test() {
         System.out.println(System.currentTimeMillis());
+        System.out.println(System.nanoTime());
+        System.out.println(System.nanoTime());
+        System.out.println(System.currentTimeMillis());
+
     }
 
     @Test

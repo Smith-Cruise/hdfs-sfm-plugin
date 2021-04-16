@@ -43,7 +43,7 @@ public class SFMIndexBuilder implements Closeable {
 
     private String lastKey;
 
-    private long lastModificationTime;
+    private long lastNanoTime;
 
     // KV
     private final List<KV> INDEX_LIST;
@@ -59,15 +59,15 @@ public class SFMIndexBuilder implements Closeable {
         return new SFMIndexBuilder(fs, sfmBasePath, mergeFilename);
     }
 
-    public void add(String filename, long offset, int length, long modificationTime) throws IOException {
-        checkKey(filename, modificationTime);
+    public void add(String filename, long offset, int length, long modificationTime, long nanoTime) throws IOException {
+        checkKey(filename, nanoTime);
 
         INDEX_LIST.add(new KV(filename, offset, length, modificationTime, false));
         numIndex++;
     }
 
-    public void addDelete(String filename, long modificationTime) throws IOException {
-        checkKey(filename, modificationTime);
+    public void addDelete(String filename, long modificationTime, long nanoTime) throws IOException {
+        checkKey(filename, nanoTime);
         INDEX_LIST.add(new KV(filename, 0, 0,modificationTime, true));
         numIndex++;
     }
@@ -146,18 +146,25 @@ public class SFMIndexBuilder implements Closeable {
     }
 
     // small to big
-    private void checkKey(String key, long modificationTime) throws IOException {
-        if (lastKey == null || lastModificationTime == 0) {
+    private void checkKey(String key, long nanoTime) throws IOException {
+        if (lastKey == null || lastNanoTime == 0) {
             lastKey = key;
-            lastModificationTime = modificationTime;
-        }
+            lastNanoTime = nanoTime;
+        } else {
+            int res = lastKey.compareTo(key);
+            if (res > 0) {
+                throw new IOException("The key should be ordered.");
+            }
 
-        if (lastKey.compareTo(key) > 0 || lastModificationTime >= modificationTime) {
-            throw new IOException("The key should be ordered.");
+            if (res == 0) {
+                if (lastNanoTime >= nanoTime) {
+                    throw new IOException("Have the same key, but the nano time should be ordered.");
+                }
+            }
         }
 
         lastKey = key;
-        lastModificationTime = modificationTime;
+        lastNanoTime = nanoTime;
 
         if (minKey == null) {
             minKey = key;

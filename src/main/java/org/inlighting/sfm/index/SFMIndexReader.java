@@ -82,7 +82,9 @@ public class SFMIndexReader {
         }
 
         final Map<String, Boolean> EXISTED_MAP = new HashMap<>();
-        for (KV kv: kvList) {
+        ListIterator<KV> kvListIterator = kvList.listIterator(kvList.size());
+        while (kvListIterator.hasPrevious()) {
+            KV kv = kvListIterator.previous();
             if (! EXISTED_MAP.containsKey(kv.getFilename())) {
                 EXISTED_MAP.put(kv.getFilename(), kv.isTombstone());
                 if (! kv.isTombstone()) {
@@ -315,7 +317,7 @@ public class SFMIndexReader {
     private KV binarySearch(List<KV> kvs, String key) {
         int low = 0;
         int high = kvs.size() - 1;
-        int middle = 0;
+        int middle;
         if (key.compareTo(getKey(kvs, low)) < 0 || key.compareTo(getKey(kvs, high)) > 0) {
             return null;
         }

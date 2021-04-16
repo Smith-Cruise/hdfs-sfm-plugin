@@ -13,16 +13,20 @@ public class FileEntity implements Comparable<FileEntity> {
 
     private boolean tombstone;
 
+    // used to compare only
+    private long nanoTime;
+
     public FileEntity() {}
 
     public FileEntity(String sfmBasePath, String filename, String tmpStoreName, long filesSize, long modificationTime,
-                      boolean tombstone) {
+                      boolean tombstone, long nanoTime) {
         this.sfmBasePath = sfmBasePath;
         this.filename = filename;
         this.tmpStoreName = tmpStoreName;
         this.filesSize = filesSize;
         this.modificationTime = modificationTime;
         this.tombstone = tombstone;
+        this.nanoTime = nanoTime;
     }
 
     public String getSfmBasePath() {
@@ -73,12 +77,20 @@ public class FileEntity implements Comparable<FileEntity> {
         this.tombstone = tombstone;
     }
 
+    public long getNanoTime() {
+        return nanoTime;
+    }
+
+    public void setNanoTime(long nanoTime) {
+        this.nanoTime = nanoTime;
+    }
+
     @Override
     public int compareTo(FileEntity o) {
         int result = filename.compareTo(o.filename);
         if (result == 0) {
-            // same filename, compare to modification time.
-            result = Long.compare(modificationTime, o.modificationTime);
+            // same filename, compare to nano time.
+            result = Long.compare(nanoTime, o.nanoTime);
         }
         return result;
     }
