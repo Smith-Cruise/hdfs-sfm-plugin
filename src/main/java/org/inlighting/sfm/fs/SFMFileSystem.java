@@ -168,7 +168,7 @@ public class SFMFileSystem extends FileSystem {
 
         // Load SFMerger lazily.(Only load it when need to create file.)
         if (SFMerger == null) {
-            SFMerger = SFMergerFactory.build(underLyingFS, replication, blockSize);
+            SFMerger = SFMergerFactory.build(underLyingFS, blockSize);
         }
 
         String sfmBasePath = SFMUtil.getSFMBasePath(uri);
@@ -204,7 +204,8 @@ public class SFMFileSystem extends FileSystem {
 
         // Load SFMerger lazily.(Only load it when need to create file.)
         if (SFMerger == null) {
-            SFMerger = SFMergerFactory.build(underLyingFS, getDefaultReplication(), getDefaultBlockSize());
+            SFMerger = SFMergerFactory.build(underLyingFS,
+                    getConf().getLong("fs.local.block.size", 32 * 1024 * 1024));
         }
         String sfmBasePath = SFMUtil.getSFMBasePath(uri);
         String filename = SFMUtil.getFilename(uri);

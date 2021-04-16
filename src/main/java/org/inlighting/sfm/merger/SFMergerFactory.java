@@ -10,8 +10,8 @@ public class SFMergerFactory {
 
     }
 
-    public static SFMerger build(FileSystem fs, short replication, long blockSize) throws IOException {
-        return new SFMerger(fs, replication, blockSize);
+    public static SFMerger build(FileSystem fs, long blockSize) throws IOException {
+        return new SFMerger(fs, blockSize);
     }
 
 }
