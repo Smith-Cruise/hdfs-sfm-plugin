@@ -77,6 +77,7 @@ public class SFMOutputStream extends OutputStream {
         OUT.close();
 
         FILE_ENTITY.setFilesSize(getWrittenLength());
+        FILE_ENTITY.setModificationTime(System.currentTimeMillis());
         SFMERGER.add(FILE_ENTITY);
         closed = true;
     }

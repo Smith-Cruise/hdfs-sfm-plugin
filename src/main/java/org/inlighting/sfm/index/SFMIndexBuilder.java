@@ -43,6 +43,8 @@ public class SFMIndexBuilder implements Closeable {
 
     private String lastKey;
 
+    private long lastModificationTime;
+
     // KV
     private final List<KV> INDEX_LIST;
 
@@ -57,16 +59,16 @@ public class SFMIndexBuilder implements Closeable {
         return new SFMIndexBuilder(fs, sfmBasePath, mergeFilename);
     }
 
-    public void add(String filename, long offset, int length) throws IOException {
-        checkKey(filename);
+    public void add(String filename, long offset, int length, long modificationTime) throws IOException {
+        checkKey(filename, modificationTime);
 
-        INDEX_LIST.add(new KV(filename, offset, length, false));
+        INDEX_LIST.add(new KV(filename, offset, length, modificationTime, false));
         numIndex++;
     }
 
-    public void addDelete(String filename) throws IOException {
-        checkKey(filename);
-        INDEX_LIST.add(new KV(filename, 0, 0, true));
+    public void addDelete(String filename, long modificationTime) throws IOException {
+        checkKey(filename, modificationTime);
+        INDEX_LIST.add(new KV(filename, 0, 0,modificationTime, true));
         numIndex++;
     }
 
@@ -96,13 +98,13 @@ public class SFMIndexBuilder implements Closeable {
 
         INDEX_LIST.forEach(kv -> {
             KVsProtos.KV.Builder kvBuilder = KVsProtos.KV.newBuilder();
+            kvBuilder.setFilename(kv.getFilename());
+            kvBuilder.setModificationTime(kv.getModificationTime());
             if (! kv.isTombstone()) {
-                kvBuilder.setFilename(kv.getFilename());
                 kvBuilder.setOffset(kv.getOffset());
                 kvBuilder.setLength(kv.getLength());
                 kvBuilder.setTombstone(false);
             } else {
-                kvBuilder.setFilename(kv.getFilename());
                 kvBuilder.setTombstone(true);
             }
 
@@ -144,15 +146,18 @@ public class SFMIndexBuilder implements Closeable {
     }
 
     // small to big
-    private void checkKey(String key) throws IOException {
-        if (lastKey == null) {
+    private void checkKey(String key, long modificationTime) throws IOException {
+        if (lastKey == null || lastModificationTime == 0) {
             lastKey = key;
+            lastModificationTime = modificationTime;
         }
 
-        if (lastKey.compareTo(key) > 0) {
+        if (lastKey.compareTo(key) > 0 || lastModificationTime >= modificationTime) {
             throw new IOException("The key should be ordered.");
         }
+
         lastKey = key;
+        lastModificationTime = modificationTime;
 
         if (minKey == null) {
             minKey = key;

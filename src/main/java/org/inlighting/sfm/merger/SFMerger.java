@@ -163,13 +163,13 @@ public class SFMerger implements Closeable {
                 }
 
                 // write index to indexBuilder
-                sfmIndexBuilder.add(file.getFilename(), startOffset, (int) file.getFilesSize());
+                sfmIndexBuilder.add(file.getFilename(), startOffset, (int) file.getFilesSize(), file.getModificationTime());
                 startOffset += outputStream.getPos();
                 in.close();
                 deleteFile(f);
             } else {
                 // delete file
-                sfmIndexBuilder.addDelete(file.getFilename());
+                sfmIndexBuilder.addDelete(file.getFilename(), file.getModificationTime());
             }
 
         }

@@ -233,21 +233,22 @@ public class SFMIndexReader {
             KVsProtos.KVs kvsProtos = KVsProtos.KVs.parseFrom(kvsBytes);
 
             final int kvSize = kvsProtos.getKvCount();
-            KV[] kvs = new KV[kvSize];
+            List<KV> kvList = new ArrayList<>();
             List<KVsProtos.KV> kvProtosList = kvsProtos.getKvList();
             for (int i=0; i<kvSize; i++) {
                 KVsProtos.KV kvProtos = kvProtosList.get(i);
                 if (! kvProtos.getTombstone()) {
                     // create
-                    kvs[kvSize-i-1] = new KV(kvProtos.getFilename(), kvProtos.getOffset(), kvProtos.getLength(), kvProtos.getTombstone());
+                    kvList.add(new KV(kvProtos.getFilename(), kvProtos.getOffset(), kvProtos.getLength(),
+                            kvProtos.getModificationTime(), kvProtos.getTombstone()));
                 } else {
                     // delete
-                    kvs[kvSize-i-1] = new KV(kvProtos.getFilename(), 0, 0, kvProtos.getTombstone());
+                    kvList.add(new KV(kvProtos.getFilename(), 0, 0,
+                            kvProtos.getModificationTime(), kvProtos.getTombstone()));
                 }
             }
-            List<KV> kvsList = Arrays.asList(kvs);
-            KV_LIST_CACHE.put(indexMetadata.indexId, kvsList);
-            return kvsList;
+            KV_LIST_CACHE.put(indexMetadata.indexId, kvList);
+            return kvList;
         }
     }
 
@@ -301,7 +302,7 @@ public class SFMIndexReader {
             int b = lineReader.readLine(line);
             read += b;
             String[] tmpStr = line.toString().split(",");
-            masterIndexList.add(0, new MasterIndex(Long.parseLong(tmpStr[0]), Integer.parseInt(tmpStr[1]),
+            masterIndexList.add(new MasterIndex(Long.parseLong(tmpStr[0]), Integer.parseInt(tmpStr[1]),
                     tmpStr[2], tmpStr[3]));
         }
     }
@@ -310,6 +311,7 @@ public class SFMIndexReader {
         return kvs.get(index).getFilename();
     }
 
+    // if match the same key, return last one.
     private KV binarySearch(List<KV> kvs, String key) {
         int low = 0;
         int high = kvs.size() - 1;
@@ -320,14 +322,16 @@ public class SFMIndexReader {
 
         while (low <= high) {
             middle = (low + high) / 2;
-            if (getKey(kvs, middle).equals(key)) {
-                return kvs.get(middle);
-            } else if (getKey(kvs, middle).compareTo(key) < 0) {
+            if (getKey(kvs, middle).compareTo(key) <= 0) {
                 low = middle + 1;
             } else {
                 high = middle - 1;
             }
         }
+        if (high >= 0 && getKey(kvs, high).equals(key)) {
+            return kvs.get(high);
+        }
+
         return null;
     }
 

@@ -210,7 +210,7 @@ public class SFMFileSystem extends FileSystem {
         String sfmBasePath = SFMUtil.getSFMBasePath(uri);
         String filename = SFMUtil.getFilename(uri);
         LOG.debug(String.format("Delete file SFM base path: %s, Filename: %s", sfmBasePath, filename));
-        SFMerger.delete(new FileEntity(sfmBasePath, filename, null, 0, true));
+        SFMerger.delete(new FileEntity(sfmBasePath, filename, null, 0, System.currentTimeMillis(), true));
         return true;
     }
 

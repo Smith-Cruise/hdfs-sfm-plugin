@@ -7,12 +7,15 @@ public class KV {
 
     private int length;
 
+    private long modificationTime;
+
     private boolean tombstone;
 
-    public KV(String filename, long offset, int length, boolean tombstone) {
+    public KV(String filename, long offset, int length, long modificationTime, boolean tombstone) {
         this.filename = filename;
         this.offset = offset;
         this.length = length;
+        this.modificationTime = modificationTime;
         this.tombstone = tombstone;
     }
 
@@ -38,6 +41,14 @@ public class KV {
 
     public void setLength(int length) {
         this.length = length;
+    }
+
+    public long getModificationTime() {
+        return modificationTime;
+    }
+
+    public void setModificationTime(long modificationTime) {
+        this.modificationTime = modificationTime;
     }
 
     public boolean isTombstone() {

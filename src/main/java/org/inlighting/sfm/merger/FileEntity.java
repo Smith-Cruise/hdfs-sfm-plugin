@@ -9,15 +9,19 @@ public class FileEntity implements Comparable<FileEntity> {
 
     private long filesSize;
 
+    private long modificationTime;
+
     private boolean tombstone;
 
     public FileEntity() {}
 
-    public FileEntity(String sfmBasePath, String filename, String tmpStoreName, long filesSize, boolean tombstone) {
+    public FileEntity(String sfmBasePath, String filename, String tmpStoreName, long filesSize, long modificationTime,
+                      boolean tombstone) {
         this.sfmBasePath = sfmBasePath;
         this.filename = filename;
         this.tmpStoreName = tmpStoreName;
         this.filesSize = filesSize;
+        this.modificationTime = modificationTime;
         this.tombstone = tombstone;
     }
 
@@ -53,6 +57,14 @@ public class FileEntity implements Comparable<FileEntity> {
         this.filesSize = filesSize;
     }
 
+    public long getModificationTime() {
+        return modificationTime;
+    }
+
+    public void setModificationTime(long modificationTime) {
+        this.modificationTime = modificationTime;
+    }
+
     public boolean isTombstone() {
         return tombstone;
     }
@@ -63,6 +75,11 @@ public class FileEntity implements Comparable<FileEntity> {
 
     @Override
     public int compareTo(FileEntity o) {
-        return filename.compareTo(o.filename);
+        int result = filename.compareTo(o.filename);
+        if (result == 0) {
+            // same filename, compare to modification time.
+            result = Long.compare(modificationTime, o.modificationTime);
+        }
+        return result;
     }
 }

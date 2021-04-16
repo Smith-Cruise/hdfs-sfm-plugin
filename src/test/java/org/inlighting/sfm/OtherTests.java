@@ -9,6 +9,11 @@ import java.io.IOException;
 public class OtherTests {
 
     @Test
+    void test() {
+        System.out.println(System.currentTimeMillis());
+    }
+
+    @Test
     void tmpTest() throws IOException {
         Path qualifiedSFMPath = new Path("hdfs://single.lab.com:9000/CentOS-7-x86_64-Minimal-2009.iso");
         FileSystem fs = qualifiedSFMPath.getFileSystem(new Configuration());
