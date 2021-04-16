@@ -4,7 +4,6 @@ import org.apache.hadoop.fs.*;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.util.LineReader;
 import org.inlighting.sfm.SFMConstants;
-import org.inlighting.sfm.fs.SFMFsDataInputStream;
 import org.inlighting.sfm.proto.BloomFilterProtos;
 import org.inlighting.sfm.proto.KVsProtos;
 import org.inlighting.sfm.proto.TrailerProtos;
@@ -17,12 +16,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URI;
 import java.util.*;
 
 public class SFMIndexReader {
 
     private static final Logger LOG = LoggerFactory.getLogger(SFMIndexReader.class);
+
+    private final String MERGED_FILENAME = "part-0";
 
     // class info
     private final FileSystem FS;
@@ -55,10 +55,7 @@ public class SFMIndexReader {
         MASTER_INDEX_PATH = new Path(SFM_BASE_PATH + "/" + SFMConstants.MASTER_INDEX_NAME);
         INDEX_PATH = new Path(SFM_BASE_PATH + "/" + SFMConstants.INDEX_NAME);
 
-        checkSFMStatus();
-
-        // load master index
-        loadMasterIndex();
+        loadSFMIndexStatus();
 
         INDEX_METADATA_CACHE = new LruCache<>(MAX_INDEX_METADATA);
         // initialize bloom filter cache
@@ -75,7 +72,8 @@ public class SFMIndexReader {
         return new SFMIndexReader(fs, sfmBasePath);
     }
 
-    public List<KV> listStatus() throws IOException {
+    public List<SFMFileStatus> listStatus() throws IOException {
+        List<SFMFileStatus> fileList = new LinkedList<>();
         List<KV> kvList = new LinkedList<>();
         for (int i=0; i<masterIndexList.size(); i++) {
             IndexMetadata indexMetadata = loadIndexMetadataLazily(i);
@@ -84,39 +82,28 @@ public class SFMIndexReader {
         }
 
         final Map<String, Boolean> EXISTED_MAP = new HashMap<>();
-        Iterator<KV> kvIterator = kvList.listIterator();
-        while (kvIterator.hasNext()) {
-            KV kv = kvIterator.next();
-
-            if (EXISTED_MAP.containsKey(kv.getFilename())) {
-                kvIterator.remove();
-            } else {
+        for (KV kv: kvList) {
+            if (! EXISTED_MAP.containsKey(kv.getFilename())) {
                 EXISTED_MAP.put(kv.getFilename(), kv.isTombstone());
-                if (kv.isTombstone()) {
-                    kvIterator.remove();
+                if (! kv.isTombstone()) {
+                    fileList.add(new SFMFileStatus(kv.getFilename(), MERGED_FILENAME, kv.getOffset(), kv.getLength(), 0));
                 }
             }
         }
-        return kvList;
-
-
+        return fileList;
     }
 
-    public FileStatus getFileStatus(String filename) throws IOException {
-        SFMFileStatus sfmFileStatus = getSFMFileStatus(filename);
-        final Path sfmBasePath = new Path(SFM_BASE_PATH);
-        return new FileStatus(sfmFileStatus.length, false,
-                FS.getDefaultReplication(new Path(SFM_BASE_PATH)),
-                FS.getDefaultBlockSize(sfmBasePath), 0, sfmBasePath);
+    public SFMFileStatus getFileStatus(String filename) throws IOException {
+        return getSFMFileStatus(filename);
     }
 
     public BlockLocation[] getFileBlockLocations(String filename, long start,
                                                  long len) throws IOException {
         SFMFileStatus sfmFileStatus = getSFMFileStatus(filename);
-        BlockLocation[] locations = FS.getFileBlockLocations(new Path(SFM_BASE_PATH, sfmFileStatus.mergedFilename),
-                sfmFileStatus.offset + start, len);
+        BlockLocation[] locations = FS.getFileBlockLocations(new Path(SFM_BASE_PATH, MERGED_FILENAME),
+                sfmFileStatus.getOffset() + start, len);
 
-        long fileOffsetInSFM = sfmFileStatus.offset;
+        long fileOffsetInSFM = sfmFileStatus.getOffset();
         long end = start + len;
         for (BlockLocation location: locations) {
             long sfmBlockStart = location.getOffset() - fileOffsetInSFM;
@@ -164,7 +151,7 @@ public class SFMIndexReader {
                     KV kv = binarySearch(kvs, filename);
                     if (kv != null) {
                         if (! kv.isTombstone()) {
-                            return new SFMFileStatus(filename, indexMetadata.mergedFilename, kv.getOffset(), kv.getLength());
+                            return new SFMFileStatus(filename, indexMetadata.mergedFilename, kv.getOffset(), kv.getLength(), 0);
 
                         } else {
                             throw new FileNotFoundException(String.format("%s is already delete", filename));
@@ -179,13 +166,7 @@ public class SFMIndexReader {
         throw new FileNotFoundException(String.format("%s didn't exist.", filename));
     }
 
-    public FSDataInputStream read(String filename, int bufferSize) throws IOException {
-        SFMFileStatus sfmFileStatus = getSFMFileStatus(filename);
-        return new SFMFsDataInputStream(FS, new Path(SFM_BASE_PATH + "/" +sfmFileStatus.mergedFilename),
-                sfmFileStatus.offset, sfmFileStatus.length, bufferSize);
-    }
-
-    private IndexMetadata loadIndexMetadataLazily(int indexId) throws IOException {
+    private synchronized IndexMetadata loadIndexMetadataLazily(int indexId) throws IOException {
         if (INDEX_METADATA_CACHE.containsKey(indexId)) {
             return INDEX_METADATA_CACHE.get(indexId);
         } else {
@@ -227,7 +208,7 @@ public class SFMIndexReader {
         }
     }
 
-    private BloomFilter loadBloomFilterLazily(IndexMetadata indexMetadata) throws IOException {
+    private synchronized BloomFilter loadBloomFilterLazily(IndexMetadata indexMetadata) throws IOException {
         if (BLOOM_FILTER_CACHE.containsKey(indexMetadata.indexId)) {
             return BLOOM_FILTER_CACHE.get(indexMetadata.indexId);
         } else {
@@ -241,7 +222,7 @@ public class SFMIndexReader {
         }
     }
 
-    private List<KV> loadKVsLazily(IndexMetadata indexMetadata) throws IOException {
+    private synchronized List<KV> loadKVsLazily(IndexMetadata indexMetadata) throws IOException {
         if (KV_LIST_CACHE.containsKey(indexMetadata.indexId)) {
             return KV_LIST_CACHE.get(indexMetadata.indexId);
         } else {
@@ -281,47 +262,47 @@ public class SFMIndexReader {
         return list;
     }
 
-    private void loadMasterIndex() throws IOException {
-        LOG.debug("Load master index.");
-        FileStatus masterIndexStatus = FS.getFileStatus(MASTER_INDEX_PATH);
-        BLOCK_SIZE = masterIndexStatus.getBlockSize();
-        REPLICATION = masterIndexStatus.getReplication();
+    private void loadSFMIndexStatus() throws IOException {
+        // check master index.
+        FileStatus masterIndexStat = null;
+        try {
+            masterIndexStat = FS.getFileStatus(MASTER_INDEX_PATH);
+        } catch (FileNotFoundException e) {
+            throw new IOException(String.format("Cannot find %s for sfm.", SFMConstants.MASTER_INDEX_NAME));
+        }
+        if (! masterIndexStat.isFile()) {
+            throw new IOException("Master index is not a regular file.");
+        }
+
+        // check index
+        FileStatus indexStat = null;
+        try {
+            indexStat = FS.getFileStatus(INDEX_PATH);
+        } catch (FileNotFoundException e) {
+            throw new IOException(String.format("Cannot find %s for sfm.", SFMConstants.INDEX_NAME));
+        }
+        // check index is a dictionary
+        if (! indexStat.isFile()) {
+            throw new IOException("Index is not a regular file.");
+        }
+        LOG.debug("SFM index check ok");
+
+        // start to load master index
+        LOG.debug("Start to load master index.");
+        BLOCK_SIZE = masterIndexStat.getBlockSize();
+        REPLICATION = masterIndexStat.getReplication();
 
         FSDataInputStream in = FS.open(MASTER_INDEX_PATH);
         long read = 0;
         Text line = new Text();
         LineReader lineReader = new LineReader(in);
         masterIndexList = new ArrayList<>();
-        while (read < masterIndexStatus.getLen()) {
+        while (read < masterIndexStat.getLen()) {
             int b = lineReader.readLine(line);
             read += b;
             String[] tmpStr = line.toString().split(",");
             masterIndexList.add(0, new MasterIndex(Long.parseLong(tmpStr[0]), Integer.parseInt(tmpStr[1]),
                     tmpStr[2], tmpStr[3]));
-        }
-    }
-
-    private void checkSFMStatus() throws IOException {
-        // check master index existed.
-        if (! FS.exists(MASTER_INDEX_PATH)) {
-            throw new IOException(String.format("Cannot find %s for sfm.", SFMConstants.MASTER_INDEX_NAME));
-        }
-
-        // check index existed.
-        if (! FS.exists(INDEX_PATH)) {
-            throw new IOException(String.format("Cannot find %s for sfm.", SFMConstants.INDEX_NAME));
-        }
-
-        // check master index is a dictionary
-        FileStatus masterIndexStat = FS.getFileStatus(MASTER_INDEX_PATH);
-        if (! masterIndexStat.isFile()) {
-            throw new IOException("Master index is not a regular file.");
-        }
-
-        // check index is a dictionary
-        FileStatus indexStat = FS.getFileStatus(INDEX_PATH);
-        if (! indexStat.isFile()) {
-            throw new IOException("Index is not a regular file.");
         }
     }
 
@@ -383,22 +364,5 @@ public class SFMIndexReader {
         private int bloomFilterLength;
 
         private int kvsLength;
-    }
-
-    private class SFMFileStatus {
-        private String filename;
-
-        private String mergedFilename;
-
-        private long offset;
-
-        private int length;
-
-        public SFMFileStatus(String filename, String mergedFilename, long offset, int length) {
-            this.filename = filename;
-            this.mergedFilename = mergedFilename;
-            this.offset = offset;
-            this.length = length;
-        }
     }
 }

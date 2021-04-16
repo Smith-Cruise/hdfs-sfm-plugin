@@ -12,13 +12,6 @@ public class SFMConstants {
 
     public static final String DEFAULT_UNDERLYING_FS = "hdfs";
 
-    public static final long DEFAULT_BLOCK_SIZE = 128 * 1024 * 1024;
-
-    // index configuration byte
-    public static final int PRE_READ_SIZE = 256 * 1024;
-
-    public static final int LAST_BYTE_SIZE = 1;
-
     public static final int TRAILER_INDEX_VERSION = 0;
 
     public static final int MAX_NUM_INDEX = 100000;

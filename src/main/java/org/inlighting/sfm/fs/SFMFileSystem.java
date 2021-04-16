@@ -8,7 +8,7 @@ import org.apache.hadoop.hdfs.*;
 import org.apache.hadoop.net.NetUtils;
 import org.apache.hadoop.util.Progressable;
 import org.inlighting.sfm.SFMConstants;
-import org.inlighting.sfm.index.KV;
+import org.inlighting.sfm.index.SFMFileStatus;
 import org.inlighting.sfm.index.SFMIndexReader;
 import org.inlighting.sfm.merger.FileEntity;
 import org.inlighting.sfm.merger.SFMerger;
@@ -18,6 +18,7 @@ import org.inlighting.sfm.util.SFMUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -71,20 +72,22 @@ public class SFMFileSystem extends FileSystem {
             throw new IOException("Incomplete SFM URI, no authority: "+name);
         }
 
-        // create underlying file system
-        if (underLyingFS == null) {
-            // create Distributed FileSystem
-            // specific to merged file system.
-            underLyingFS = new Path(String.format("%s://%s", SFMConstants.DEFAULT_UNDERLYING_FS, authority)).getFileSystem(conf);
-        }
-
         this.uri = URI.create(schema+"://"+authority);
         this.workingDir = getHomeDirectory();
 
-        // init metaDataCache
-        if (metaDataCache == null) {
-            final int MAX_CACHE_ENTRIES = 10;
-            metaDataCache = Collections.synchronizedMap(new LruCache<String, SFMetaData>(MAX_CACHE_ENTRIES));
+        synchronized (this) {
+            // create underlying file system
+            if (underLyingFS == null) {
+                // create Distributed FileSystem
+                // specific to merged file system.
+                underLyingFS = new Path(String.format("%s://%s", SFMConstants.DEFAULT_UNDERLYING_FS, authority)).getFileSystem(conf);
+            }
+
+            // init metaDataCache
+            if (metaDataCache == null) {
+                final int MAX_CACHE_ENTRIES = 10;
+                metaDataCache = Collections.synchronizedMap(new LruCache<String, SFMetaData>(MAX_CACHE_ENTRIES));
+            }
         }
     }
 
@@ -135,7 +138,12 @@ public class SFMFileSystem extends FileSystem {
         loadSFMInformation(absF.toUri());
         // start to read
         String filename = SFMUtil.getFilename(absF.toUri());
-        return curSFMReader.read(filename, bufferSize);
+        if (filename == null) {
+            throw new FileNotFoundException(absF.toString());
+        }
+        SFMFileStatus sfmFileStatus = curSFMReader.getFileStatus(filename);
+        return new SFMFsDataInputStream(underLyingFS, new Path(curSFMBasePath, sfmFileStatus.getMergedFilename()),
+                sfmFileStatus.getOffset(), sfmFileStatus.getLength(), bufferSize);
     }
 
     @Override
@@ -214,18 +222,16 @@ public class SFMFileSystem extends FileSystem {
         }
         loadSFMInformation(uri);
 
-        List<KV> kvList = curSFMReader.listStatus();
-        final String sfmBasePath = curSFMReader.getSFMBasePath();
-        FileStatus[] fileStatus = new FileStatus[kvList.size()];
+        List<SFMFileStatus> sfmFileStatuses= curSFMReader.listStatus();
+        FileStatus[] fileStatuses = new FileStatus[sfmFileStatuses.size()];
         int i = 0;
-        for (KV kv: kvList) {
-            final Path filePath = makeQualified(new Path(sfmBasePath, kv.getFilename()));
-            fileStatus[i] = new FileStatus(kv.getLength(), false,
-                   getDefaultReplication(filePath), getDefaultBlockSize(filePath),
-                    0, filePath);
+        for (SFMFileStatus sfmFileStatus: sfmFileStatuses) {
+            final Path filePath = makeQualified(new Path(curSFMBasePath, sfmFileStatus.getFilename()));
+            fileStatuses[i] = new FileStatus(sfmFileStatus.getLength(), false, curSFMReader.getReplication(),
+                    curSFMReader.getBlockSize(), sfmFileStatus.getModificationTime(), filePath);
             i++;
         }
-        return fileStatus;
+        return fileStatuses;
     }
 
     @Override
@@ -269,13 +275,13 @@ public class SFMFileSystem extends FileSystem {
         String filename = SFMUtil.getFilename(uri);
         if (filename != null) {
             // file
-            FileStatus fileStatus = curSFMReader.getFileStatus(filename);
-            fileStatus.setPath(makeQualified(f));
-            return fileStatus;
+            SFMFileStatus sfmFileStatus = curSFMReader.getFileStatus(filename);
+            final Path filePath = makeQualified(new Path(curSFMBasePath, sfmFileStatus.getFilename()));
+            return new FileStatus(sfmFileStatus.getLength(), true, curSFMReader.getReplication(),
+                    curSFMReader.getBlockSize(), sfmFileStatus.getModificationTime(), filePath);
         } else {
-            // dir
-            return new FileStatus(0, true, getDefaultReplication(f), getDefaultBlockSize(f),
-                    0, makeQualified(f));
+            // dir, handle by underlyingFS
+            return underLyingFS.getFileStatus(absF);
         }
     }
 
@@ -373,7 +379,7 @@ public class SFMFileSystem extends FileSystem {
     }
 
     // path must be absolute path, and will ignore schema and authority automatically
-    private void loadSFMInformation(URI uri) throws IOException {
+    private synchronized void loadSFMInformation(URI uri) throws IOException {
         String sfmBasePath = SFMUtil.getSFMBasePath(uri);
         if (! sfmBasePath.equals(curSFMBasePath)) {
             SFMetaData metaData = getSFMInformation(sfmBasePath);
