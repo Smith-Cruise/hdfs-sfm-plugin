@@ -6,17 +6,17 @@ package org.inlighting.sfm.proto;
 public final class KVsProtos {
   private KVsProtos() {}
   public static void registerAllExtensions(
-      org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite registry) {
+      com.google.protobuf.ExtensionRegistryLite registry) {
   }
 
   public static void registerAllExtensions(
-      org.apache.hadoop.thirdparty.protobuf.ExtensionRegistry registry) {
+      com.google.protobuf.ExtensionRegistry registry) {
     registerAllExtensions(
-        (org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite) registry);
+        (com.google.protobuf.ExtensionRegistryLite) registry);
   }
   public interface KVOrBuilder extends
       // @@protoc_insertion_point(interface_extends:hadoop.hdfs.sfm.KV)
-      org.apache.hadoop.thirdparty.protobuf.MessageOrBuilder {
+      com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>required string filename = 1;</code>
@@ -29,7 +29,7 @@ public final class KVsProtos {
     /**
      * <code>required string filename = 1;</code>
      */
-    org.apache.hadoop.thirdparty.protobuf.ByteString
+    com.google.protobuf.ByteString
         getFilenameBytes();
 
     /**
@@ -59,11 +59,20 @@ public final class KVsProtos {
     int getLength();
 
     /**
-     * <code>required bool tombstone = 4;</code>
+     * <code>required uint64 modificationTime = 4;</code>
+     */
+    boolean hasModificationTime();
+    /**
+     * <code>required uint64 modificationTime = 4;</code>
+     */
+    long getModificationTime();
+
+    /**
+     * <code>required bool tombstone = 5;</code>
      */
     boolean hasTombstone();
     /**
-     * <code>required bool tombstone = 4;</code>
+     * <code>required bool tombstone = 5;</code>
      */
     boolean getTombstone();
   }
@@ -71,12 +80,12 @@ public final class KVsProtos {
    * Protobuf type {@code hadoop.hdfs.sfm.KV}
    */
   public  static final class KV extends
-      org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3 implements
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:hadoop.hdfs.sfm.KV)
       KVOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use KV.newBuilder() to construct.
-    private KV(org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    private KV(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private KV() {
@@ -84,21 +93,21 @@ public final class KVsProtos {
     }
 
     @java.lang.Override
-    public final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet
+    public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
     private KV(
-        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
-      org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet.Builder unknownFields =
-          org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet.newBuilder();
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -108,7 +117,7 @@ public final class KVsProtos {
               done = true;
               break;
             case 10: {
-              org.apache.hadoop.thirdparty.protobuf.ByteString bs = input.readBytes();
+              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
               filename_ = bs;
               break;
@@ -125,6 +134,11 @@ public final class KVsProtos {
             }
             case 32: {
               bitField0_ |= 0x00000008;
+              modificationTime_ = input.readUInt64();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
               tombstone_ = input.readBool();
               break;
             }
@@ -137,27 +151,27 @@ public final class KVsProtos {
             }
           }
         }
-      } catch (org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException e) {
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException(
+        throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
-    public static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
+    public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return KVsProtos.internal_static_hadoop_hdfs_sfm_KV_descriptor;
+      return org.inlighting.sfm.proto.KVsProtos.internal_static_hadoop_hdfs_sfm_KV_descriptor;
     }
 
     @java.lang.Override
-    protected org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return KVsProtos.internal_static_hadoop_hdfs_sfm_KV_fieldAccessorTable
+      return org.inlighting.sfm.proto.KVsProtos.internal_static_hadoop_hdfs_sfm_KV_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              KVsProtos.KV.class, KVsProtos.KV.Builder.class);
+              org.inlighting.sfm.proto.KVsProtos.KV.class, org.inlighting.sfm.proto.KVsProtos.KV.Builder.class);
     }
 
     private int bitField0_;
@@ -177,8 +191,8 @@ public final class KVsProtos {
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
-        org.apache.hadoop.thirdparty.protobuf.ByteString bs = 
-            (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
           filename_ = s;
@@ -189,17 +203,17 @@ public final class KVsProtos {
     /**
      * <code>required string filename = 1;</code>
      */
-    public org.apache.hadoop.thirdparty.protobuf.ByteString
+    public com.google.protobuf.ByteString
         getFilenameBytes() {
       java.lang.Object ref = filename_;
       if (ref instanceof java.lang.String) {
-        org.apache.hadoop.thirdparty.protobuf.ByteString b = 
-            org.apache.hadoop.thirdparty.protobuf.ByteString.copyFromUtf8(
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
         filename_ = b;
         return b;
       } else {
-        return (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
+        return (com.google.protobuf.ByteString) ref;
       }
     }
 
@@ -241,16 +255,31 @@ public final class KVsProtos {
       return length_;
     }
 
-    public static final int TOMBSTONE_FIELD_NUMBER = 4;
-    private boolean tombstone_;
+    public static final int MODIFICATIONTIME_FIELD_NUMBER = 4;
+    private long modificationTime_;
     /**
-     * <code>required bool tombstone = 4;</code>
+     * <code>required uint64 modificationTime = 4;</code>
      */
-    public boolean hasTombstone() {
+    public boolean hasModificationTime() {
       return ((bitField0_ & 0x00000008) != 0);
     }
     /**
-     * <code>required bool tombstone = 4;</code>
+     * <code>required uint64 modificationTime = 4;</code>
+     */
+    public long getModificationTime() {
+      return modificationTime_;
+    }
+
+    public static final int TOMBSTONE_FIELD_NUMBER = 5;
+    private boolean tombstone_;
+    /**
+     * <code>required bool tombstone = 5;</code>
+     */
+    public boolean hasTombstone() {
+      return ((bitField0_ & 0x00000010) != 0);
+    }
+    /**
+     * <code>required bool tombstone = 5;</code>
      */
     public boolean getTombstone() {
       return tombstone_;
@@ -267,6 +296,10 @@ public final class KVsProtos {
         memoizedIsInitialized = 0;
         return false;
       }
+      if (!hasModificationTime()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       if (!hasTombstone()) {
         memoizedIsInitialized = 0;
         return false;
@@ -276,10 +309,10 @@ public final class KVsProtos {
     }
 
     @java.lang.Override
-    public void writeTo(org.apache.hadoop.thirdparty.protobuf.CodedOutputStream output)
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       if (((bitField0_ & 0x00000001) != 0)) {
-        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.writeString(output, 1, filename_);
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, filename_);
       }
       if (((bitField0_ & 0x00000002) != 0)) {
         output.writeUInt64(2, offset_);
@@ -288,7 +321,10 @@ public final class KVsProtos {
         output.writeUInt32(3, length_);
       }
       if (((bitField0_ & 0x00000008) != 0)) {
-        output.writeBool(4, tombstone_);
+        output.writeUInt64(4, modificationTime_);
+      }
+      if (((bitField0_ & 0x00000010) != 0)) {
+        output.writeBool(5, tombstone_);
       }
       unknownFields.writeTo(output);
     }
@@ -300,19 +336,23 @@ public final class KVsProtos {
 
       size = 0;
       if (((bitField0_ & 0x00000001) != 0)) {
-        size += org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.computeStringSize(1, filename_);
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, filename_);
       }
       if (((bitField0_ & 0x00000002) != 0)) {
-        size += org.apache.hadoop.thirdparty.protobuf.CodedOutputStream
+        size += com.google.protobuf.CodedOutputStream
           .computeUInt64Size(2, offset_);
       }
       if (((bitField0_ & 0x00000004) != 0)) {
-        size += org.apache.hadoop.thirdparty.protobuf.CodedOutputStream
+        size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(3, length_);
       }
       if (((bitField0_ & 0x00000008) != 0)) {
-        size += org.apache.hadoop.thirdparty.protobuf.CodedOutputStream
-          .computeBoolSize(4, tombstone_);
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(4, modificationTime_);
+      }
+      if (((bitField0_ & 0x00000010) != 0)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(5, tombstone_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -324,10 +364,10 @@ public final class KVsProtos {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof KVsProtos.KV)) {
+      if (!(obj instanceof org.inlighting.sfm.proto.KVsProtos.KV)) {
         return super.equals(obj);
       }
-      KVsProtos.KV other = (KVsProtos.KV) obj;
+      org.inlighting.sfm.proto.KVsProtos.KV other = (org.inlighting.sfm.proto.KVsProtos.KV) obj;
 
       if (hasFilename() != other.hasFilename()) return false;
       if (hasFilename()) {
@@ -343,6 +383,11 @@ public final class KVsProtos {
       if (hasLength()) {
         if (getLength()
             != other.getLength()) return false;
+      }
+      if (hasModificationTime() != other.hasModificationTime()) return false;
+      if (hasModificationTime()) {
+        if (getModificationTime()
+            != other.getModificationTime()) return false;
       }
       if (hasTombstone() != other.hasTombstone()) return false;
       if (hasTombstone()) {
@@ -366,16 +411,21 @@ public final class KVsProtos {
       }
       if (hasOffset()) {
         hash = (37 * hash) + OFFSET_FIELD_NUMBER;
-        hash = (53 * hash) + org.apache.hadoop.thirdparty.protobuf.Internal.hashLong(
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
             getOffset());
       }
       if (hasLength()) {
         hash = (37 * hash) + LENGTH_FIELD_NUMBER;
         hash = (53 * hash) + getLength();
       }
+      if (hasModificationTime()) {
+        hash = (37 * hash) + MODIFICATIONTIME_FIELD_NUMBER;
+        hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+            getModificationTime());
+      }
       if (hasTombstone()) {
         hash = (37 * hash) + TOMBSTONE_FIELD_NUMBER;
-        hash = (53 * hash) + org.apache.hadoop.thirdparty.protobuf.Internal.hashBoolean(
+        hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
             getTombstone());
       }
       hash = (29 * hash) + unknownFields.hashCode();
@@ -383,73 +433,73 @@ public final class KVsProtos {
       return hash;
     }
 
-    public static KVsProtos.KV parseFrom(
+    public static org.inlighting.sfm.proto.KVsProtos.KV parseFrom(
         java.nio.ByteBuffer data)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static KVsProtos.KV parseFrom(
+    public static org.inlighting.sfm.proto.KVsProtos.KV parseFrom(
         java.nio.ByteBuffer data,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static KVsProtos.KV parseFrom(
-        org.apache.hadoop.thirdparty.protobuf.ByteString data)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+    public static org.inlighting.sfm.proto.KVsProtos.KV parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static KVsProtos.KV parseFrom(
-        org.apache.hadoop.thirdparty.protobuf.ByteString data,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+    public static org.inlighting.sfm.proto.KVsProtos.KV parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static KVsProtos.KV parseFrom(byte[] data)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+    public static org.inlighting.sfm.proto.KVsProtos.KV parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static KVsProtos.KV parseFrom(
+    public static org.inlighting.sfm.proto.KVsProtos.KV parseFrom(
         byte[] data,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static KVsProtos.KV parseFrom(java.io.InputStream input)
+    public static org.inlighting.sfm.proto.KVsProtos.KV parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static KVsProtos.KV parseFrom(
+    public static org.inlighting.sfm.proto.KVsProtos.KV parseFrom(
         java.io.InputStream input,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static KVsProtos.KV parseDelimitedFrom(java.io.InputStream input)
+    public static org.inlighting.sfm.proto.KVsProtos.KV parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static KVsProtos.KV parseDelimitedFrom(
+    public static org.inlighting.sfm.proto.KVsProtos.KV parseDelimitedFrom(
         java.io.InputStream input,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static KVsProtos.KV parseFrom(
-        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input)
+    public static org.inlighting.sfm.proto.KVsProtos.KV parseFrom(
+        com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static KVsProtos.KV parseFrom(
-        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+    public static org.inlighting.sfm.proto.KVsProtos.KV parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -458,7 +508,7 @@ public final class KVsProtos {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(KVsProtos.KV prototype) {
+    public static Builder newBuilder(org.inlighting.sfm.proto.KVsProtos.KV prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -469,7 +519,7 @@ public final class KVsProtos {
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -477,34 +527,34 @@ public final class KVsProtos {
      * Protobuf type {@code hadoop.hdfs.sfm.KV}
      */
     public static final class Builder extends
-        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:hadoop.hdfs.sfm.KV)
-        KVsProtos.KVOrBuilder {
-      public static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
+        org.inlighting.sfm.proto.KVsProtos.KVOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return KVsProtos.internal_static_hadoop_hdfs_sfm_KV_descriptor;
+        return org.inlighting.sfm.proto.KVsProtos.internal_static_hadoop_hdfs_sfm_KV_descriptor;
       }
 
       @java.lang.Override
-      protected org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return KVsProtos.internal_static_hadoop_hdfs_sfm_KV_fieldAccessorTable
+        return org.inlighting.sfm.proto.KVsProtos.internal_static_hadoop_hdfs_sfm_KV_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                KVsProtos.KV.class, KVsProtos.KV.Builder.class);
+                org.inlighting.sfm.proto.KVsProtos.KV.class, org.inlighting.sfm.proto.KVsProtos.KV.Builder.class);
       }
 
-      // Construct using org.inlighting.proto.KVsProtos.KV.newBuilder()
+      // Construct using org.inlighting.sfm.proto.KVsProtos.KV.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
 
       private Builder(
-          org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+        if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
         }
       }
@@ -517,25 +567,27 @@ public final class KVsProtos {
         bitField0_ = (bitField0_ & ~0x00000002);
         length_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
-        tombstone_ = false;
+        modificationTime_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000008);
+        tombstone_ = false;
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
       @java.lang.Override
-      public org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
+      public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return KVsProtos.internal_static_hadoop_hdfs_sfm_KV_descriptor;
+        return org.inlighting.sfm.proto.KVsProtos.internal_static_hadoop_hdfs_sfm_KV_descriptor;
       }
 
       @java.lang.Override
-      public KVsProtos.KV getDefaultInstanceForType() {
-        return KVsProtos.KV.getDefaultInstance();
+      public org.inlighting.sfm.proto.KVsProtos.KV getDefaultInstanceForType() {
+        return org.inlighting.sfm.proto.KVsProtos.KV.getDefaultInstance();
       }
 
       @java.lang.Override
-      public KVsProtos.KV build() {
-        KVsProtos.KV result = buildPartial();
+      public org.inlighting.sfm.proto.KVsProtos.KV build() {
+        org.inlighting.sfm.proto.KVsProtos.KV result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -543,8 +595,8 @@ public final class KVsProtos {
       }
 
       @java.lang.Override
-      public KVsProtos.KV buildPartial() {
-        KVsProtos.KV result = new KVsProtos.KV(this);
+      public org.inlighting.sfm.proto.KVsProtos.KV buildPartial() {
+        org.inlighting.sfm.proto.KVsProtos.KV result = new org.inlighting.sfm.proto.KVsProtos.KV(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) != 0)) {
@@ -560,8 +612,12 @@ public final class KVsProtos {
           to_bitField0_ |= 0x00000004;
         }
         if (((from_bitField0_ & 0x00000008) != 0)) {
-          result.tombstone_ = tombstone_;
+          result.modificationTime_ = modificationTime_;
           to_bitField0_ |= 0x00000008;
+        }
+        if (((from_bitField0_ & 0x00000010) != 0)) {
+          result.tombstone_ = tombstone_;
+          to_bitField0_ |= 0x00000010;
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -574,44 +630,44 @@ public final class KVsProtos {
       }
       @java.lang.Override
       public Builder setField(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.setField(field, value);
       }
       @java.lang.Override
       public Builder clearField(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field) {
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
       @java.lang.Override
       public Builder clearOneof(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.OneofDescriptor oneof) {
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
       @java.lang.Override
       public Builder setRepeatedField(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
       @java.lang.Override
       public Builder addRepeatedField(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
       @java.lang.Override
-      public Builder mergeFrom(org.apache.hadoop.thirdparty.protobuf.Message other) {
-        if (other instanceof KVsProtos.KV) {
-          return mergeFrom((KVsProtos.KV)other);
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.inlighting.sfm.proto.KVsProtos.KV) {
+          return mergeFrom((org.inlighting.sfm.proto.KVsProtos.KV)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(KVsProtos.KV other) {
-        if (other == KVsProtos.KV.getDefaultInstance()) return this;
+      public Builder mergeFrom(org.inlighting.sfm.proto.KVsProtos.KV other) {
+        if (other == org.inlighting.sfm.proto.KVsProtos.KV.getDefaultInstance()) return this;
         if (other.hasFilename()) {
           bitField0_ |= 0x00000001;
           filename_ = other.filename_;
@@ -622,6 +678,9 @@ public final class KVsProtos {
         }
         if (other.hasLength()) {
           setLength(other.getLength());
+        }
+        if (other.hasModificationTime()) {
+          setModificationTime(other.getModificationTime());
         }
         if (other.hasTombstone()) {
           setTombstone(other.getTombstone());
@@ -636,6 +695,9 @@ public final class KVsProtos {
         if (!hasFilename()) {
           return false;
         }
+        if (!hasModificationTime()) {
+          return false;
+        }
         if (!hasTombstone()) {
           return false;
         }
@@ -644,14 +706,14 @@ public final class KVsProtos {
 
       @java.lang.Override
       public Builder mergeFrom(
-          org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
-          org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        KVsProtos.KV parsedMessage = null;
+        org.inlighting.sfm.proto.KVsProtos.KV parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (KVsProtos.KV) e.getUnfinishedMessage();
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.inlighting.sfm.proto.KVsProtos.KV) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -675,8 +737,8 @@ public final class KVsProtos {
       public java.lang.String getFilename() {
         java.lang.Object ref = filename_;
         if (!(ref instanceof java.lang.String)) {
-          org.apache.hadoop.thirdparty.protobuf.ByteString bs =
-              (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
           if (bs.isValidUtf8()) {
             filename_ = s;
@@ -689,17 +751,17 @@ public final class KVsProtos {
       /**
        * <code>required string filename = 1;</code>
        */
-      public org.apache.hadoop.thirdparty.protobuf.ByteString
+      public com.google.protobuf.ByteString
           getFilenameBytes() {
         java.lang.Object ref = filename_;
         if (ref instanceof String) {
-          org.apache.hadoop.thirdparty.protobuf.ByteString b = 
-              org.apache.hadoop.thirdparty.protobuf.ByteString.copyFromUtf8(
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
           filename_ = b;
           return b;
         } else {
-          return (org.apache.hadoop.thirdparty.protobuf.ByteString) ref;
+          return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
@@ -728,7 +790,7 @@ public final class KVsProtos {
        * <code>required string filename = 1;</code>
        */
       public Builder setFilenameBytes(
-          org.apache.hadoop.thirdparty.protobuf.ByteString value) {
+          com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -818,46 +880,78 @@ public final class KVsProtos {
         return this;
       }
 
-      private boolean tombstone_ ;
+      private long modificationTime_ ;
       /**
-       * <code>required bool tombstone = 4;</code>
+       * <code>required uint64 modificationTime = 4;</code>
        */
-      public boolean hasTombstone() {
+      public boolean hasModificationTime() {
         return ((bitField0_ & 0x00000008) != 0);
       }
       /**
-       * <code>required bool tombstone = 4;</code>
+       * <code>required uint64 modificationTime = 4;</code>
+       */
+      public long getModificationTime() {
+        return modificationTime_;
+      }
+      /**
+       * <code>required uint64 modificationTime = 4;</code>
+       */
+      public Builder setModificationTime(long value) {
+        bitField0_ |= 0x00000008;
+        modificationTime_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required uint64 modificationTime = 4;</code>
+       */
+      public Builder clearModificationTime() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        modificationTime_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private boolean tombstone_ ;
+      /**
+       * <code>required bool tombstone = 5;</code>
+       */
+      public boolean hasTombstone() {
+        return ((bitField0_ & 0x00000010) != 0);
+      }
+      /**
+       * <code>required bool tombstone = 5;</code>
        */
       public boolean getTombstone() {
         return tombstone_;
       }
       /**
-       * <code>required bool tombstone = 4;</code>
+       * <code>required bool tombstone = 5;</code>
        */
       public Builder setTombstone(boolean value) {
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         tombstone_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required bool tombstone = 4;</code>
+       * <code>required bool tombstone = 5;</code>
        */
       public Builder clearTombstone() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000010);
         tombstone_ = false;
         onChanged();
         return this;
       }
       @java.lang.Override
       public final Builder setUnknownFields(
-          final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
       @java.lang.Override
       public final Builder mergeUnknownFields(
-          final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -866,37 +960,37 @@ public final class KVsProtos {
     }
 
     // @@protoc_insertion_point(class_scope:hadoop.hdfs.sfm.KV)
-    private static final KVsProtos.KV DEFAULT_INSTANCE;
+    private static final org.inlighting.sfm.proto.KVsProtos.KV DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new KVsProtos.KV();
+      DEFAULT_INSTANCE = new org.inlighting.sfm.proto.KVsProtos.KV();
     }
 
-    public static KVsProtos.KV getDefaultInstance() {
+    public static org.inlighting.sfm.proto.KVsProtos.KV getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final org.apache.hadoop.thirdparty.protobuf.Parser<KV>
-        PARSER = new org.apache.hadoop.thirdparty.protobuf.AbstractParser<KV>() {
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<KV>
+        PARSER = new com.google.protobuf.AbstractParser<KV>() {
       @java.lang.Override
       public KV parsePartialFrom(
-          org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
-          org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
         return new KV(input, extensionRegistry);
       }
     };
 
-    public static org.apache.hadoop.thirdparty.protobuf.Parser<KV> parser() {
+    public static com.google.protobuf.Parser<KV> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public org.apache.hadoop.thirdparty.protobuf.Parser<KV> getParserForType() {
+    public com.google.protobuf.Parser<KV> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public KVsProtos.KV getDefaultInstanceForType() {
+    public org.inlighting.sfm.proto.KVsProtos.KV getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
@@ -904,17 +998,17 @@ public final class KVsProtos {
 
   public interface KVsOrBuilder extends
       // @@protoc_insertion_point(interface_extends:hadoop.hdfs.sfm.KVs)
-      org.apache.hadoop.thirdparty.protobuf.MessageOrBuilder {
+      com.google.protobuf.MessageOrBuilder {
 
     /**
      * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
      */
-    java.util.List<KVsProtos.KV>
+    java.util.List<org.inlighting.sfm.proto.KVsProtos.KV> 
         getKvList();
     /**
      * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
      */
-    KVsProtos.KV getKv(int index);
+    org.inlighting.sfm.proto.KVsProtos.KV getKv(int index);
     /**
      * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
      */
@@ -922,24 +1016,24 @@ public final class KVsProtos {
     /**
      * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
      */
-    java.util.List<? extends KVsProtos.KVOrBuilder>
+    java.util.List<? extends org.inlighting.sfm.proto.KVsProtos.KVOrBuilder> 
         getKvOrBuilderList();
     /**
      * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
      */
-    KVsProtos.KVOrBuilder getKvOrBuilder(
+    org.inlighting.sfm.proto.KVsProtos.KVOrBuilder getKvOrBuilder(
         int index);
   }
   /**
    * Protobuf type {@code hadoop.hdfs.sfm.KVs}
    */
   public  static final class KVs extends
-      org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3 implements
+      com.google.protobuf.GeneratedMessageV3 implements
       // @@protoc_insertion_point(message_implements:hadoop.hdfs.sfm.KVs)
       KVsOrBuilder {
   private static final long serialVersionUID = 0L;
     // Use KVs.newBuilder() to construct.
-    private KVs(org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.Builder<?> builder) {
+    private KVs(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
       super(builder);
     }
     private KVs() {
@@ -947,21 +1041,21 @@ public final class KVsProtos {
     }
 
     @java.lang.Override
-    public final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet
+    public final com.google.protobuf.UnknownFieldSet
     getUnknownFields() {
       return this.unknownFields;
     }
     private KVs(
-        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       this();
       if (extensionRegistry == null) {
         throw new java.lang.NullPointerException();
       }
       int mutable_bitField0_ = 0;
-      org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet.Builder unknownFields =
-          org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet.newBuilder();
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -972,11 +1066,11 @@ public final class KVsProtos {
               break;
             case 10: {
               if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-                kv_ = new java.util.ArrayList<KVsProtos.KV>();
+                kv_ = new java.util.ArrayList<org.inlighting.sfm.proto.KVsProtos.KV>();
                 mutable_bitField0_ |= 0x00000001;
               }
               kv_.add(
-                  input.readMessage(KVsProtos.KV.PARSER, extensionRegistry));
+                  input.readMessage(org.inlighting.sfm.proto.KVsProtos.KV.PARSER, extensionRegistry));
               break;
             }
             default: {
@@ -988,10 +1082,10 @@ public final class KVsProtos {
             }
           }
         }
-      } catch (org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException e) {
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
-        throw new org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException(
+        throw new com.google.protobuf.InvalidProtocolBufferException(
             e).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000001) != 0)) {
@@ -1001,31 +1095,31 @@ public final class KVsProtos {
         makeExtensionsImmutable();
       }
     }
-    public static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
+    public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return KVsProtos.internal_static_hadoop_hdfs_sfm_KVs_descriptor;
+      return org.inlighting.sfm.proto.KVsProtos.internal_static_hadoop_hdfs_sfm_KVs_descriptor;
     }
 
     @java.lang.Override
-    protected org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return KVsProtos.internal_static_hadoop_hdfs_sfm_KVs_fieldAccessorTable
+      return org.inlighting.sfm.proto.KVsProtos.internal_static_hadoop_hdfs_sfm_KVs_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              KVsProtos.KVs.class, KVsProtos.KVs.Builder.class);
+              org.inlighting.sfm.proto.KVsProtos.KVs.class, org.inlighting.sfm.proto.KVsProtos.KVs.Builder.class);
     }
 
     public static final int KV_FIELD_NUMBER = 1;
-    private java.util.List<KVsProtos.KV> kv_;
+    private java.util.List<org.inlighting.sfm.proto.KVsProtos.KV> kv_;
     /**
      * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
      */
-    public java.util.List<KVsProtos.KV> getKvList() {
+    public java.util.List<org.inlighting.sfm.proto.KVsProtos.KV> getKvList() {
       return kv_;
     }
     /**
      * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
      */
-    public java.util.List<? extends KVsProtos.KVOrBuilder>
+    public java.util.List<? extends org.inlighting.sfm.proto.KVsProtos.KVOrBuilder> 
         getKvOrBuilderList() {
       return kv_;
     }
@@ -1038,13 +1132,13 @@ public final class KVsProtos {
     /**
      * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
      */
-    public KVsProtos.KV getKv(int index) {
+    public org.inlighting.sfm.proto.KVsProtos.KV getKv(int index) {
       return kv_.get(index);
     }
     /**
      * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
      */
-    public KVsProtos.KVOrBuilder getKvOrBuilder(
+    public org.inlighting.sfm.proto.KVsProtos.KVOrBuilder getKvOrBuilder(
         int index) {
       return kv_.get(index);
     }
@@ -1067,7 +1161,7 @@ public final class KVsProtos {
     }
 
     @java.lang.Override
-    public void writeTo(org.apache.hadoop.thirdparty.protobuf.CodedOutputStream output)
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       for (int i = 0; i < kv_.size(); i++) {
         output.writeMessage(1, kv_.get(i));
@@ -1082,7 +1176,7 @@ public final class KVsProtos {
 
       size = 0;
       for (int i = 0; i < kv_.size(); i++) {
-        size += org.apache.hadoop.thirdparty.protobuf.CodedOutputStream
+        size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, kv_.get(i));
       }
       size += unknownFields.getSerializedSize();
@@ -1095,10 +1189,10 @@ public final class KVsProtos {
       if (obj == this) {
        return true;
       }
-      if (!(obj instanceof KVsProtos.KVs)) {
+      if (!(obj instanceof org.inlighting.sfm.proto.KVsProtos.KVs)) {
         return super.equals(obj);
       }
-      KVsProtos.KVs other = (KVsProtos.KVs) obj;
+      org.inlighting.sfm.proto.KVsProtos.KVs other = (org.inlighting.sfm.proto.KVsProtos.KVs) obj;
 
       if (!getKvList()
           .equals(other.getKvList())) return false;
@@ -1122,73 +1216,73 @@ public final class KVsProtos {
       return hash;
     }
 
-    public static KVsProtos.KVs parseFrom(
+    public static org.inlighting.sfm.proto.KVsProtos.KVs parseFrom(
         java.nio.ByteBuffer data)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static KVsProtos.KVs parseFrom(
+    public static org.inlighting.sfm.proto.KVsProtos.KVs parseFrom(
         java.nio.ByteBuffer data,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static KVsProtos.KVs parseFrom(
-        org.apache.hadoop.thirdparty.protobuf.ByteString data)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+    public static org.inlighting.sfm.proto.KVsProtos.KVs parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static KVsProtos.KVs parseFrom(
-        org.apache.hadoop.thirdparty.protobuf.ByteString data,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+    public static org.inlighting.sfm.proto.KVsProtos.KVs parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static KVsProtos.KVs parseFrom(byte[] data)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+    public static org.inlighting.sfm.proto.KVsProtos.KVs parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static KVsProtos.KVs parseFrom(
+    public static org.inlighting.sfm.proto.KVsProtos.KVs parseFrom(
         byte[] data,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static KVsProtos.KVs parseFrom(java.io.InputStream input)
+    public static org.inlighting.sfm.proto.KVsProtos.KVs parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static KVsProtos.KVs parseFrom(
+    public static org.inlighting.sfm.proto.KVsProtos.KVs parseFrom(
         java.io.InputStream input,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
-    public static KVsProtos.KVs parseDelimitedFrom(java.io.InputStream input)
+    public static org.inlighting.sfm.proto.KVsProtos.KVs parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input);
     }
-    public static KVsProtos.KVs parseDelimitedFrom(
+    public static org.inlighting.sfm.proto.KVsProtos.KVs parseDelimitedFrom(
         java.io.InputStream input,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
     }
-    public static KVsProtos.KVs parseFrom(
-        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input)
+    public static org.inlighting.sfm.proto.KVsProtos.KVs parseFrom(
+        com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input);
     }
-    public static KVsProtos.KVs parseFrom(
-        org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
-        org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+    public static org.inlighting.sfm.proto.KVsProtos.KVs parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+      return com.google.protobuf.GeneratedMessageV3
           .parseWithIOException(PARSER, input, extensionRegistry);
     }
 
@@ -1197,7 +1291,7 @@ public final class KVsProtos {
     public static Builder newBuilder() {
       return DEFAULT_INSTANCE.toBuilder();
     }
-    public static Builder newBuilder(KVsProtos.KVs prototype) {
+    public static Builder newBuilder(org.inlighting.sfm.proto.KVsProtos.KVs prototype) {
       return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
     }
     @java.lang.Override
@@ -1208,7 +1302,7 @@ public final class KVsProtos {
 
     @java.lang.Override
     protected Builder newBuilderForType(
-        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -1216,34 +1310,34 @@ public final class KVsProtos {
      * Protobuf type {@code hadoop.hdfs.sfm.KVs}
      */
     public static final class Builder extends
-        org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
         // @@protoc_insertion_point(builder_implements:hadoop.hdfs.sfm.KVs)
-        KVsProtos.KVsOrBuilder {
-      public static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
+        org.inlighting.sfm.proto.KVsProtos.KVsOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return KVsProtos.internal_static_hadoop_hdfs_sfm_KVs_descriptor;
+        return org.inlighting.sfm.proto.KVsProtos.internal_static_hadoop_hdfs_sfm_KVs_descriptor;
       }
 
       @java.lang.Override
-      protected org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return KVsProtos.internal_static_hadoop_hdfs_sfm_KVs_fieldAccessorTable
+        return org.inlighting.sfm.proto.KVsProtos.internal_static_hadoop_hdfs_sfm_KVs_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                KVsProtos.KVs.class, KVsProtos.KVs.Builder.class);
+                org.inlighting.sfm.proto.KVsProtos.KVs.class, org.inlighting.sfm.proto.KVsProtos.KVs.Builder.class);
       }
 
-      // Construct using org.inlighting.proto.KVsProtos.KVs.newBuilder()
+      // Construct using org.inlighting.sfm.proto.KVsProtos.KVs.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
 
       private Builder(
-          org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.BuilderParent parent) {
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
       private void maybeForceBuilderInitialization() {
-        if (org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3
+        if (com.google.protobuf.GeneratedMessageV3
                 .alwaysUseFieldBuilders) {
           getKvFieldBuilder();
         }
@@ -1261,19 +1355,19 @@ public final class KVsProtos {
       }
 
       @java.lang.Override
-      public org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
+      public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return KVsProtos.internal_static_hadoop_hdfs_sfm_KVs_descriptor;
+        return org.inlighting.sfm.proto.KVsProtos.internal_static_hadoop_hdfs_sfm_KVs_descriptor;
       }
 
       @java.lang.Override
-      public KVsProtos.KVs getDefaultInstanceForType() {
-        return KVsProtos.KVs.getDefaultInstance();
+      public org.inlighting.sfm.proto.KVsProtos.KVs getDefaultInstanceForType() {
+        return org.inlighting.sfm.proto.KVsProtos.KVs.getDefaultInstance();
       }
 
       @java.lang.Override
-      public KVsProtos.KVs build() {
-        KVsProtos.KVs result = buildPartial();
+      public org.inlighting.sfm.proto.KVsProtos.KVs build() {
+        org.inlighting.sfm.proto.KVsProtos.KVs result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
@@ -1281,8 +1375,8 @@ public final class KVsProtos {
       }
 
       @java.lang.Override
-      public KVsProtos.KVs buildPartial() {
-        KVsProtos.KVs result = new KVsProtos.KVs(this);
+      public org.inlighting.sfm.proto.KVsProtos.KVs buildPartial() {
+        org.inlighting.sfm.proto.KVsProtos.KVs result = new org.inlighting.sfm.proto.KVsProtos.KVs(this);
         int from_bitField0_ = bitField0_;
         if (kvBuilder_ == null) {
           if (((bitField0_ & 0x00000001) != 0)) {
@@ -1303,44 +1397,44 @@ public final class KVsProtos {
       }
       @java.lang.Override
       public Builder setField(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.setField(field, value);
       }
       @java.lang.Override
       public Builder clearField(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field) {
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
         return super.clearField(field);
       }
       @java.lang.Override
       public Builder clearOneof(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.OneofDescriptor oneof) {
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
         return super.clearOneof(oneof);
       }
       @java.lang.Override
       public Builder setRepeatedField(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           int index, java.lang.Object value) {
         return super.setRepeatedField(field, index, value);
       }
       @java.lang.Override
       public Builder addRepeatedField(
-          org.apache.hadoop.thirdparty.protobuf.Descriptors.FieldDescriptor field,
+          com.google.protobuf.Descriptors.FieldDescriptor field,
           java.lang.Object value) {
         return super.addRepeatedField(field, value);
       }
       @java.lang.Override
-      public Builder mergeFrom(org.apache.hadoop.thirdparty.protobuf.Message other) {
-        if (other instanceof KVsProtos.KVs) {
-          return mergeFrom((KVsProtos.KVs)other);
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof org.inlighting.sfm.proto.KVsProtos.KVs) {
+          return mergeFrom((org.inlighting.sfm.proto.KVsProtos.KVs)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(KVsProtos.KVs other) {
-        if (other == KVsProtos.KVs.getDefaultInstance()) return this;
+      public Builder mergeFrom(org.inlighting.sfm.proto.KVsProtos.KVs other) {
+        if (other == org.inlighting.sfm.proto.KVsProtos.KVs.getDefaultInstance()) return this;
         if (kvBuilder_ == null) {
           if (!other.kv_.isEmpty()) {
             if (kv_.isEmpty()) {
@@ -1360,7 +1454,7 @@ public final class KVsProtos {
               kv_ = other.kv_;
               bitField0_ = (bitField0_ & ~0x00000001);
               kvBuilder_ = 
-                org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
                    getKvFieldBuilder() : null;
             } else {
               kvBuilder_.addAllMessages(other.kv_);
@@ -1384,14 +1478,14 @@ public final class KVsProtos {
 
       @java.lang.Override
       public Builder mergeFrom(
-          org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
-          org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        KVsProtos.KVs parsedMessage = null;
+        org.inlighting.sfm.proto.KVsProtos.KVs parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (KVsProtos.KVs) e.getUnfinishedMessage();
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (org.inlighting.sfm.proto.KVsProtos.KVs) e.getUnfinishedMessage();
           throw e.unwrapIOException();
         } finally {
           if (parsedMessage != null) {
@@ -1402,22 +1496,22 @@ public final class KVsProtos {
       }
       private int bitField0_;
 
-      private java.util.List<KVsProtos.KV> kv_ =
+      private java.util.List<org.inlighting.sfm.proto.KVsProtos.KV> kv_ =
         java.util.Collections.emptyList();
       private void ensureKvIsMutable() {
         if (!((bitField0_ & 0x00000001) != 0)) {
-          kv_ = new java.util.ArrayList<KVsProtos.KV>(kv_);
+          kv_ = new java.util.ArrayList<org.inlighting.sfm.proto.KVsProtos.KV>(kv_);
           bitField0_ |= 0x00000001;
          }
       }
 
-      private org.apache.hadoop.thirdparty.protobuf.RepeatedFieldBuilderV3<
-          KVsProtos.KV, KVsProtos.KV.Builder, KVsProtos.KVOrBuilder> kvBuilder_;
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.inlighting.sfm.proto.KVsProtos.KV, org.inlighting.sfm.proto.KVsProtos.KV.Builder, org.inlighting.sfm.proto.KVsProtos.KVOrBuilder> kvBuilder_;
 
       /**
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
-      public java.util.List<KVsProtos.KV> getKvList() {
+      public java.util.List<org.inlighting.sfm.proto.KVsProtos.KV> getKvList() {
         if (kvBuilder_ == null) {
           return java.util.Collections.unmodifiableList(kv_);
         } else {
@@ -1437,7 +1531,7 @@ public final class KVsProtos {
       /**
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
-      public KVsProtos.KV getKv(int index) {
+      public org.inlighting.sfm.proto.KVsProtos.KV getKv(int index) {
         if (kvBuilder_ == null) {
           return kv_.get(index);
         } else {
@@ -1448,7 +1542,7 @@ public final class KVsProtos {
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
       public Builder setKv(
-          int index, KVsProtos.KV value) {
+          int index, org.inlighting.sfm.proto.KVsProtos.KV value) {
         if (kvBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1465,7 +1559,7 @@ public final class KVsProtos {
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
       public Builder setKv(
-          int index, KVsProtos.KV.Builder builderForValue) {
+          int index, org.inlighting.sfm.proto.KVsProtos.KV.Builder builderForValue) {
         if (kvBuilder_ == null) {
           ensureKvIsMutable();
           kv_.set(index, builderForValue.build());
@@ -1478,7 +1572,7 @@ public final class KVsProtos {
       /**
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
-      public Builder addKv(KVsProtos.KV value) {
+      public Builder addKv(org.inlighting.sfm.proto.KVsProtos.KV value) {
         if (kvBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1495,7 +1589,7 @@ public final class KVsProtos {
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
       public Builder addKv(
-          int index, KVsProtos.KV value) {
+          int index, org.inlighting.sfm.proto.KVsProtos.KV value) {
         if (kvBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1512,7 +1606,7 @@ public final class KVsProtos {
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
       public Builder addKv(
-          KVsProtos.KV.Builder builderForValue) {
+          org.inlighting.sfm.proto.KVsProtos.KV.Builder builderForValue) {
         if (kvBuilder_ == null) {
           ensureKvIsMutable();
           kv_.add(builderForValue.build());
@@ -1526,7 +1620,7 @@ public final class KVsProtos {
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
       public Builder addKv(
-          int index, KVsProtos.KV.Builder builderForValue) {
+          int index, org.inlighting.sfm.proto.KVsProtos.KV.Builder builderForValue) {
         if (kvBuilder_ == null) {
           ensureKvIsMutable();
           kv_.add(index, builderForValue.build());
@@ -1540,10 +1634,10 @@ public final class KVsProtos {
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
       public Builder addAllKv(
-          java.lang.Iterable<? extends KVsProtos.KV> values) {
+          java.lang.Iterable<? extends org.inlighting.sfm.proto.KVsProtos.KV> values) {
         if (kvBuilder_ == null) {
           ensureKvIsMutable();
-          org.apache.hadoop.thirdparty.protobuf.AbstractMessageLite.Builder.addAll(
+          com.google.protobuf.AbstractMessageLite.Builder.addAll(
               values, kv_);
           onChanged();
         } else {
@@ -1580,14 +1674,14 @@ public final class KVsProtos {
       /**
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
-      public KVsProtos.KV.Builder getKvBuilder(
+      public org.inlighting.sfm.proto.KVsProtos.KV.Builder getKvBuilder(
           int index) {
         return getKvFieldBuilder().getBuilder(index);
       }
       /**
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
-      public KVsProtos.KVOrBuilder getKvOrBuilder(
+      public org.inlighting.sfm.proto.KVsProtos.KVOrBuilder getKvOrBuilder(
           int index) {
         if (kvBuilder_ == null) {
           return kv_.get(index);  } else {
@@ -1597,7 +1691,7 @@ public final class KVsProtos {
       /**
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
-      public java.util.List<? extends KVsProtos.KVOrBuilder>
+      public java.util.List<? extends org.inlighting.sfm.proto.KVsProtos.KVOrBuilder> 
            getKvOrBuilderList() {
         if (kvBuilder_ != null) {
           return kvBuilder_.getMessageOrBuilderList();
@@ -1608,31 +1702,31 @@ public final class KVsProtos {
       /**
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
-      public KVsProtos.KV.Builder addKvBuilder() {
+      public org.inlighting.sfm.proto.KVsProtos.KV.Builder addKvBuilder() {
         return getKvFieldBuilder().addBuilder(
-            KVsProtos.KV.getDefaultInstance());
+            org.inlighting.sfm.proto.KVsProtos.KV.getDefaultInstance());
       }
       /**
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
-      public KVsProtos.KV.Builder addKvBuilder(
+      public org.inlighting.sfm.proto.KVsProtos.KV.Builder addKvBuilder(
           int index) {
         return getKvFieldBuilder().addBuilder(
-            index, KVsProtos.KV.getDefaultInstance());
+            index, org.inlighting.sfm.proto.KVsProtos.KV.getDefaultInstance());
       }
       /**
        * <code>repeated .hadoop.hdfs.sfm.KV kv = 1;</code>
        */
-      public java.util.List<KVsProtos.KV.Builder>
+      public java.util.List<org.inlighting.sfm.proto.KVsProtos.KV.Builder> 
            getKvBuilderList() {
         return getKvFieldBuilder().getBuilderList();
       }
-      private org.apache.hadoop.thirdparty.protobuf.RepeatedFieldBuilderV3<
-          KVsProtos.KV, KVsProtos.KV.Builder, KVsProtos.KVOrBuilder>
+      private com.google.protobuf.RepeatedFieldBuilderV3<
+          org.inlighting.sfm.proto.KVsProtos.KV, org.inlighting.sfm.proto.KVsProtos.KV.Builder, org.inlighting.sfm.proto.KVsProtos.KVOrBuilder> 
           getKvFieldBuilder() {
         if (kvBuilder_ == null) {
-          kvBuilder_ = new org.apache.hadoop.thirdparty.protobuf.RepeatedFieldBuilderV3<
-              KVsProtos.KV, KVsProtos.KV.Builder, KVsProtos.KVOrBuilder>(
+          kvBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+              org.inlighting.sfm.proto.KVsProtos.KV, org.inlighting.sfm.proto.KVsProtos.KV.Builder, org.inlighting.sfm.proto.KVsProtos.KVOrBuilder>(
                   kv_,
                   ((bitField0_ & 0x00000001) != 0),
                   getParentForChildren(),
@@ -1643,13 +1737,13 @@ public final class KVsProtos {
       }
       @java.lang.Override
       public final Builder setUnknownFields(
-          final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.setUnknownFields(unknownFields);
       }
 
       @java.lang.Override
       public final Builder mergeUnknownFields(
-          final org.apache.hadoop.thirdparty.protobuf.UnknownFieldSet unknownFields) {
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
         return super.mergeUnknownFields(unknownFields);
       }
 
@@ -1658,89 +1752,90 @@ public final class KVsProtos {
     }
 
     // @@protoc_insertion_point(class_scope:hadoop.hdfs.sfm.KVs)
-    private static final KVsProtos.KVs DEFAULT_INSTANCE;
+    private static final org.inlighting.sfm.proto.KVsProtos.KVs DEFAULT_INSTANCE;
     static {
-      DEFAULT_INSTANCE = new KVsProtos.KVs();
+      DEFAULT_INSTANCE = new org.inlighting.sfm.proto.KVsProtos.KVs();
     }
 
-    public static KVsProtos.KVs getDefaultInstance() {
+    public static org.inlighting.sfm.proto.KVsProtos.KVs getDefaultInstance() {
       return DEFAULT_INSTANCE;
     }
 
-    @java.lang.Deprecated public static final org.apache.hadoop.thirdparty.protobuf.Parser<KVs>
-        PARSER = new org.apache.hadoop.thirdparty.protobuf.AbstractParser<KVs>() {
+    @java.lang.Deprecated public static final com.google.protobuf.Parser<KVs>
+        PARSER = new com.google.protobuf.AbstractParser<KVs>() {
       @java.lang.Override
       public KVs parsePartialFrom(
-          org.apache.hadoop.thirdparty.protobuf.CodedInputStream input,
-          org.apache.hadoop.thirdparty.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws org.apache.hadoop.thirdparty.protobuf.InvalidProtocolBufferException {
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
         return new KVs(input, extensionRegistry);
       }
     };
 
-    public static org.apache.hadoop.thirdparty.protobuf.Parser<KVs> parser() {
+    public static com.google.protobuf.Parser<KVs> parser() {
       return PARSER;
     }
 
     @java.lang.Override
-    public org.apache.hadoop.thirdparty.protobuf.Parser<KVs> getParserForType() {
+    public com.google.protobuf.Parser<KVs> getParserForType() {
       return PARSER;
     }
 
     @java.lang.Override
-    public KVsProtos.KVs getDefaultInstanceForType() {
+    public org.inlighting.sfm.proto.KVsProtos.KVs getDefaultInstanceForType() {
       return DEFAULT_INSTANCE;
     }
 
   }
 
-  private static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_hadoop_hdfs_sfm_KV_descriptor;
   private static final 
-    org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_hadoop_hdfs_sfm_KV_fieldAccessorTable;
-  private static final org.apache.hadoop.thirdparty.protobuf.Descriptors.Descriptor
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_hadoop_hdfs_sfm_KVs_descriptor;
   private static final 
-    org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_hadoop_hdfs_sfm_KVs_fieldAccessorTable;
 
-  public static org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor
+  public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
   }
-  private static  org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor
+  private static  com.google.protobuf.Descriptors.FileDescriptor
       descriptor;
   static {
     java.lang.String[] descriptorData = {
       "\n\031resources/proto/KVs.proto\022\017hadoop.hdfs" +
-      ".sfm\"I\n\002KV\022\020\n\010filename\030\001 \002(\t\022\016\n\006offset\030\002" +
-      " \001(\004\022\016\n\006length\030\003 \001(\r\022\021\n\ttombstone\030\004 \002(\010\"" +
-      "&\n\003KVs\022\037\n\002kv\030\001 \003(\0132\023.hadoop.hdfs.sfm.KVB" +
-      "$\n\024org.inlighting.protoB\tKVsProtos\240\001\001"
+      ".sfm\"c\n\002KV\022\020\n\010filename\030\001 \002(\t\022\016\n\006offset\030\002" +
+      " \001(\004\022\016\n\006length\030\003 \001(\r\022\030\n\020modificationTime" +
+      "\030\004 \002(\004\022\021\n\ttombstone\030\005 \002(\010\"&\n\003KVs\022\037\n\002kv\030\001" +
+      " \003(\0132\023.hadoop.hdfs.sfm.KVB(\n\030org.inlight" +
+      "ing.sfm.protoB\tKVsProtos\240\001\001"
     };
-    org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public org.apache.hadoop.thirdparty.protobuf.ExtensionRegistry assignDescriptors(
-              org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor root) {
+    com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
+        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
+          public com.google.protobuf.ExtensionRegistry assignDescriptors(
+              com.google.protobuf.Descriptors.FileDescriptor root) {
             descriptor = root;
             return null;
           }
         };
-    org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor
+    com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
-        new org.apache.hadoop.thirdparty.protobuf.Descriptors.FileDescriptor[] {
+        new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
     internal_static_hadoop_hdfs_sfm_KV_descriptor =
       getDescriptor().getMessageTypes().get(0);
     internal_static_hadoop_hdfs_sfm_KV_fieldAccessorTable = new
-      org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_hadoop_hdfs_sfm_KV_descriptor,
-        new java.lang.String[] { "Filename", "Offset", "Length", "Tombstone", });
+        new java.lang.String[] { "Filename", "Offset", "Length", "ModificationTime", "Tombstone", });
     internal_static_hadoop_hdfs_sfm_KVs_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_hadoop_hdfs_sfm_KVs_fieldAccessorTable = new
-      org.apache.hadoop.thirdparty.protobuf.GeneratedMessageV3.FieldAccessorTable(
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_hadoop_hdfs_sfm_KVs_descriptor,
         new java.lang.String[] { "Kv", });
   }
