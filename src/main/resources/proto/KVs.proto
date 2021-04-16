@@ -10,7 +10,8 @@ message KV {
   // offset should be long
   optional uint64 offset = 2;
   optional uint32 length = 3;
-  required bool tombstone = 4;
+  required uint64 modificationTime = 4;
+  required bool tombstone = 5;
 }
 
 message KVs {
