@@ -283,7 +283,8 @@ public class SFMFileSystem extends FileSystem {
                     curSFMReader.getBlockSize(), sfmFileStatus.getModificationTime(), filePath);
         } else {
             // dir, handle by underlyingFS
-            FileStatus fileStatus = underLyingFS.getFileStatus(absF);
+            // if absF contains sfm schema, should remove it.
+            FileStatus fileStatus = underLyingFS.getFileStatus(new Path(absF.toUri().getPath()));
             // replace schema from hdfs to sfm
             URI tmpURI = fileStatus.getPath().toUri();
             fileStatus.setPath(new Path(getScheme(), tmpURI.getAuthority(), tmpURI.getPath()));

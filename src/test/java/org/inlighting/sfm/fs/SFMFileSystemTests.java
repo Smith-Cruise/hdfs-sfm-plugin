@@ -57,24 +57,28 @@ public class SFMFileSystemTests {
 
         {
             FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
-            FileStatus dir = fs.getFileStatus(new Path(sfmBasePath));
+            FileStatus dir1 = fs.getFileStatus(new Path(sfmBasePath));
+            FileStatus dir2 = fs.getFileStatus(qualifiedSFMPath);
             FileStatus a = fs.getFileStatus(new Path(sfmBasePath + "/a.txt"));
             FileStatus b = fs.getFileStatus(new Path(sfmBasePath + "/b.txt"));
 
-            assertTrue(dir.isDirectory());
+            assertTrue(dir1.isDirectory());
             assertTrue(a.isFile());
             assertTrue(a.isFile());
 
-            assertEquals(0, dir.getLen());
+            assertEquals(0, dir1.getLen());
             assertEquals(4, a.getLen());
             assertEquals("Hello World".getBytes(StandardCharsets.UTF_8).length, b.getLen());
 
-            assertEquals(qualifiedSFMPath.toString(), dir.getPath().toString());
+            assertEquals(qualifiedSFMPath.toString(), dir1.getPath().toString());
+            assertEquals(qualifiedSFMPath.toString(), dir2.getPath().toString());
             assertEquals(qualifiedSFMPath+"/a.txt", a.getPath().toString());
             assertEquals(qualifiedSFMPath+"/b.txt", b.getPath().toString());
 
             fs.close();
         }
+
+
     }
 
     @Test
