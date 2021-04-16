@@ -72,8 +72,7 @@ public class SFMFileSystem extends FileSystem {
             throw new IOException("Incomplete SFM URI, no authority: "+name);
         }
 
-        this.uri = URI.create(schema+"://"+authority);
-        this.workingDir = getHomeDirectory();
+
 
         synchronized (this) {
             // create underlying file system
@@ -82,6 +81,9 @@ public class SFMFileSystem extends FileSystem {
                 // specific to merged file system.
                 underLyingFS = new Path(String.format("%s://%s", SFMConstants.DEFAULT_UNDERLYING_FS, authority)).getFileSystem(conf);
             }
+
+            this.uri = URI.create(schema+"://"+authority);
+            this.workingDir = getHomeDirectory();
 
             // init metaDataCache
             if (metaDataCache == null) {
