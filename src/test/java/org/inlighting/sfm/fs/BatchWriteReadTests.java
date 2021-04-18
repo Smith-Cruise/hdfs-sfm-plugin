@@ -32,12 +32,12 @@ public class BatchWriteReadTests {
 
     @Test
     void batchWriteAndRandomRead() throws IOException {
+        final int total = 100;
         {
             FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
             FSDataOutputStream out;
-            for (int i=0; i<=100; i++) {
-                long time = System.currentTimeMillis();
-                String filename = time + ".txt";
+            for (int i=0; i<total; i++) {
+                String filename = i + ".txt";
                 out = fs.create(new Path(folder, filename));
                 out.writeBytes(filename);
                 out.close();
@@ -51,7 +51,7 @@ public class BatchWriteReadTests {
             FSDataInputStream in;
             Random random = new Random();
             byte[] bytes = new byte[100];
-            for (int i=0; i<10; i++) {
+            for (int i=0; i<total/2; i++) {
                 int randomIndex = random.nextInt(fileStatuses.length);
                 FileStatus fileStatus = fileStatuses[randomIndex];
                 Path file = fileStatus.getPath();

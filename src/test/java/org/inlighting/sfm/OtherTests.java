@@ -39,14 +39,13 @@ public class OtherTests {
 
     @Test
     void listRead() throws IOException {
-        Path qualifiedSFMPath = new Path("sfm://single.lab.com:9000/test.sfm");
-        FileSystem fs = qualifiedSFMPath.getFileSystem(new Configuration());
+        Path qualifiedSFMPath = SFMTestUtils.genSFMPath("/batch_write_read_tests.sfm");
+        FileSystem fs = qualifiedSFMPath.getFileSystem(SFMTestUtils.getDefaultConfiguration());
         FileStatus[] fileStatuses = fs.listStatus(qualifiedSFMPath);
-        for (FileStatus fileStatus: fileStatuses) {
-            FSDataInputStream in = fs.open(fileStatus.getPath());
-            byte[] bytes = new byte[100];
-            in.read(bytes);
-        }
+        System.out.println(fileStatuses.length);
+//        for (FileStatus fileStatus: fileStatuses) {
+//            System.out.println(fileStatus.toString());
+//        }
         fs.close();
     }
 }
