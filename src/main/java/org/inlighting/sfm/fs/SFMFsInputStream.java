@@ -142,7 +142,7 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
     @Override
     public synchronized void seek(long pos) throws IOException {
         validatePosition(pos);
-        mergedPosition = mergedStart + mergedPosition;
+        mergedPosition = mergedStart + pos;
         UNDER_LYING_STREAM.seek(mergedPosition);
     }
 
