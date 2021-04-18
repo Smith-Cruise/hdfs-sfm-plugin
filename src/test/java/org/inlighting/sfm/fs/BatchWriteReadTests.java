@@ -1,41 +1,44 @@
 package org.inlighting.sfm.fs;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
-import org.inlighting.sfm.HdfsConfiguration;
+import org.inlighting.sfm.SFMTestUtils;
 import org.inlighting.sfm.util.SFMUtil;
 import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Random;
 
 public class BatchWriteReadTests {
 
+    private final String folder = "/batch_write_read_tests.sfm";
 
-    private final Path hdfsPath = new Path("hdfs://single.lab.com:9000/batch.sfm");
+    private final Path qualifiedHDFSPath = SFMTestUtils.genHDFSPath(folder);
 
-    private final Path sfmPath = new Path("sfm://single.lab.com:9000/batch.sfm");
+    private final Path qualifiedSFMPath = SFMTestUtils.genSFMPath(folder);
+
+    private final Configuration hdfsConfiguration = SFMTestUtils.getDefaultConfiguration();
 
 
     @BeforeEach
     void deleteTestSFM() throws IOException {
-        FileSystem fs = hdfsPath.getFileSystem(HdfsConfiguration.getDefault());
-        if (fs.exists(hdfsPath)) {
-            fs.delete(hdfsPath, true);
+        FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+        if (fs.exists(qualifiedHDFSPath)) {
+            fs.delete(qualifiedHDFSPath, true);
         }
     }
 
     @Test
     void batchWriteAndRandomRead() throws IOException {
         {
-            FileSystem fs = sfmPath.getFileSystem(HdfsConfiguration.getDefault());
+            FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
             FSDataOutputStream out;
-            for (int i=0; i<=1000; i++) {
+            for (int i=0; i<=100; i++) {
                 long time = System.currentTimeMillis();
                 String filename = time + ".txt";
-                out = fs.create(new Path("/batch.sfm/" + filename));
+                out = fs.create(new Path(folder, filename));
                 out.writeBytes(filename);
                 out.close();
             }
@@ -43,8 +46,8 @@ public class BatchWriteReadTests {
         }
 
         {
-            FileSystem fs = sfmPath.getFileSystem(HdfsConfiguration.getDefault());
-            FileStatus[] fileStatuses = fs.listStatus(sfmPath);
+            FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
+            FileStatus[] fileStatuses = fs.listStatus(qualifiedSFMPath);
             FSDataInputStream in;
             Random random = new Random();
             byte[] bytes = new byte[100];

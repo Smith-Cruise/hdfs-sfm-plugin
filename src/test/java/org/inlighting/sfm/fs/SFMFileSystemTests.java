@@ -2,6 +2,7 @@ package org.inlighting.sfm.fs;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
+import org.inlighting.sfm.SFMTestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,20 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class SFMFileSystemTests {
 
-    private final String authority = "single.lab.com:9000";
+    private final String folderPath = "/sfm_filesystem_tests.sfm";
 
-    private final String sfmBasePath = "/test.sfm";
+    private final Path qualifiedHDFSPath = SFMTestUtils.genHDFSPath(folderPath);
 
-    private final Path qualifiedHDFSPath = new Path("hdfs://"+authority+sfmBasePath);
+    private final Path qualifiedSFMPath = SFMTestUtils.genSFMPath(folderPath);
 
-    private final Path qualifiedSFMPath = new Path("sfm://"+authority+sfmBasePath);
-
-    private static final Configuration hdfsConfiguration = new Configuration();
-
-    @BeforeAll
-    static void loadHdfsConfiguration() {
-        hdfsConfiguration.set("dfs.replication", "1");
-    }
+    private final Configuration hdfsConfiguration = SFMTestUtils.getDefaultConfiguration();
 
     @BeforeEach
     void deleteTestSFM() throws IOException {
@@ -41,7 +35,7 @@ public class SFMFileSystemTests {
     void getFileStatusTest() throws IOException {
         {
             FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
-            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
+            FSDataOutputStream out = fs.create(new Path(folderPath + "/a.txt"));
             out.writeInt(5);
             out.close();
             fs.close();
@@ -49,7 +43,7 @@ public class SFMFileSystemTests {
 
         {
             FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
-            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/b.txt"));
+            FSDataOutputStream out = fs.create(new Path(folderPath + "/b.txt"));
             out.writeBytes("Hello World");
             out.close();
             fs.close();
@@ -57,10 +51,10 @@ public class SFMFileSystemTests {
 
         {
             FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
-            FileStatus dir1 = fs.getFileStatus(new Path(sfmBasePath));
+            FileStatus dir1 = fs.getFileStatus(new Path(folderPath));
             FileStatus dir2 = fs.getFileStatus(qualifiedSFMPath);
-            FileStatus a = fs.getFileStatus(new Path(sfmBasePath + "/a.txt"));
-            FileStatus b = fs.getFileStatus(new Path(sfmBasePath + "/b.txt"));
+            FileStatus a = fs.getFileStatus(new Path(folderPath + "/a.txt"));
+            FileStatus b = fs.getFileStatus(new Path(folderPath + "/b.txt"));
 
             assertTrue(dir1.isDirectory());
             assertTrue(a.isFile());
@@ -85,29 +79,29 @@ public class SFMFileSystemTests {
     void listStatusTest() throws IOException {
         {
             FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
-            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
+            FSDataOutputStream out = fs.create(new Path(folderPath + "/a.txt"));
             out.writeInt(5);
             out.close();
 
-            out = fs.create(new Path(sfmBasePath + "/delete.txt"));
+            out = fs.create(new Path(folderPath + "/delete.txt"));
             out.writeBytes("HelloWorld");
             out.close();
 
-            out = fs.create(new Path(sfmBasePath + "/b.txt"));
+            out = fs.create(new Path(folderPath + "/b.txt"));
             out.writeBytes("HelloWorld");
             out.close();
 
-            out = fs.create(new Path(sfmBasePath + "/a.txt"));
+            out = fs.create(new Path(folderPath + "/a.txt"));
             out.writeBytes("a.txt");
             out.close();
 
-            fs.delete(new Path(sfmBasePath + "/delete.txt"), false);
+            fs.delete(new Path(folderPath + "/delete.txt"), false);
             fs.close();
         }
 
         {
             FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
-            FileStatus[] fileStatuses = fs.listStatus(new Path(sfmBasePath));
+            FileStatus[] fileStatuses = fs.listStatus(new Path(folderPath));
             assertEquals(2, fileStatuses.length);
             assertEquals("a.txt".getBytes(StandardCharsets.UTF_8).length, fileStatuses[1].getLen());
             assertEquals(qualifiedSFMPath+"/a.txt", fileStatuses[1].getPath().toString());
@@ -121,7 +115,7 @@ public class SFMFileSystemTests {
     void makeQualifiedTest() throws IOException {
         FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
         Path path = new Path("/hello");
-        assertEquals("sfm://"+authority+"/hello", fs.makeQualified(path).toString());
+        assertEquals(SFMTestUtils.genSFMPath("/hello").toString(), fs.makeQualified(path).toString());
         fs.close();
     }
 }

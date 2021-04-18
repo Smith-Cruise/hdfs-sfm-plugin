@@ -88,7 +88,7 @@ public class SFMIndexReader {
             if (! EXISTED_MAP.containsKey(kv.getFilename())) {
                 EXISTED_MAP.put(kv.getFilename(), kv.isTombstone());
                 if (! kv.isTombstone()) {
-                    fileList.add(new SFMFileStatus(kv.getFilename(), MERGED_FILENAME, kv.getOffset(), kv.getLength(), 0));
+                    fileList.add(new SFMFileStatus(kv.getFilename(), MERGED_FILENAME, kv.getOffset(), kv.getLength(), kv.getModificationTime()));
                 }
             }
         }
@@ -133,38 +133,34 @@ public class SFMIndexReader {
 
     private SFMFileStatus getSFMFileStatus(String filename) throws IOException {
         List<Integer> probablyIndices = searchProbablyIndex(filename);
-        if (probablyIndices.size() == 0) {
-            throw new FileNotFoundException(String.format("%s didn't existed.", filename));
-        }
+        if (probablyIndices.size() != 0) {
+            try {
+                for (int probablyIndex: probablyIndices) {
+                    // get index metadata
+                    IndexMetadata indexMetadata = loadIndexMetadataLazily(probablyIndex);
 
-        try {
-            for (int probablyIndex: probablyIndices) {
-                // get index metadata
-                IndexMetadata indexMetadata = loadIndexMetadataLazily(probablyIndex);
+                    // check is in bloom filter
+                    BloomFilter bloomFilter = loadBloomFilterLazily(indexMetadata);
 
-                // check is in bloom filter
-                BloomFilter bloomFilter = loadBloomFilterLazily(indexMetadata);
+                    boolean found = bloomFilter.testString(filename);
+                    if (found) {
+                        List<KV> kvs = loadKVsLazily(indexMetadata);
 
-                boolean found = bloomFilter.testString(filename);
-                if (found) {
-                    List<KV> kvs = loadKVsLazily(indexMetadata);
-
-                    // binary search filename
-                    KV kv = binarySearch(kvs, filename);
-                    if (kv != null) {
-                        if (! kv.isTombstone()) {
-                            return new SFMFileStatus(filename, indexMetadata.mergedFilename, kv.getOffset(), kv.getLength(), 0);
-
-                        } else {
-                            throw new FileNotFoundException(String.format("%s is already delete", filename));
+                        // binary search filename
+                        KV kv = binarySearch(kvs, filename);
+                        if (kv != null) {
+                            if (! kv.isTombstone()) {
+                                return new SFMFileStatus(filename, indexMetadata.mergedFilename, kv.getOffset(), kv.getLength(), kv.getModificationTime());
+                            } else {
+                                throw new FileNotFoundException(String.format("%s is already deleted", filename));
+                            }
                         }
                     }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
         throw new FileNotFoundException(String.format("%s didn't exist.", filename));
     }
 
@@ -315,25 +311,29 @@ public class SFMIndexReader {
 
     // if match the same key, return last one.
     private KV binarySearch(List<KV> kvs, String key) {
-        int low = 0;
-        int high = kvs.size() - 1;
-        int middle;
-        if (key.compareTo(getKey(kvs, low)) < 0 || key.compareTo(getKey(kvs, high)) > 0) {
+        int left = 0;
+        int right = kvs.size() - 1;
+        int mid;
+
+        if (key.compareTo(getKey(kvs, left)) < 0 || key.compareTo(getKey(kvs, right)) > 0) {
             return null;
         }
 
-        while (low <= high) {
-            middle = (low + high) / 2;
-            if (getKey(kvs, middle).compareTo(key) <= 0) {
-                low = middle + 1;
+        while (left <= right) {
+            int compare = 0;
+            mid = (left + right) / 2;
+            compare = getKey(kvs, mid).compareTo(key);
+            if (compare == 0) {
+                left = mid + 1;
+            } else if (compare < 0) {
+                left = mid + 1;
             } else {
-                high = middle - 1;
+                right = mid - 1;
             }
         }
-        if (high >= 0 && getKey(kvs, high).equals(key)) {
-            return kvs.get(high);
+        if (right != -1 && getKey(kvs, right).equals(key)) {
+            return kvs.get(right);
         }
-
         return null;
     }
 

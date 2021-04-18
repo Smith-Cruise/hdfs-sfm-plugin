@@ -2,6 +2,7 @@ package org.inlighting.sfm.fs;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.*;
+import org.inlighting.sfm.SFMTestUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,20 +16,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class WriteReadTests {
 
-    private final String authority = "single.lab.com:9000";
+    private final String folder = "/write_read_tests.sfm";
 
-    private final String sfmBasePath = "/test.sfm";
+    private final Path qualifiedHDFSPath = SFMTestUtils.genHDFSPath(folder);
 
-    private final Path qualifiedHDFSPath = new Path("hdfs://"+authority+sfmBasePath);
+    private final Path qualifiedSFMPath = SFMTestUtils.genSFMPath(folder);
 
-    private final Path qualifiedSFMPath = new Path("sfm://"+authority+sfmBasePath);
+    private final Configuration hdfsConfiguration = SFMTestUtils.getDefaultConfiguration();
 
-    private static final Configuration hdfsConfiguration = new Configuration();
-
-    @BeforeAll
-    static void loadHdfsConfiguration() {
-        hdfsConfiguration.set("dfs.replication", "1");
-    }
+    private byte[] tmpBytes = new byte[100];
 
     @BeforeEach
     void deleteTestSFM() throws IOException {
@@ -38,27 +34,34 @@ public class WriteReadTests {
         }
     }
 
-    // 一次常规读写
+    // 简单读写测试
     @Test
-    void singleWriteRead() throws IOException {
+    void simpleReadWriteTest() throws IOException {
         {
             FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
-            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
+            FSDataOutputStream out = fs.create(new Path(folder + "/a.txt"));
             out.writeInt(5);
+            out.close();
+            out = fs.create(new Path(folder + "/content.txt"));
+            out.writeBytes("Hello World");
             out.close();
             fs.close();
         }
 
         {
             FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
-            FSDataInputStream in = fs.open(new Path(sfmBasePath + "/a.txt"));
+            FSDataInputStream in = fs.open(new Path(folder + "/a.txt"));
             int result = in.readInt();
             in.close();
             assertEquals(5, result);
 
+            in = fs.open(new Path(folder + "/content.txt"));
+            int read = in.read(tmpBytes);
+            assertEquals("Hello World", new String(tmpBytes, 0, read));
+
             // test not found file
             assertThrows(FileNotFoundException.class, () -> {
-                fs.open(new Path(sfmBasePath + "/c.txt"));
+                fs.open(new Path(folder + "/c.txt"));
             });
             fs.close();
         }
@@ -66,166 +69,190 @@ public class WriteReadTests {
 
     // 写入两次，第二次覆盖第一次的 filename，读取应该读取到第二次的内容（最新），中间close过
     @Test
-    void doubleWriteSingleRead1() throws IOException {
+    void complexReadWriteTest() throws IOException {
         {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
-            out.writeInt(5);
+            FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
+            FSDataOutputStream out = fs.create(new Path(folder + "/a.txt"));
+            out.write(1);
             out.close();
+
+            out = fs.create(new Path(folder + "/c.txt"));
+            out.writeFloat(2);
+            out.close();
+
+            out = fs.create(new Path(folder + "/delete.txt"));
+            out.writeBytes("delete");
+            out.close();
+
+            out = fs.create(new Path(folder + "/b.txt"));
+            out.writeDouble(3);
+            out.close();
+
+            fs.delete(new Path(folder + "/delete.txt"), false);
+
+            out = fs.create(new Path(folder + "/a.txt"));
+            out.writeInt(999);
+            out.close();
+
             fs.close();
         }
 
         {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
-            out.writeBytes("hello");
-            out.close();
-            fs.close();
-        }
+            FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
+            FileStatus[] fileStatuses = fs.listStatus(new Path(folder));
+            assertEquals(3, fileStatuses.length);
 
-        {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FSDataInputStream in = fs.open(new Path(sfmBasePath + "/a.txt"));
-            byte[] tmp = new byte[10];
-            int read = in.read(tmp);
+
+            FSDataInputStream in = fs.open(new Path(folder + "/a.txt"));
+            assertEquals(999, in.readInt());
             in.close();
-            byte[] str = new byte[read];
-            System.arraycopy(tmp, 0, str, 0, read);
-            assertEquals("hello", new String(str));
+
+            in = fs.open(new Path(folder + "/c.txt"));
+            assertEquals(2, in.readFloat());
+            in.close();
+
+            in = fs.open(new Path(folder + "/b.txt"));
+            assertEquals(3, in.readDouble());
+            in.close();
+
+            assertThrows(FileNotFoundException.class, ()-> fs.open(new Path(folder + "/delete.txt")));
+
             fs.close();
         }
     }
 
-    // 写入两次，第二次覆盖第一次的 filename，读取应该读取到第二次的内容（最新），中间不close
-    @Test
-    void doubleWriteSingleRead2() throws IOException {
-        {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
-            out.writeInt(5);
-            out.close();
-            out = fs.create(new Path(sfmBasePath + "/a.txt"));
-            out.writeBytes("hello");
-            out.close();
-            fs.close();
-        }
 
-        {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FSDataInputStream in = fs.open(new Path(sfmBasePath + "/a.txt"));
-            byte[] tmp = new byte[10];
-            int read = in.read(tmp);
-            in.close();
-            byte[] str = new byte[read];
-            System.arraycopy(tmp, 0, str, 0, read);
-            assertEquals("hello", new String(str));
-            fs.close();
-        }
-    }
-
-    // 创建两次，每次不同的 filename，两个都能正常读取。
-    @Test
-    void doubleWriteDoubleRead() throws IOException {
-        {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
-            out.writeInt(5);
-            out.close();
-            fs.close();
-        }
-
-        {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/b.txt"));
-            out.writeBytes("hello");
-            out.close();
-            fs.close();
-        }
-
-        {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FSDataInputStream in = fs.open(new Path(sfmBasePath + "/a.txt"));
-            assertEquals(5, in.readInt());
-            in.close();
-            fs.close();
-        }
-
-        {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FSDataInputStream in = fs.open(new Path(sfmBasePath + "/b.txt"));
-            byte[] tmp = new byte[10];
-            int read = in.read(tmp);
-            in.close();
-            byte[] str = new byte[read];
-            System.arraycopy(tmp, 0, str, 0, read);
-            assertEquals("hello", new String(str));
-            fs.close();
-        }
-    }
-
-    @Test
-    void writeDeleteRead() throws IOException {
-        {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
-            out.writeInt(5);
-            out.close();
-            fs.close();
-        }
-
-        {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FSDataInputStream in = fs.open(new Path(sfmBasePath + "/a.txt"));
-            assertEquals(5, in.readInt());
-            in.close();
-            fs.close();
-        }
-
-        {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            fs.delete(new Path(sfmBasePath + "/a.txt"), false);
-            fs.close();
-        }
-
-        {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            assertThrows(FileNotFoundException.class, () -> fs.open(new Path(sfmBasePath + "/a.txt")));
-            fs.close();
-        }
-    }
-
-    @Test
-    void listFiles() throws IOException {
-        {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
-            out.writeInt(5);
-            out.close();
-
-            out = fs.create(new Path(sfmBasePath + "/delete.txt"));
-            out.writeBytes("HelloWorld");
-            out.close();
-
-            out = fs.create(new Path(sfmBasePath + "/b.txt"));
-            out.writeBytes("HelloWorld");
-            out.close();
-
-            out = fs.create(new Path(sfmBasePath + "/a.txt"));
-            out.writeBytes("a.txt");
-            out.close();
-
-            fs.delete(new Path(sfmBasePath + "/delete.txt"), false);
-            fs.close();
-        }
-
-        {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FileStatus[] fileStatuses = fs.listStatus(new Path(sfmBasePath));
-            assertEquals(2, fileStatuses.length);
-            assertEquals("HelloWorld".getBytes(StandardCharsets.UTF_8).length, fileStatuses[1].getLen());
-            assertEquals("a.txt".getBytes(StandardCharsets.UTF_8).length, fileStatuses[0].getLen());
-            fs.close();
-        }
-
-    }
+//
+//    // 写入两次，第二次覆盖第一次的 filename，读取应该读取到第二次的内容（最新），中间不close
+//    @Test
+//    void doubleWriteSingleRead2() throws IOException {
+//        {
+//            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+//            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
+//            out.writeInt(5);
+//            out.close();
+//            out = fs.create(new Path(sfmBasePath + "/a.txt"));
+//            out.writeBytes("hello");
+//            out.close();
+//            fs.close();
+//        }
+//
+//        {
+//            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+//            FSDataInputStream in = fs.open(new Path(sfmBasePath + "/a.txt"));
+//            byte[] tmp = new byte[10];
+//            int read = in.read(tmp);
+//            in.close();
+//            byte[] str = new byte[read];
+//            System.arraycopy(tmp, 0, str, 0, read);
+//            assertEquals("hello", new String(str));
+//            fs.close();
+//        }
+//    }
+//
+//    // 创建两次，每次不同的 filename，两个都能正常读取。
+//    @Test
+//    void doubleWriteDoubleRead() throws IOException {
+//        {
+//            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+//            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
+//            out.writeInt(5);
+//            out.close();
+//            fs.close();
+//        }
+//
+//        {
+//            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+//            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/b.txt"));
+//            out.writeBytes("hello");
+//            out.close();
+//            fs.close();
+//        }
+//
+//        {
+//            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+//            FSDataInputStream in = fs.open(new Path(sfmBasePath + "/a.txt"));
+//            assertEquals(5, in.readInt());
+//            in.close();
+//            fs.close();
+//        }
+//
+//        {
+//            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+//            FSDataInputStream in = fs.open(new Path(sfmBasePath + "/b.txt"));
+//            byte[] tmp = new byte[10];
+//            int read = in.read(tmp);
+//            in.close();
+//            byte[] str = new byte[read];
+//            System.arraycopy(tmp, 0, str, 0, read);
+//            assertEquals("hello", new String(str));
+//            fs.close();
+//        }
+//    }
+//
+//    @Test
+//    void writeDeleteRead() throws IOException {
+//        {
+//            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+//            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
+//            out.writeInt(5);
+//            out.close();
+//            fs.close();
+//        }
+//
+//        {
+//            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+//            FSDataInputStream in = fs.open(new Path(sfmBasePath + "/a.txt"));
+//            assertEquals(5, in.readInt());
+//            in.close();
+//            fs.close();
+//        }
+//
+//        {
+//            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+//            fs.delete(new Path(sfmBasePath + "/a.txt"), false);
+//            fs.close();
+//        }
+//
+//        {
+//            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+//            assertThrows(FileNotFoundException.class, () -> fs.open(new Path(sfmBasePath + "/a.txt")));
+//            fs.close();
+//        }
+//    }
+//
+//    @Test
+//    void listFiles() throws IOException {
+//        {
+//            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+//            FSDataOutputStream out = fs.create(new Path(sfmBasePath + "/a.txt"));
+//            out.writeInt(5);
+//            out.close();
+//
+//            out = fs.create(new Path(sfmBasePath + "/delete.txt"));
+//            out.writeBytes("HelloWorld");
+//            out.close();
+//
+//            out = fs.create(new Path(sfmBasePath + "/b.txt"));
+//            out.writeBytes("HelloWorld");
+//            out.close();
+//
+//            out = fs.create(new Path(sfmBasePath + "/a.txt"));
+//            out.writeBytes("a.txt");
+//            out.close();
+//
+//            fs.delete(new Path(sfmBasePath + "/delete.txt"), false);
+//            fs.close();
+//        }
+//
+//        {
+//            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+//            FileStatus[] fileStatuses = fs.listStatus(new Path(sfmBasePath));
+//            assertEquals(2, fileStatuses.length);
+//            assertEquals("HelloWorld".getBytes(StandardCharsets.UTF_8).length, fileStatuses[1].getLen());
+//            assertEquals("a.txt".getBytes(StandardCharsets.UTF_8).length, fileStatuses[0].getLen());
+//            fs.close();
+//        }
+//
+//    }
 }
