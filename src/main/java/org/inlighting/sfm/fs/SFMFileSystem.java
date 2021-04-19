@@ -77,17 +77,12 @@ public class SFMFileSystem extends FileSystem {
         synchronized (this) {
             // create underlying file system
             if (underLyingFS == null) {
-                // create Distributed FileSystem
+                // create Distributed FileSystem without cache !!!!
                 // specific to merged file system.
+                conf.set("fs.hdfs.impl.disable.cache", "true");
                 underLyingFS = new Path(String.format("%s://%s", SFMConstants.DEFAULT_UNDERLYING_FS, authority)).getFileSystem(conf);
-                LOG.debug(String.format("Underlying FS create succeed. Schema: %s, Details: %s", underLyingFS.getScheme(),
+                LOG.debug(String.format("Uncached underlying FS create succeed. Schema: %s, Details: %s", underLyingFS.getScheme(),
                         underLyingFS.toString()));
-//                try {
-//                    FileStatus fileStatus = underLyingFS.getFileStatus(new Path("/CentOS-7-x86_64-Minimal-2009.iso"));
-//                    System.out.println(fileStatus.toString());
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
             }
 
             this.uri = URI.create(schema+"://"+authority);
