@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -108,6 +109,19 @@ public class SFMFileSystemTests {
             assertEquals("HelloWorld".getBytes(StandardCharsets.UTF_8).length, fileStatuses[0].getLen());
             assertEquals(qualifiedSFMPath+"/b.txt", fileStatuses[0].getPath().toString());
             fs.close();
+        }
+    }
+
+    @Test
+    void getFileBlockLocationsTest() throws IOException {
+        {
+            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+            FileStatus fileStatus = fs.getFileStatus(new Path("/CentOS-7-x86_64-Minimal-2009.iso"));
+            System.out.println("-------");
+            System.out.println(fileStatus.toString());
+            System.out.println("-----");
+            BlockLocation[] blockLocations = fs.getFileBlockLocations(fileStatus, 1342177281, 1);
+            Arrays.stream(blockLocations).forEach(a -> System.out.println(a.toString()));
         }
     }
 

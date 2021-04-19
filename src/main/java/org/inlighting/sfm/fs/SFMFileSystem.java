@@ -125,6 +125,8 @@ public class SFMFileSystem extends FileSystem {
     @Override
     public BlockLocation[] getFileBlockLocations(FileStatus file, long start,
                                                  long len) throws IOException {
+        LOG.debug(String.format("GetFileBlockLocations, file status: %s, start: %d, len:%d", file.toString(),
+                start, len));
         if (start < 0 || len < 0) {
             throw new IllegalArgumentException("Invalid start or len parameter");
         }
