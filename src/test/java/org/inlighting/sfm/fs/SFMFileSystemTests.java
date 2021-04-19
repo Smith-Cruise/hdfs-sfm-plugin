@@ -115,13 +115,36 @@ public class SFMFileSystemTests {
     @Test
     void getFileBlockLocationsTest() throws IOException {
         {
-            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
-            FileStatus fileStatus = fs.getFileStatus(new Path("/CentOS-7-x86_64-Minimal-2009.iso"));
-            System.out.println("-------");
-            System.out.println(fileStatus.toString());
-            System.out.println("-----");
-            BlockLocation[] blockLocations = fs.getFileBlockLocations(fileStatus, 1342177281, 1);
-            Arrays.stream(blockLocations).forEach(a -> System.out.println(a.toString()));
+            FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
+            FSDataOutputStream out = fs.create(new Path(folderPath + "/a.txt"));
+            out.writeInt(5);
+            out.close();
+            fs.close();
+        }
+
+        {
+            FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
+            FSDataOutputStream out = fs.create(new Path(folderPath + "/b.txt"));
+            out.writeBytes("Hello World");
+            out.close();
+            fs.close();
+        }
+//        {
+//            FileSystem fs = qualifiedHDFSPath.getFileSystem(hdfsConfiguration);
+//            FileStatus fileStatus = fs.getFileStatus(new Path("/CentOS-7-x86_64-Minimal-2009.iso"));
+//            System.out.println("-------");
+//            System.out.println(fileStatus.toString());
+//            System.out.println("-----");
+//            BlockLocation[] blockLocations = fs.getFileBlockLocations(fileStatus, 1342177281, 1);
+//            Arrays.stream(blockLocations).forEach(a -> System.out.println(a.toString()));
+//        }
+        {
+            FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
+            FileStatus fileStatus = fs.getFileStatus(new Path(folderPath, "a.txt"));
+            BlockLocation[] blockLocations = fs.getFileBlockLocations(fileStatus, 15, 1);
+            for (BlockLocation blockLocation: blockLocations) {
+                System.out.println(blockLocation);
+            }
         }
     }
 
