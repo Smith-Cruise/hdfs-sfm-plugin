@@ -80,14 +80,14 @@ public class SFMFileSystem extends FileSystem {
                 // create Distributed FileSystem
                 // specific to merged file system.
                 underLyingFS = new Path(String.format("%s://%s", SFMConstants.DEFAULT_UNDERLYING_FS, authority)).getFileSystem(conf);
-                LOG.debug(String.format("Underlying FS create succeed. Schema:%s, Path:%s", underLyingFS.getScheme(),
-                        underLyingFS.getUri().getPath()));
-                try {
-                    FileStatus fileStatus = underLyingFS.getFileStatus(new Path("/CentOS-7-x86_64-Minimal-2009.iso"));
-                    System.out.println(fileStatus.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                LOG.debug(String.format("Underlying FS create succeed. Schema: %s, Details: %s", underLyingFS.getScheme(),
+                        underLyingFS.toString()));
+//                try {
+//                    FileStatus fileStatus = underLyingFS.getFileStatus(new Path("/CentOS-7-x86_64-Minimal-2009.iso"));
+//                    System.out.println(fileStatus.toString());
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             }
 
             this.uri = URI.create(schema+"://"+authority);

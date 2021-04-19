@@ -96,6 +96,7 @@ public class SFMIndexReader {
     }
 
     public SFMFileStatus getFileStatus(String filename) throws IOException {
+        LOG.debug(String.format("Start to read SFM FileStatus, filename: %s", filename));
         return getSFMFileStatus(filename);
     }
 
@@ -261,7 +262,7 @@ public class SFMIndexReader {
         return list;
     }
 
-    private void loadSFMIndexStatus() throws IOException {
+    private synchronized void loadSFMIndexStatus() throws IOException {
         // check master index.
         FileStatus masterIndexStat = null;
         try {
@@ -303,6 +304,8 @@ public class SFMIndexReader {
             masterIndexList.add(new MasterIndex(Long.parseLong(tmpStr[0]), Integer.parseInt(tmpStr[1]),
                     tmpStr[2], tmpStr[3]));
         }
+        lineReader.close();
+        LOG.debug("SFM master index load succeed.");
     }
 
     private String getKey(List<KV> kvs, int index) {
