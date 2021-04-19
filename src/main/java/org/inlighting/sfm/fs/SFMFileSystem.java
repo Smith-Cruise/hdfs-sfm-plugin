@@ -409,15 +409,17 @@ public class SFMFileSystem extends FileSystem {
     }
 
     private SFMetaData getSFMInformation(String sfmBasePath) throws IOException {
-        LOG.debug(String.format("Load SFM information: %s", sfmBasePath));
+        LOG.debug(String.format("Start to load SFM information: %s", sfmBasePath));
         SFMetaData metaData = metaDataCache.get(sfmBasePath);
         if (metaData == null) {
+            LOG.debug(String.format("SFMIndexReader didn't created, start to build it: %s", sfmBasePath));
             // build SFMIndexReader
             SFMIndexReader sfmReader = SFMIndexReader.build(underLyingFS, sfmBasePath);
             SFMetaData newSFMetaData = new SFMetaData(sfmBasePath, sfmReader);
             metaDataCache.put(sfmBasePath, newSFMetaData);
             return newSFMetaData;
         } else {
+            LOG.debug(String.format("SFMIndexReader already created, just return it: %s", sfmBasePath));
             return metaData;
         }
     }
