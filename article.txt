@@ -1,0 +1,214 @@
+This website uses cookies, including third party ones, to allow for analysis of how people use our website in order to improve your experience and our services. By continuing to use our website, you agree to the use of such cookies. Click here for more information on our Cookie Policy and Privacy Policy.​	×
+Skip navigation
+INFORMA
+DISCOVER:
+Black Hat
+
+Interop
+
+IoT World
+
+AFCOM Leaders Lab
+
+RSS Feed
+MENU
+IT ProSEARCH LOG IN REGISTER NEWSLETTER SIGN-UP
+Topics ▸ Buying Guides Reports Webinars Whitepapers Events
+
+
+
+
+RECENT
+Dependency Problems Increase for Open Source Components
+APR 14, 2021
+FBI Operation Remotely Removes Web Shells From Exchange Servers
+APR 14, 2021
+Windows 10 Release Preview Channel Build Tracker
+APR 13, 2021
+Windows 10 Beta Channel Build Tracker
+APR 13, 2021
+‘Kyndryl’: IBM Names Spinoff of Managed Infrastructure Services Business
+APR 13, 2021
+FEATURED
+Is There Room for Linux Workstations at Your Organization?
+AUG 07, 2020
+Mozilla Shrinks to Survive Amid Declining Firefox Usage
+AUG 18, 2020
+Survey: Open Source Cloud Technologies Fit Devs Like a Glove
+FEB 12, 2021
+2020 State of AI Survey Report
+JUN 30, 2020
+making a decision fork in the roadGetty Images
+COMPUTE ENGINES>LINUX
+Looking for a CentOS Replacement? Start Here
+IT shops may be looking for a CentOS replacement in advance of its support sunsetting. Here are some alternative free Linux distros.
+Christine Hall | Apr 16, 2021
+
+Red Hat’s December 2020 announcement that it will do away with CentOS, its free-to-use downstream clone of Red Hat Enterprise Linux, caused a stir among IT shops in the estimated 2,500 companies that rely on CentOS to run production workloads, as well as for testing or development purposes. These include Northrup Gruman, Comcast, Verizon, Master Card, Indeed and many others.
+
+Red Hat, which gained control of CentOS in 2014, said it's replacing the distribution with the previously announced CentOS Streams, which sits upstream of RHEL as a constantly morphing, rolling-release distro instead of using traditional scheduled releases that enterprises prefer.
+
+For companies that are currently running CentOS, one of the appealing features was the budget-friendly aspect: They were running CentOS specifically because they need the rock-solid stability of RHEL, but wish to avoid paying Red Hat for expensive support subscriptions because they’ve already got in-house expertise.
+
+While CentOS Streams is free, like CentOS, there are a couple of reasons why the new CentOS Streams is a deal breaker for many users – especially enterprises.
+
+Sitting upstream and being used as a testing ground for RHEL's next release raises concerns about possible stability issues if bugs or software conflicts are inadvertently introduced. Also, moving from a predictable, traditional new-release schedule to a constantly updating release schedule really changes how enterprises have to work.
+
+While CentOS 7 won't reach end-of-life status until 2024, giving users three years to come up with a plan for its replacement, Red Hat will quit supporting the latest release, CentOS 8, on Dec. 31, 2021.
+
+For IT shops looking for an alternative to CentOS, there are a number of Linux distributions that can function as CentOS replacements and are also based on RHEL; two of them are specifically being developed to fill the void.
+
+
+AlmaLinux
+CloudLinux, the company behind CloudLinux OS – a commercial security-hardened Linux distribution that's based on CentOS – announced AlmaLinux as a specific, drop-in replacement for CentOS 8 the day after Red Hat made its CentOS intentions known. It has pledged $1 million a year to keep the project going.
+
+AlmaLinux already has released its first stable distro, meaning IT pros can go ahead and start testing it.
+
+The pluses for this one are big. Because it's basically a clone of CentOS 8, any workloads that are already working well on that distro should in theory automatically run without problems on this one. The upgrade path from CentOS 8 to AlmaLinux is also a painless affair that can be done on the fly with no downtime, simply by running an Alma-supplied script.
+
+CloudLinux also has a patching service, KernelCare, which already develops security patches for many Linux distros in-house, and often has patches for RHEL ahead of Red Hat. AlmaLinux is already listed as one of the Linux distros KernelCare supports. More timely security patching will be especially important to CentOS users, who generally haven't seen security patches until 48 hours or so after Red Hat issues patches for RHEL.
+
+On the negative side, the distribution currently doesn't support UEFI "secure boot" installation, as that requires cooperation from Microsoft. CloudLinux CEO Igor Seletskiy told ITPro Today that problem should be worked out long before CentOS 8 reaches its end of life. The distro also does not have FIPS and CIS security certifications for regulated businesses, while CentOS has a FIPS compliance mode and a step-by-step security checklist developed with the Center for Internet Security.
+
+And finally, the distro currently only runs on x86 machines, although developers hope to have it up and running on Arm64 devices in the near future.
+
+Rocky Linux
+Rocky Linux is another new Linux distro that was born to fill the void that the passing of CentOS will open. It was also the first CentOS replacement to be announced following the news from Red Hat.
+
+Like AlmaLinux, Rocky also comes with a strong CentOS pedigree. The project is being led by Gregory Kurtzer, who was the founder and project lead at CentOS from 2002 to 2005. Kurtzer said the project has already raised approximately $2 million in funding, with several large companies, including Amazon, signed up as top-tier sponsors.
+
+Kurtzer told ITPro Today that users should also be able to upgrade entire fleets of servers running CentOS 8 without experiencing any downtime – in this case by running some terminal commands.
+
+Several versions of this distro are planned, Kurtzer said, starting with the core version, which will be designed solely as a CentOS replacement. Using that as a core, other editions will be designed specifically for various workloads, including  minified versions designed for embedded devices that will be available for both x86 and Arm processors.
+
+If your organization is running workloads that require FIPS or CIS certifications, you might want to take a wait-and-see approach here, however. While Kurtzer told us that FIPS and CIS certifications are “absolutely a goal of ours,” he added that “[because] we are a community endeavor, it will 100% be dependent on our enterprise user base both pushing for this as well as helping to enact it. With the right partners, this will absolutely happen and I’m working with organizations now in this regard.”
+
+The first Rocky Linux release candidate is scheduled to be available on April 30, Kurtzer said, with the first stable release expected to arrive sometime in June.
+
+Oracle Linux
+Oracle Linux is a free-to-use Linux distribution, compiled from RHEL source code, that Oracle launched in 2006. Although the company has its own modified version of the Linux kernel, Unbreakable Enterprise Kernel, which it says is 100% compatible with RHEL, it also makes available what it calls Red Hat Compatible Kernel, which is identical to the kernel that ships with RHEL.
+
+One advantage to using Oracle Linux as a drop-in replacement for RHEL is that the company offers two levels of paid support, which can be purchased and activated online at a later date if an organization decides it no longer wants to support the software on its own.
+
+Another plus for regulated businesses is that the distribution has FIPS and CIS certifications.
+
+On the downside, although Oracle has been offering a free version of Oracle Linux for nearly 15 years, there is always the risk that Oracle could decide to make Oracle Linux available on a paid subscription basis only basis, similar to the Red Hat model, which would effectively close the door on upgrading without a support contract.
+
+RHEL
+Traditionally, RHEL hasn’t been available for production use without a paid subscription. However, Red Hat now allows free use of 16 instances of RHEL running production workloads, making it a perfect solution for small and medium-sized businesses with needs that fall beneath that threshold.
+
+Shortly after Red Hat announced that it is pulling the plug on CentOS, it expanded its no-cost Red Hat Developer program, which had been limited to a single machine running non-production developer workloads, to include the free use RHEL on up to 16 machines, with production workloads now being allowed.
+
+All that's required to take advantage of this is the opening of a free Red Hat account, which will allow you to download RHEL and get updates.
+
+"Nothing else is required," Red Hat said in a statement. "This isn't a sales program and no sales representative will follow up. An option will exist within the subscription to easily upgrade to full support, but that's up to you."
+
+For more than 16 servers, self-supported RHEL will cost $349 per year per server.
+
+0 COMMENTS
+RECOMMENDED READING
+open-source101.jpg
+Dependency Problems Increase for Open Source Components
+APR 14, 2021
+IBM
+SCO Successor Xinuos Files Lawsuit Against IBM
+APR 03, 2021
+azure iot hub security portal
+KernelCare Brings Bootless Security Patching to Azure IoT Hub
+APR 02, 2021
+open-source101.jpg
+Open Source 101: Go Online & Find Your Way Around Open Source
+MAR 29, 2021
+IBMGetty
+COMPUTE ENGINES>LINUX
+SCO Successor Xinuos Files Lawsuit Against IBM
+The suit alleges that IBM stole proprietary code from a company whose assets Xinuos now owns, then colluded with Red Hat to lock Xinuos out of the Linux market.
+Christine Hall | Apr 03, 2021
+
+UnixWare/OpenServer vendor Xinuos filed a complaint on March 31, 2021, with the US District Court of the Virgin Islands claiming that IBM copied code owned by Xinuos into its Unix operating systems. The suit may cause a few Linux users with decades-long memories to raise an eyebrow and set a news alert to see how this particular court case will go.
+
+In the suit, the company also claimed that IBM and Red Hat have for years been engaged in an antitrust conspiracy to corner the server operating system market, and that IBM's purchase of Red Hat was part of that conspiracy.
+
+To many longtime Linux users, this action is "deja vu all over again," as Xinuos is the company that purchased the SCO Group – or what was left of it – ten years ago in 2011. And SCO was famous not for its products, but for the six years it spent in court from 2003 to 2009 seeking a billion-dollar-plus judgement against IBM with the claim that IBM had taken proprietary code from SCO Unix and put it in the Linux kernel.
+
+SCO eventually lost that suit once a third company, Novell, got involved.
+
+Here’s where it gets tricky: In March 2003, the SCO Group claimed ownership of AT&T Unix and said that IBM’s distribution of Linux was actually an unauthorized distribution of AT&T Linux. Two months later, Novell asserted that it had only sold the marketing rights to AT&T Unix to SCO, not the intellectual property around AT&T Unix. For the next two years, SCO and Novell sued and countersued each other over the issue of who owned the intellectual property around AT&T Unix. And in 2007, a federal judge ruled that Novell was the owner of the UNIX and UnixWare copyrights.
+
+That should be the end, right? Wrong. In 2009, that 2007 ruling was partially reversed, so SCO continued pursuing legal action to prove it owned the copyrights to the intellectual property associated with AT&T Unix. It lost SCO v. Novell in 2010, then lost the appeal in 2011.
+
+In 2011, Xinuos, then UnXis, a company formed specifically to buy SCO's Unix software assets (which by then hadn't been updated for more than four years), placed a $600,000 bid for the company and won against a single opposing bid of $18.
+
+Although the lukewarm corpse of SCO would continue to attempt to revive its case against IBM through a series of appeals as recently as 2017, the sale of its intellectual property assets to Xinuos effectively put an end to the threat against IBM and Linux.
+
+In 2016, Xinous's CEO Sean Synder said, "We are not SCO. We are investors who bought the products. We did not buy the ability to pursue litigation against IBM, and we have absolutely no interest in that."
+
+So what has changed in five years?
+
+Xinuos insists it's because IBM and Red Hat have conspired to unfairly tilt the competitive playing field in their favor, and not because time has passed their product by.
+
+"IBM and Red Hat conspired to illegally corner a market and crush competition," the company wrote in its legal complaint.
+
+For the copyright claim, which targets only IBM, the company said, "IBM stole Xinuos’ intellectual property and used that stolen property to build and sell a product to compete with Xinuos itself."
+
+The intellectual property in question is SCO's UnixWare and OpenServer code, which was then allegedly incorporated into the IBM AIX operating system.
+
+The software that Xinuos is claiming IBM infringed was created after 1995, i.e. the year of the Novell sale to SCO.  This disputed software largely revolves around code from Project Monterey, which was started by IBM, SCO, Sequent and Intel in 1998 as an attempt to make Unix a more competitive product by turning it into a single operating system that would allow users to more easily move workloads from one version of Unix to another. IBM's contribution to the project was providing POWER and PowerPC support from AIX.
+
+In early 2001, IBM began backing out of the project, a few months after the company had announced $1 billion on Linux development.
+
+Twenty years later, Xinuos is claiming IBM stole code from the Project Monterey collaboration.
+
+"Through Project Monterey, IBM gained confidential access to the Code," Xinuos said in the court filing. "Project Monterey was then terminated by IBM without IBM gaining any rights to the Code under the applicable agreement. Indeed, IBM specifically asked Xinuos’ predecessor if it could use the Code in AIX, z/OS and IBM i, and the request was denied."
+
+Whether or not this is true or can be proven remains to be seen. So far, Xinuos has offered no evidence and IBM is adamantly denying both the copyright and antitrust charges being brought against it.
+
+"Xinuos' copyright allegations merely rehash the stale claims of its predecessor, whose copyrights Xinuos purchased out of bankruptcy -- and have no merit," IBM spokesperson Doug Shelton said in a statement. "Xinuos's antitrust allegations, brought against IBM and Red Hat, the world's largest open-source company, similarly defy logic. IBM and Red Hat will aggressively defend the integrity of the open-source development process and the inherent choice, and thus competition, that open source fosters."
+
+The antitrust charge seems to suggest a conspiracy that's been ongoing since Project Monterey which – again – began 23 years ago in 1998 and culminated in IBM’s 2018 acquisition of Red Hat. Xinuos further explained that the two companies agreed to divide the pie so that IBM would take the big enterprise players, leaving SMBs to Red Hat.
+
+"[S]tolen property in IBM’s hand, IBM and Red Hat illegally agreed to divide the relevant market and use their growing market powers to victimize consumers, innovative competitors, and innovation itself," Xinuos told the court. "[A]fter IBM and Red Hat launched their conspiracy, IBM then acquired Red Hat to solidify and make permanent their scheme. ... IBM has been misleading its investors by falsely claiming all infringement claims against IBM regarding the copied code have been waived."
+
+The good news for Linux users is that so far all copyright infringement claims are being made solely against IBM's Unix operating systems.
+
+READ MORE
+TAGS: COMPUTE ENGINES
+0 COMMENTS
+RECOMMENDED READING
+making a decision fork in the road
+Looking for a CentOS Replacement? Start Here
+APR 16, 2021
+open-source101.jpg
+Dependency Problems Increase for Open Source Components
+APR 14, 2021
+azure iot hub security portal
+KernelCare Brings Bootless Security Patching to Azure IoT Hub
+APR 02, 2021
+open-source101.jpg
+Open Source 101: Go Online & Find Your Way Around Open Source
+MAR 29, 2021
+Sign up for the ITPro Today newsletter.
+
+Email address
+
+United States
+SIGN UP
+
+Logo
+About
+Advertise
+Contact Us
+Sitemap
+Ad Choices
+CCPA: Do not sell my personal info
+Privacy Policy
+Terms of Service
+Content Licensing/Reprints
+Cookie Policy
+Follow us:
+
+Informa Tech	© 2021 Informa USA, Inc., All rights reserved
+Privacy Policy Cookie Policy Terms of Use
+
+Follow
+Show
