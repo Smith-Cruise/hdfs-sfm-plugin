@@ -80,6 +80,8 @@ public class SFMFileSystem extends FileSystem {
                 // create Distributed FileSystem
                 // specific to merged file system.
                 underLyingFS = new Path(String.format("%s://%s", SFMConstants.DEFAULT_UNDERLYING_FS, authority)).getFileSystem(conf);
+                LOG.debug(String.format("Underlying FS create succeed-schema:%s, path:%s", underLyingFS.getScheme(),
+                        underLyingFS.getUri().getPath()));
             }
 
             this.uri = URI.create(schema+"://"+authority);
