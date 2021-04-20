@@ -110,16 +110,12 @@ public class SFMerger implements Closeable {
         LOG.debug(String.format("Write index: %s, write path: %s", sfmBasePath, mergeFilePath.toUri().getPath()));
 
         FileStatus fileStatus;
-        // used for append
-        long baseOffset;
         try {
             LOG.debug("Merged file existed, append it.");
             fileStatus = FS.getFileStatus(mergeFilePath);
-            baseOffset = fileStatus.getLen();
         } catch (FileNotFoundException e) {
             LOG.debug("Merged file didn't existed, create it.");
             fileStatus = null;
-            baseOffset = 0;
         }
 
         FSDataOutputStream outputStream;
@@ -128,7 +124,6 @@ public class SFMerger implements Closeable {
         } else {
             outputStream = FS.create(mergeFilePath);
         }
-        long prevPos = outputStream.getPos();
 
         List<FileEntity> files = MERGED_MAP.get(sfmBasePath);
 
@@ -148,8 +143,11 @@ public class SFMerger implements Closeable {
             MERGED_MAP_INDEX_BUILDER.put(sfmBasePath, sfmIndexBuilder);
         }
 
+        long prevPos = 0;
         for (FileEntity file: files) {
             if (! file.isTombstone()) {
+                prevPos = outputStream.getPos();
+
                 // add file
                 File f = new File(TMP_FOLDER + "/" + file.getTmpStoreName());
                 if (! f.exists()) {
@@ -164,9 +162,8 @@ public class SFMerger implements Closeable {
                 }
 
                 // write index to indexBuilder
-                sfmIndexBuilder.add(file.getFilename(), baseOffset + prevPos, (int) file.getFilesSize(), file.getModificationTime(),
+                sfmIndexBuilder.add(file.getFilename(), prevPos, (int) file.getFilesSize(), file.getModificationTime(),
                         file.getNanoTime());
-                prevPos = outputStream.getPos();
                 in.close();
                 deleteFile(f);
             } else {
