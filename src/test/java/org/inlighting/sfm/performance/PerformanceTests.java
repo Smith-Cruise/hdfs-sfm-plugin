@@ -58,6 +58,9 @@ public class PerformanceTests {
 
         FileSystem fs = qualifiedSFMPath.getFileSystem(configuration);
         FSDataOutputStream out;
+        out = fs.create(new Path(folder, "article.txt"));
+        out.writeBytes(sb.toString());
+        out.close();
         for (int i=0; i<times; i++) {
             out = fs.create(new Path(folder, i + ".txt"));
             out.writeBytes(sb.toString());
