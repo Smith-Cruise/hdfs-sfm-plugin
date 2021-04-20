@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,7 +54,7 @@ public class SFMIndexBuilder implements Closeable {
         FS = fs;
         SFM_BASE_PATH = sfmBasePath;
         MERGE_FILENAME = mergeFilename;
-        INDEX_LIST = new LinkedList<>();
+        INDEX_LIST = new ArrayList<>();
     }
 
     public static SFMIndexBuilder build(FileSystem fs, String sfmBasePath, String mergeFilename) {
@@ -60,15 +62,15 @@ public class SFMIndexBuilder implements Closeable {
     }
 
     public void add(String filename, long offset, int length, long modificationTime, long nanoTime) throws IOException {
-        checkKey(filename, nanoTime);
+//        checkKey(filename, nanoTime);
 
-        INDEX_LIST.add(new KV(filename, offset, length, modificationTime, false));
+        INDEX_LIST.add(new KV(filename, offset, length, modificationTime, false, nanoTime));
         numIndex++;
     }
 
     public void addDelete(String filename, long modificationTime, long nanoTime) throws IOException {
-        checkKey(filename, nanoTime);
-        INDEX_LIST.add(new KV(filename, 0, 0,modificationTime, true));
+//        checkKey(filename, nanoTime);
+        INDEX_LIST.add(new KV(filename, 0, 0,modificationTime, true, nanoTime));
         numIndex++;
     }
 
@@ -96,11 +98,14 @@ public class SFMIndexBuilder implements Closeable {
         KVsProtos.KVs.Builder kvsBuilder = KVsProtos.KVs.newBuilder();
         BloomFilter bloomFilter = new BloomFilter(numIndex, FPP);
 
-        INDEX_LIST.forEach(kv -> {
+        // sort first.
+        Collections.sort(INDEX_LIST);
+        for (KV kv : INDEX_LIST) {
+            checkKey(kv.getFilename(), kv.getNanoTime());
             KVsProtos.KV.Builder kvBuilder = KVsProtos.KV.newBuilder();
             kvBuilder.setFilename(kv.getFilename());
             kvBuilder.setModificationTime(kv.getModificationTime());
-            if (! kv.isTombstone()) {
+            if (!kv.isTombstone()) {
                 kvBuilder.setOffset(kv.getOffset());
                 kvBuilder.setLength(kv.getLength());
                 kvBuilder.setTombstone(false);
@@ -110,7 +115,7 @@ public class SFMIndexBuilder implements Closeable {
 
             kvsBuilder.addKv(kvBuilder.build());
             bloomFilter.addString(kv.getFilename());
-        });
+        }
 
         // write index
         final CodedOutputStream codedOutput = CodedOutputStream.newInstance(indexOutput);
@@ -147,18 +152,13 @@ public class SFMIndexBuilder implements Closeable {
 
     // small to big
     private void checkKey(String key, long nanoTime) throws IOException {
-        if (lastKey == null || lastNanoTime == 0) {
-            lastKey = key;
-            lastNanoTime = nanoTime;
-        } else {
+        if (lastKey != null) {
             int res = lastKey.compareTo(key);
             if (res > 0) {
-                throw new IOException("The key should be ordered.");
-            }
-
-            if (res == 0) {
+                throw new IOException(String.format("The key should be ordered. Last key: %s, now key: %s", lastKey, key));
+            } else if (res == 0) {
                 if (lastNanoTime >= nanoTime) {
-                    throw new IOException("Have the same key, but the nano time should be ordered.");
+                    throw new IOException(String.format("Have the same key, but the nano time should be ordered. Last key: %s, now key: %s", lastKey, key));
                 }
             }
         }

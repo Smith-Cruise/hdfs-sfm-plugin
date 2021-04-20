@@ -131,7 +131,6 @@ public class SFMerger implements Closeable {
         long prevPos = outputStream.getPos();
 
         List<FileEntity> files = MERGED_MAP.get(sfmBasePath);
-        Collections.sort(files);
 
         // create or get index builder
         // todo

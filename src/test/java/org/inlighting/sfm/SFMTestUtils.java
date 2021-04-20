@@ -11,6 +11,10 @@ public class SFMTestUtils {
         return new Path("sfm", AUTHORITY, folderPath);
     }
 
+    public static Path genSFMPath(String authority, String folderPath) {
+        return new Path("sfm", authority, folderPath);
+    }
+
     public static Path genHDFSPath(String folderPath) {
         return new Path("hdfs", AUTHORITY, folderPath);
     }

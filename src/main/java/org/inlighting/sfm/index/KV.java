@@ -1,6 +1,8 @@
 package org.inlighting.sfm.index;
 
-public class KV {
+import org.inlighting.sfm.merger.FileEntity;
+
+public class KV implements Comparable<KV> {
     private String filename;
 
     private long offset;
@@ -11,12 +13,20 @@ public class KV {
 
     private boolean tombstone;
 
-    public KV(String filename, long offset, int length, long modificationTime, boolean tombstone) {
+    // used to compare only
+    private long nanoTime;
+
+    public KV(String filename, long offset, int length, long modificationTime, boolean tombstone, long nanoTime) {
         this.filename = filename;
         this.offset = offset;
         this.length = length;
         this.modificationTime = modificationTime;
         this.tombstone = tombstone;
+        this.nanoTime = nanoTime;
+    }
+
+    public KV(String filename, long offset, int length, long modificationTime, boolean tombstone) {
+       this(filename, offset, length, modificationTime, tombstone, 0);
     }
 
     public String getFilename() {
@@ -57,5 +67,23 @@ public class KV {
 
     public void setTombstone(boolean tombstone) {
         this.tombstone = tombstone;
+    }
+
+    public long getNanoTime() {
+        return nanoTime;
+    }
+
+    public void setNanoTime(long nanoTime) {
+        this.nanoTime = nanoTime;
+    }
+
+    @Override
+    public int compareTo(KV o) {
+        int result = filename.compareTo(o.filename);
+        if (result == 0) {
+            // same filename, compare to nano time.
+            result = Long.compare(nanoTime, o.nanoTime);
+        }
+        return result;
     }
 }

@@ -1,6 +1,6 @@
 package org.inlighting.sfm.merger;
 
-public class FileEntity implements Comparable<FileEntity> {
+public class FileEntity {
     private String sfmBasePath;
 
     private String filename;
@@ -85,13 +85,4 @@ public class FileEntity implements Comparable<FileEntity> {
         this.nanoTime = nanoTime;
     }
 
-    @Override
-    public int compareTo(FileEntity o) {
-        int result = filename.compareTo(o.filename);
-        if (result == 0) {
-            // same filename, compare to nano time.
-            result = Long.compare(nanoTime, o.nanoTime);
-        }
-        return result;
-    }
 }
