@@ -231,6 +231,10 @@ public class SFMFileSystem extends FileSystem {
         loadSFMInformation(uri);
 
         List<SFMFileStatus> sfmFileStatuses= curSFMReader.listStatus();
+
+        // sort it to boost file affinity
+        Collections.sort(sfmFileStatuses);
+
         FileStatus[] fileStatuses = new FileStatus[sfmFileStatuses.size()];
         int i = 0;
         for (SFMFileStatus sfmFileStatus: sfmFileStatuses) {

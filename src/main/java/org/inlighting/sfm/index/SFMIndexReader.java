@@ -73,7 +73,7 @@ public class SFMIndexReader {
     }
 
     public List<SFMFileStatus> listStatus() throws IOException {
-        List<SFMFileStatus> fileList = new LinkedList<>();
+        List<SFMFileStatus> fileList = new ArrayList<>();
         List<KV> kvList = new LinkedList<>();
         for (int i=0; i<masterIndexList.size(); i++) {
             IndexMetadata indexMetadata = loadIndexMetadataLazily(i);

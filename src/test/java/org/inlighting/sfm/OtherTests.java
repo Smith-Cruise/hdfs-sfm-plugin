@@ -62,27 +62,11 @@ public class OtherTests {
 
     @Test
     void listRead() throws IOException {
-        Path qualifiedSFMPath = SFMTestUtils.genSFMPath("master.lab.com:9000", "/articles.sfm");
+        Path qualifiedSFMPath = SFMTestUtils.genSFMPath("single.lab.com:9000", "/articles.sfm");
         FileSystem fs = qualifiedSFMPath.getFileSystem(new Configuration());
         FileStatus[] fileStatuses = fs.listStatus(new Path("/articles.sfm"));
-        int offset = 0;
-        int loop = 0;
         for (FileStatus fileStatus: fileStatuses) {
-            loop ++;
-            BlockLocation[] blkLocations = fs.getFileBlockLocations(fileStatus, 0, fileStatus.getLen());
-            boolean meet = false;
-            for(int i = 0; i < blkLocations.length; ++i) {
-                if (blkLocations[i].getOffset() <= offset && offset < blkLocations[i].getOffset() + blkLocations[i].getLength()) {
-                    meet = true;
-                }
-            }
-            if (meet) {
-                continue;
-            }
-
-            BlockLocation last = blkLocations[blkLocations.length - 1];
-            long fileLength = last.getOffset() + last.getLength() - 1L;
-            throw new IllegalArgumentException("Offset " + offset + " is outside of file (0.." + fileLength + ")");
+            System.out.println(fileStatus.getPath().toUri().getPath());
         }
 
     }

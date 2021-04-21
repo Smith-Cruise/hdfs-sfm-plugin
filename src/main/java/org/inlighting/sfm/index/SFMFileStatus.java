@@ -1,6 +1,6 @@
 package org.inlighting.sfm.index;
 
-public class SFMFileStatus {
+public class SFMFileStatus implements Comparable<SFMFileStatus> {
 
     private String filename;
 
@@ -58,5 +58,10 @@ public class SFMFileStatus {
 
     public void setModificationTime(long modificationTime) {
         this.modificationTime = modificationTime;
+    }
+
+    @Override
+    public int compareTo(SFMFileStatus o) {
+        return Long.compare(modificationTime, o.modificationTime);
     }
 }
