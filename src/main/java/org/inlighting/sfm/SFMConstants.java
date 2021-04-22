@@ -8,7 +8,7 @@ public class SFMConstants {
 
     public static final String SFMERGER_TMP_FOLDER = "TMP_SFM";
 
-    public static final boolean ENABLE_CACHE = false;
+    public static final boolean ENABLE_CACHE = true;
 
     public static final boolean OVERWRITE_TMP_FOLDER = true;
 
