@@ -47,13 +47,13 @@ public class SFMCacheManager implements Closeable {
         return sfmCache.read(b, position, off, len);
     }
 
-
-
     @Override
     public void close() throws IOException {
         UNDER_LYING_STREAM.close();
-        LOG.debug("Invalidate SFM cache, the cache hit rate is " + sfmCache.getHitRate());
-        sfmCache = null;
+        if (sfmCache != null) {
+            LOG.debug("Invalidate SFM cache, the cache hit rate is " + sfmCache.getHitRate());
+            sfmCache = null;
+        }
     }
 
     private class SFMCache {
