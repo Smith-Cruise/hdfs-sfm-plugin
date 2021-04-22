@@ -14,11 +14,12 @@ import org.inlighting.sfm.util.SFMUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Closeable;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
-public class SFMIndexReader {
+public class SFMIndexReader implements Closeable {
 
     private static final Logger LOG = LoggerFactory.getLogger(SFMIndexReader.class);
 
@@ -353,6 +354,11 @@ public class SFMIndexReader {
 
     public String getSFMBasePath() {
         return SFM_BASE_PATH;
+    }
+
+    @Override
+    public void close() throws IOException {
+        IN.close();
     }
 
     private class IndexMetadata {

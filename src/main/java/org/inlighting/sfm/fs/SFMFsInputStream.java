@@ -1,6 +1,7 @@
 package org.inlighting.sfm.fs;
 
 import org.apache.hadoop.fs.*;
+import org.inlighting.sfm.cache.SFMCacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,14 +20,23 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
     private final byte[] ONE_BYTE_BUFFER = new byte[1];
 
     private final FSDataInputStream UNDER_LYING_STREAM;
+    private final SFMCacheManager SFM_CACHE_MANAGER;
 
-    public SFMFsInputStream(FileSystem fs, Path mergedPath, long start, long length, int bufferSize) throws IOException {
+    public SFMFsInputStream(FileSystem fs, Path mergedPath, long start, long length, int bufferSize, SFMCacheManager sfmCacheManager) throws IOException {
         if (length < 0) {
             throw new IllegalArgumentException(String.format("Negative length: %d", length));
         }
 
-        UNDER_LYING_STREAM = fs.open(mergedPath, bufferSize);
-        UNDER_LYING_STREAM.seek(start);
+        if (sfmCacheManager == null) {
+            UNDER_LYING_STREAM = fs.open(mergedPath, bufferSize);
+            UNDER_LYING_STREAM.seek(start);
+            SFM_CACHE_MANAGER = null;
+        } else {
+            // Do not create underLyingStream, use cacheManager only.
+            SFM_CACHE_MANAGER = sfmCacheManager;
+            UNDER_LYING_STREAM = null;
+        }
+
         mergedStart = start;
         mergedEnd = start + length;
         mergedPosition = start;
@@ -50,7 +60,9 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
 
     @Override
     public synchronized void close() throws IOException {
-        UNDER_LYING_STREAM.close();
+        if (! isEnableCache()) {
+            UNDER_LYING_STREAM.close();
+        }
         super.close();
     }
 
@@ -66,11 +78,15 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
 
     @Override
     public synchronized int read(byte[] b, int off, int len) throws IOException {
+        if (b == null) {
+            throw new NullPointerException();
+        }
+
+        int ret = -1;
         if (len == 0) {
-            return 0;
+            return ret;
         }
         int newLen = len;
-        int ret = -1;
         if (mergedPosition + len > mergedEnd) {
             newLen = (int) (mergedEnd - mergedPosition);
         }
@@ -79,7 +95,13 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
         if (newLen == 0) {
             return ret;
         }
-        ret = UNDER_LYING_STREAM.read(b,off, newLen);
+
+        // start to read
+        if (isEnableCache()) {
+            ret = SFM_CACHE_MANAGER.read(mergedPosition, b, off, newLen);
+        } else {
+            ret = UNDER_LYING_STREAM.read(b,off, newLen);
+        }
         mergedPosition += ret;
         return ret;
     }
@@ -92,7 +114,9 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
             if (tmpN > actualRemaining) {
                 tmpN = actualRemaining;
             }
-            UNDER_LYING_STREAM.seek(tmpN + mergedPosition);
+            if (! isEnableCache()) {
+                UNDER_LYING_STREAM.seek(tmpN + mergedPosition);
+            }
             mergedPosition += tmpN;
             return tmpN;
         }
@@ -102,14 +126,23 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
         return 0;
     }
 
-    // position readable
-    // different
+    // position readable, do not change current offset.
+    // maybe error.
     @Override
     public int read(long position, byte[] buffer, int offset, int length) throws IOException {
-        if (mergedStart + length + position > mergedEnd) {
+        int nLength = length;
+        if (mergedStart + nLength + position > mergedEnd) {
+            nLength = (int) (mergedEnd - mergedStart - position);
+        }
+        if (nLength <= 0) {
             return -1;
         }
-        return UNDER_LYING_STREAM.read(position + mergedStart, buffer, offset, length);
+
+        if (isEnableCache()) {
+            return SFM_CACHE_MANAGER.read(position + mergedStart, buffer, offset, length);
+        } else {
+            return UNDER_LYING_STREAM.read(position + mergedStart, buffer, offset, length);
+        }
     }
 
     @Override
@@ -121,12 +154,12 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
         if (mergedStart + length + position > mergedEnd) {
             throw new EOFException("Not enough bytes to read.");
         }
-        UNDER_LYING_STREAM.readFully(mergedStart + position, buffer, offset, length);
-    }
 
-    @Override
-    public void readFully(long position, byte[] buffer) throws IOException {
-        readFully(position, buffer, 0, buffer.length);
+        if (isEnableCache()) {
+            SFM_CACHE_MANAGER.read(mergedStart + position, buffer, offset, length);
+        } else {
+            UNDER_LYING_STREAM.readFully(mergedStart + position, buffer, offset, length);
+        }
     }
 
     @Override
@@ -143,7 +176,9 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
     public synchronized void seek(long pos) throws IOException {
         validatePosition(pos);
         mergedPosition = mergedStart + pos;
-        UNDER_LYING_STREAM.seek(mergedPosition);
+        if (! isEnableCache()) {
+            UNDER_LYING_STREAM.seek(mergedPosition);
+        }
     }
 
     @Override
@@ -153,14 +188,20 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
 
     @Override
     public synchronized boolean seekToNewSource(long targetPos) throws IOException {
-        // different
-        return UNDER_LYING_STREAM.seekToNewSource(targetPos);
+        // do not need to implement this
+        // hdfs in itself does seektonewsource
+        // while reading.
+        return false;
     }
 
     @Override
     public synchronized int read() throws IOException {
         int ret = read(ONE_BYTE_BUFFER, 0, 1);
         return (ret <= 0) ? -1: (ONE_BYTE_BUFFER[0] & 0xff);
+    }
+
+    private boolean isEnableCache() {
+        return SFM_CACHE_MANAGER != null;
     }
 
     private void validatePosition(final long pos) throws IOException {

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -39,25 +40,56 @@ public class WriteReadTests {
     void simpleReadWriteTest() throws IOException {
         {
             FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
-            FSDataOutputStream out = fs.create(new Path(folder + "/a.txt"));
+            FSDataOutputStream out = fs.create(new Path(folder, "a.txt"));
             out.writeInt(5);
             out.close();
-            out = fs.create(new Path(folder + "/content.txt"));
+            out = fs.create(new Path(folder, "content1.txt"));
             out.writeBytes("Hello World");
+            out.writeInt(9);
+            out.close();
+            out = fs.create(new Path(folder,"content2.txt"));
+            out.writeBytes("World Hello");
+            out.close();
+            out = fs.create(new Path(folder, "b.txt"));
+            out.writeDouble(10.123);
             out.close();
             fs.close();
         }
 
         {
-            FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
-            FSDataInputStream in = fs.open(new Path(folder + "/a.txt"));
-            int result = in.readInt();
-            in.close();
-            assertEquals(5, result);
+            int read = 0;
 
-            in = fs.open(new Path(folder + "/content.txt"));
-            int read = in.read(tmpBytes);
+            FileSystem fs = qualifiedSFMPath.getFileSystem(hdfsConfiguration);
+            FSDataInputStream in = fs.open(new Path(folder, "a.txt"));
+            assertEquals(5, in.readInt());
+            in.close();
+
+            in = fs.open(new Path(folder, "content1.txt"));
+            read = in.read(tmpBytes, 0, 11);
             assertEquals("Hello World", new String(tmpBytes, 0, read));
+            assertEquals(4, in.available());
+            assertEquals(9, in.readInt());
+            assertEquals(0, in.available());
+            in.seek(11);
+            assertEquals(9, in.readInt());
+            in.seek(0);
+            assertEquals(11, in.skip(11));
+            assertEquals(9, in.readInt());
+            assertEquals(15, in.getPos());
+
+            FSDataInputStream finalIn = in;
+            assertThrows(EOFException.class, ()-> {
+                finalIn.readFully(0, tmpBytes);
+            });
+
+
+            in = fs.open(new Path(folder, "content2.txt"));
+            read = in.read(tmpBytes, 0, 11);
+            assertEquals("World Hello", new String(tmpBytes, 0, read));
+
+            in = fs.open(new Path(folder, "b.txt"));
+            assertEquals(10.123, in.readDouble());
+
 
             // test not found file
             assertThrows(FileNotFoundException.class, () -> {
