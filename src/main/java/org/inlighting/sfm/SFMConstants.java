@@ -6,6 +6,8 @@ public class SFMConstants {
 
     public static final String MASTER_INDEX_NAME = "_masterIndex";
 
+    public static final String MERGED_FILENAME = "part-0";
+
     public static final String SFMERGER_TMP_FOLDER = "TMP_SFM";
 
     public static final boolean ENABLE_CACHE = true;

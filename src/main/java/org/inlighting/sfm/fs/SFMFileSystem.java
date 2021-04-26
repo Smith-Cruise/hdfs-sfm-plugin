@@ -152,7 +152,7 @@ public class SFMFileSystem extends FileSystem {
             throw new FileNotFoundException(absF.toString());
         }
         SFMFileStatus sfmFileStatus = curSFMReader.getFileStatus(filename);
-        return new SFMFsDataInputStream(underLyingFS, new Path(curSFMBasePath, sfmFileStatus.getMergedFilename()),
+        return new SFMFsDataInputStream(underLyingFS, new Path(curSFMBasePath, SFMConstants.MERGED_FILENAME),
                 sfmFileStatus.getOffset(), sfmFileStatus.getLength(), bufferSize, curSFMCacheManager);
     }
 
@@ -429,7 +429,7 @@ public class SFMFileSystem extends FileSystem {
             SFMIndexReader sfmReader = SFMIndexReader.build(underLyingFS, sfmBasePath);
             SFMCacheManager sfmCacheManager = null;
             if (SFMConstants.ENABLE_CACHE) {
-                sfmCacheManager = SFMCacheFactory.build(underLyingFS, new Path(sfmBasePath, "part-0"));
+                sfmCacheManager = SFMCacheFactory.build(underLyingFS, new Path(sfmBasePath, SFMConstants.MERGED_FILENAME));
             }
             SFMetaData newSFMetaData = new SFMetaData(sfmBasePath, sfmReader, sfmCacheManager);
             metaDataCache.put(sfmBasePath, newSFMetaData);

@@ -105,7 +105,7 @@ public class SFMerger implements Closeable {
 
     private void merge(String sfmBasePath) throws IOException {
         // 暂定这个名字
-        final String MERGED_FILENAME = "part-0";
+        final String MERGED_FILENAME = SFMConstants.MERGED_FILENAME;
         Path mergeFilePath = new Path(sfmBasePath + "/" + MERGED_FILENAME);
         LOG.debug(String.format("Write index: %s, write path: %s", sfmBasePath, mergeFilePath.toUri().getPath()));
 

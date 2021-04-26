@@ -23,8 +23,6 @@ public class SFMIndexReader implements Closeable {
 
     private static final Logger LOG = LoggerFactory.getLogger(SFMIndexReader.class);
 
-    private final String MERGED_FILENAME = "part-0";
-
     // class info
     private final FileSystem FS;
 
@@ -89,7 +87,7 @@ public class SFMIndexReader implements Closeable {
             if (! EXISTED_MAP.containsKey(kv.getFilename())) {
                 EXISTED_MAP.put(kv.getFilename(), kv.isTombstone());
                 if (! kv.isTombstone()) {
-                    fileList.add(new SFMFileStatus(kv.getFilename(), MERGED_FILENAME, kv.getOffset(), kv.getLength(), kv.getModificationTime()));
+                    fileList.add(new SFMFileStatus(kv.getFilename(), SFMConstants.MERGED_FILENAME, kv.getOffset(), kv.getLength(), kv.getModificationTime()));
                 }
             }
         }
@@ -105,7 +103,7 @@ public class SFMIndexReader implements Closeable {
                                                  long len) throws IOException {
         SFMFileStatus sfmFileStatus = getSFMFileStatus(filename);
         len = Math.min(len, sfmFileStatus.getLength());
-        BlockLocation[] locations = FS.getFileBlockLocations(new Path(SFM_BASE_PATH, MERGED_FILENAME),
+        BlockLocation[] locations = FS.getFileBlockLocations(new Path(SFM_BASE_PATH, sfmFileStatus.getMergedFilename()),
                 sfmFileStatus.getOffset() + start, len);
 
 
