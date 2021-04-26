@@ -12,11 +12,22 @@ import java.nio.ByteBuffer;
 
 public class SFMCacheManager implements Closeable {
 
-    private SFMCache sfmCache;
+    private static final Logger LOG = LoggerFactory.getLogger(SFMCacheManager.class);
+
+    // lock for sfmCache and underlying stream
+    private Object lock;
+
+    private SFMCache curSFMCache;
+
+    private SFMCache nextSFMCache;
 
     private final FSDataInputStream UNDER_LYING_STREAM;
 
-    private static final Logger LOG = LoggerFactory.getLogger(SFMCacheManager.class);
+    private int curPrefetchSize = 10240;
+
+//    private boolean shouldLargePrefetchSize = false;
+//
+//    private int maxPrefetchSize = 20480;
 
     public SFMCacheManager(FileSystem fs, Path mergedPath) throws IOException {
         // bufferSize no effect.
@@ -24,39 +35,114 @@ public class SFMCacheManager implements Closeable {
     }
 
     public synchronized int read(long position, byte[] b, int off, int len) throws IOException {
-        if (sfmCache != null) {
-            if (sfmCache.isHit(position, len)) {
-                // hit, just read
+        if (curSFMCache != null) {
+            if (curSFMCache.isHit(position, len)) {
                 LOG.debug(String.format("Hit cache, just return it. {position: %d, len: %d}", position, len));
-                return sfmCache.read(b, position, off, len);
+                int read = curSFMCache.read(b, position, off, len);
+
+
+                return read;
             } else {
-                LOG.debug("Invalidate SFM cache, the cache hit rate is " + sfmCache.getHitRate());
-                sfmCache = null;
+                synchronized (lock) {
+                    curSFMCache.close();
+                    curSFMCache = null;
+                    if (nextSFMCache != null) {
+                        curSFMCache = nextSFMCache;
+                        nextSFMCache = null;
+                    }
+                }
             }
         }
 
+//        synchronized (lock) {
+//            if (nextSFMCache == null) {
+//                if (shouldLargePrefetchSize) {
+//                    curPrefetchSize = curPrefetchSize * 2;
+//                    curPrefetchSize = Math.min(curPrefetchSize, maxPrefetchSize);
+//                }
+//                new Fetcher(curSFMCache.getOffsetEnd(), curPrefetchSize).start();
+//            }
+//        }
+
+
+//        if (curSFMCache != null && curSFMCache.isHit(position, len)) {
+//
+//
+//            if (curSFMCache.isHit(position, len)) {
+//                if (nextSFMCache == null) {
+//                    Fetcher fetcher = new Fetcher();
+//                }
+//
+//                // hit, just read
+//                LOG.debug(String.format("Hit cache, just return it. {position: %d, len: %d}", position, len));
+//                return ;
+//            } else {
+//                curSFMCache.close();
+//                curSFMCache = null;
+//            }
+//        }
+
+
+
+//        if (sfmCache != null) {
+//            if (sfmCache.isHit(position, len)) {
+//
+//            } else {
+//                sfmCache.close();
+//                sfmCache = null;
+//            }
+//        }
+
         // start to read
         // 10mb
-        int prefetchLen = 10 * 1024 * 1024;
-        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(prefetchLen);
-
-        int read = UNDER_LYING_STREAM.read(position, byteBuffer);
-        // put in cache
-        sfmCache = new SFMCache(position, position + read, byteBuffer);
-        LOG.debug(String.format("Create cache, [%d-%d]", position, position+read));
-        return sfmCache.read(b, position, off, len);
+//        int prefetchLen = 10 * 1024 * 1024;
+//        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(prefetchLen);
+//
+//        int read = UNDER_LYING_STREAM.read(position, byteBuffer);
+//        // put in cache
+//        sfmCache = new SFMCache(position, position + read, byteBuffer);
+//        LOG.debug(String.format("Create cache, [%d-%d]", position, position+read));
+//        return sfmCache.read(b, position, off, len);
+        return 0;
     }
 
     @Override
     public void close() throws IOException {
-        UNDER_LYING_STREAM.close();
-        if (sfmCache != null) {
-            LOG.debug("Invalidate SFM cache, the cache hit rate is " + sfmCache.getHitRate());
-            sfmCache = null;
+//        UNDER_LYING_STREAM.close();
+//        if (sfmCache != null) {
+//            LOG.debug("Invalidate SFM cache, the cache hit rate is " + sfmCache.getHitRate());
+//            sfmCache = null;
+//        }
+    }
+
+    private class Fetcher extends Thread {
+
+        private long position;
+
+        private int length;
+
+        public Fetcher(long position, int length) {
+            this.position = position;
+            this.length = length;
+        }
+
+        @Override
+        public void run() {
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(length);
+            synchronized (lock) {
+                try {
+                    int read = UNDER_LYING_STREAM.read(position, byteBuffer);
+                    nextSFMCache = new SFMCache(position, position + read, byteBuffer);
+                    LOG.debug(String.format("Create next cache, [%d-%d]", position, position+read));
+                } catch (IOException e) {
+                   e.printStackTrace();
+                }
+            }
+
         }
     }
 
-    private class SFMCache {
+    private class SFMCache implements Closeable{
         private long offsetStart;
 
         private long offsetEnd;
@@ -93,6 +179,16 @@ public class SFMCacheManager implements Closeable {
             byteBuffer.get(b, offset, len);
             int tmpEnd = byteBuffer.position();
             return tmpEnd - tmpStart;
+        }
+
+        public long getOffsetEnd() {
+            return offsetEnd;
+        }
+
+        @Override
+        public void close() throws IOException {
+            byteBuffer = null;
+            LOG.debug("Invalidate SFM cache, the cache hit rate is " + getHitRate());
         }
     }
 }
