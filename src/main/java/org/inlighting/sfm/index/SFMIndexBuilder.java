@@ -30,8 +30,6 @@ public class SFMIndexBuilder implements Closeable {
 
     private final String SFM_BASE_PATH;
 
-    private final String MERGE_FILENAME;
-
     private int numIndex = 0;
 
     // bloom filter
@@ -53,7 +51,6 @@ public class SFMIndexBuilder implements Closeable {
     public SFMIndexBuilder(FileSystem fs, String sfmBasePath, String mergeFilename) {
         FS = fs;
         SFM_BASE_PATH = sfmBasePath;
-        MERGE_FILENAME = mergeFilename;
         INDEX_LIST = new ArrayList<>();
     }
 
@@ -129,7 +126,6 @@ public class SFMIndexBuilder implements Closeable {
         bloomFilterProtos.writeTo(codedOutput);
 
         TrailerProtos.Trailer.Builder trailerBuilder = TrailerProtos.Trailer.newBuilder();
-        trailerBuilder.setMergedFilename(MERGE_FILENAME);
         trailerBuilder.setKvsLength(kvs.getSerializedSize());
         trailerBuilder.setMinKey(minKey);
         trailerBuilder.setMaxKey(maxKey);

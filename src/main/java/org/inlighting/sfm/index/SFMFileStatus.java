@@ -4,17 +4,14 @@ public class SFMFileStatus implements Comparable<SFMFileStatus> {
 
     private String filename;
 
-    private String mergedFilename;
-
     private long offset;
 
     private int length;
 
     long modificationTime;
 
-    public SFMFileStatus(String filename, String mergedFilename, long offset, int length, long modificationTime) {
+    public SFMFileStatus(String filename, long offset, int length, long modificationTime) {
         this.filename = filename;
-        this.mergedFilename = mergedFilename;
         this.offset = offset;
         this.length = length;
         this.modificationTime = modificationTime;
@@ -26,14 +23,6 @@ public class SFMFileStatus implements Comparable<SFMFileStatus> {
 
     public void setFilename(String filename) {
         this.filename = filename;
-    }
-
-    public String getMergedFilename() {
-        return mergedFilename;
-    }
-
-    public void setMergedFilename(String mergedFilename) {
-        this.mergedFilename = mergedFilename;
     }
 
     public long getOffset() {

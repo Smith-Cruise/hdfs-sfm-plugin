@@ -8,13 +8,12 @@ import org.apache.hadoop.hdfs.*;
 import org.apache.hadoop.net.NetUtils;
 import org.apache.hadoop.util.Progressable;
 import org.inlighting.sfm.SFMConstants;
-import org.inlighting.sfm.cache.SFMCacheFactory;
-import org.inlighting.sfm.cache.SFMCacheManager;
 import org.inlighting.sfm.index.SFMFileStatus;
 import org.inlighting.sfm.index.SFMIndexReader;
 import org.inlighting.sfm.merger.FileEntity;
 import org.inlighting.sfm.merger.SFMerger;
 import org.inlighting.sfm.merger.SFMergerFactory;
+import org.inlighting.sfm.readahead.ReadaheadManager;
 import org.inlighting.sfm.util.LruCache;
 import org.inlighting.sfm.util.SFMUtil;
 import org.slf4j.Logger;
@@ -45,7 +44,7 @@ public class SFMFileSystem extends FileSystem {
     // current information, need lock
     private String curSFMBasePath;
     private SFMIndexReader curSFMReader;
-    private SFMCacheManager curSFMCacheManager;
+    private ReadaheadManager curReadaheadManager;
 
     public SFMFileSystem() {
         // need to initialize
@@ -74,8 +73,6 @@ public class SFMFileSystem extends FileSystem {
         if (authority == null) {
             throw new IOException("Incomplete SFM URI, no authority: "+name);
         }
-
-
 
         synchronized (this) {
             // create underlying file system
@@ -153,17 +150,16 @@ public class SFMFileSystem extends FileSystem {
         }
         SFMFileStatus sfmFileStatus = curSFMReader.getFileStatus(filename);
         return new SFMFsDataInputStream(underLyingFS, new Path(curSFMBasePath, SFMConstants.MERGED_FILENAME),
-                sfmFileStatus.getOffset(), sfmFileStatus.getLength(), bufferSize, curSFMCacheManager);
+                sfmFileStatus.getOffset(), sfmFileStatus.getLength(), bufferSize, curReadaheadManager);
     }
 
     @Override
     public FSDataOutputStream append(Path f, final int bufferSize,
                                      final Progressable progress) throws IOException {
-        throw new IOException("Unsupported");
+        throw new IOException("Append unsupported");
     }
 
-    // todo
-    // 永远默认覆盖文件
+    // SFM filesystem always overwrite data.
     @Override
     public FSDataOutputStream create(Path f, FsPermission permission, boolean overwrite, int bufferSize, short replication, long blockSize, Progressable progress) throws IOException {
         Path absF = fixRelativePart(f);
@@ -186,15 +182,20 @@ public class SFMFileSystem extends FileSystem {
         return new SFMFsDataOutputStream(SFMerger, sfmBasePath, filename, statistics);
     }
 
+    // setReplication can only set for the whole sfm dir.
+    // not test yet
+    // todo
     @Override
     public boolean setReplication(Path src, final short replication)
             throws IOException {
-        throw new IOException("Unsupported");
+        Path absF = fixRelativePart(src);
+        String sfmBasePath = SFMUtil.getSFMBasePath(absF.toUri());
+        return underLyingFS.setReplication(new Path(sfmBasePath), replication);
     }
 
     @Override
     public boolean rename(Path src, Path dst) throws IOException {
-        throw new IOException("Unsupported");
+        throw new IOException("Rename unsupported");
     }
 
     @Override
@@ -269,7 +270,7 @@ public class SFMFileSystem extends FileSystem {
             SFMetaData sfMetaData = metaDataCache.get(sfmBasePath);
             sfMetaData.sfmReader.close();
             if (SFMConstants.ENABLE_CACHE) {
-                sfMetaData.sfmCacheManager.close();
+                sfMetaData.readaheadManager = null;
             }
         }
 
@@ -414,7 +415,7 @@ public class SFMFileSystem extends FileSystem {
             SFMetaData metaData = getSFMInformation(sfmBasePath);
             curSFMBasePath = metaData.sfmBasePath;
             curSFMReader = metaData.sfmReader;
-            curSFMCacheManager = metaData.sfmCacheManager;
+            curReadaheadManager = metaData.readaheadManager;
         } else {
             LOG.debug(String.format("%s do not need to reload SFM information.", uri));
         }
@@ -427,11 +428,11 @@ public class SFMFileSystem extends FileSystem {
             LOG.debug(String.format("SFMIndexReader didn't created, start to build it: %s", sfmBasePath));
             // build SFMIndexReader
             SFMIndexReader sfmReader = SFMIndexReader.build(underLyingFS, sfmBasePath);
-            SFMCacheManager sfmCacheManager = null;
+            ReadaheadManager readaheadManager = null;
             if (SFMConstants.ENABLE_CACHE) {
-                sfmCacheManager = SFMCacheFactory.build(underLyingFS, new Path(sfmBasePath, SFMConstants.MERGED_FILENAME));
+                readaheadManager = new ReadaheadManager(underLyingFS, new Path(sfmBasePath, SFMConstants.MERGED_FILENAME));
             }
-            SFMetaData newSFMetaData = new SFMetaData(sfmBasePath, sfmReader, sfmCacheManager);
+            SFMetaData newSFMetaData = new SFMetaData(sfmBasePath, sfmReader, readaheadManager);
             metaDataCache.put(sfmBasePath, newSFMetaData);
             return newSFMetaData;
         } else {
@@ -461,16 +462,16 @@ public class SFMFileSystem extends FileSystem {
 
         private SFMIndexReader sfmReader;
 
-        private SFMCacheManager sfmCacheManager;
+        private ReadaheadManager readaheadManager;
 
         public SFMetaData(String sfmBasePath, SFMIndexReader sfmReader) {
             this(sfmBasePath, sfmReader, null);
         }
 
-        public SFMetaData(String sfmBasePath, SFMIndexReader sfmReader, SFMCacheManager sfmCacheManager) {
+        public SFMetaData(String sfmBasePath, SFMIndexReader sfmReader, ReadaheadManager readaheadManager) {
             this.sfmBasePath = sfmBasePath;
             this.sfmReader = sfmReader;
-            this.sfmCacheManager = sfmCacheManager;
+            this.readaheadManager = readaheadManager;
         }
     }
 

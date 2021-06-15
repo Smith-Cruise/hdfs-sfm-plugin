@@ -87,7 +87,7 @@ public class SFMIndexReader implements Closeable {
             if (! EXISTED_MAP.containsKey(kv.getFilename())) {
                 EXISTED_MAP.put(kv.getFilename(), kv.isTombstone());
                 if (! kv.isTombstone()) {
-                    fileList.add(new SFMFileStatus(kv.getFilename(), SFMConstants.MERGED_FILENAME, kv.getOffset(), kv.getLength(), kv.getModificationTime()));
+                    fileList.add(new SFMFileStatus(kv.getFilename(), kv.getOffset(), kv.getLength(), kv.getModificationTime()));
                 }
             }
         }
@@ -103,7 +103,7 @@ public class SFMIndexReader implements Closeable {
                                                  long len) throws IOException {
         SFMFileStatus sfmFileStatus = getSFMFileStatus(filename);
         len = Math.min(len, sfmFileStatus.getLength());
-        BlockLocation[] locations = FS.getFileBlockLocations(new Path(SFM_BASE_PATH, sfmFileStatus.getMergedFilename()),
+        BlockLocation[] locations = FS.getFileBlockLocations(new Path(SFM_BASE_PATH, SFMConstants.MERGED_FILENAME),
                 sfmFileStatus.getOffset() + start, len);
 
 
@@ -153,7 +153,7 @@ public class SFMIndexReader implements Closeable {
                         KV kv = binarySearch(kvs, filename);
                         if (kv != null) {
                             if (! kv.isTombstone()) {
-                                return new SFMFileStatus(filename, indexMetadata.mergedFilename, kv.getOffset(), kv.getLength(), kv.getModificationTime());
+                                return new SFMFileStatus(filename, kv.getOffset(), kv.getLength(), kv.getModificationTime());
                             } else {
                                 throw new FileNotFoundException(String.format("%s is already deleted", filename));
                             }
@@ -188,7 +188,6 @@ public class SFMIndexReader implements Closeable {
             byte[] trailerBytes = new byte[trailerLength];
             IN.readFully(trailerBytes);
             TrailerProtos.Trailer trailer = TrailerProtos.Trailer.parseFrom(trailerBytes);
-            String mergedFilename = trailer.getMergedFilename();
 //                String minKey = trailer.getMinKey();
 //                String maxKey = trailer.getMaxKey();
             int version = trailer.getVersion();
@@ -198,7 +197,6 @@ public class SFMIndexReader implements Closeable {
             indexMetadata.indexId = indexId;
             indexMetadata.offset = offset;
             indexMetadata.length = length;
-            indexMetadata.mergedFilename = mergedFilename;
 //                indexMetadata.minKey = minKey;
 //                indexMetadata.maxKey = maxKey;
             indexMetadata.version = version;
@@ -366,8 +364,6 @@ public class SFMIndexReader implements Closeable {
         private long offset;
 
         private int length;
-
-        private String mergedFilename;
 
 //        private String minKey;
 

@@ -1,7 +1,7 @@
 package org.inlighting.sfm.fs;
 
 import org.apache.hadoop.fs.*;
-import org.inlighting.sfm.cache.SFMCacheManager;
+import org.inlighting.sfm.readahead.ReadaheadManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,20 +20,20 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
     private final byte[] ONE_BYTE_BUFFER = new byte[1];
 
     private final FSDataInputStream UNDER_LYING_STREAM;
-    private final SFMCacheManager SFM_CACHE_MANAGER;
+    private final ReadaheadManager READAHEAD_MANAGER;
 
-    public SFMFsInputStream(FileSystem fs, Path mergedPath, long start, long length, int bufferSize, SFMCacheManager sfmCacheManager) throws IOException {
+    public SFMFsInputStream(FileSystem fs, Path mergedPath, long start, long length, int bufferSize, ReadaheadManager readaheadManager) throws IOException {
         if (length < 0) {
             throw new IllegalArgumentException(String.format("Negative length: %d", length));
         }
 
-        if (sfmCacheManager == null) {
+        if (readaheadManager == null) {
             UNDER_LYING_STREAM = fs.open(mergedPath, bufferSize);
             UNDER_LYING_STREAM.seek(start);
-            SFM_CACHE_MANAGER = null;
+            READAHEAD_MANAGER = null;
         } else {
             // Do not create underLyingStream, use cacheManager only.
-            SFM_CACHE_MANAGER = sfmCacheManager;
+            READAHEAD_MANAGER = readaheadManager;
             UNDER_LYING_STREAM = null;
         }
 
@@ -98,7 +98,7 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
 
         // start to read
         if (isEnableCache()) {
-            ret = SFM_CACHE_MANAGER.read(mergedPosition, b, off, newLen);
+            ret = READAHEAD_MANAGER.read(mergedPosition, b, off, newLen);
         } else {
             ret = UNDER_LYING_STREAM.read(b,off, newLen);
         }
@@ -139,7 +139,7 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
         }
 
         if (isEnableCache()) {
-            return SFM_CACHE_MANAGER.read(position + mergedStart, buffer, offset, length);
+            return READAHEAD_MANAGER.read(position + mergedStart, buffer, offset, length);
         } else {
             return UNDER_LYING_STREAM.read(position + mergedStart, buffer, offset, length);
         }
@@ -156,7 +156,7 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
         }
 
         if (isEnableCache()) {
-            SFM_CACHE_MANAGER.read(mergedStart + position, buffer, offset, length);
+            READAHEAD_MANAGER.read(mergedStart + position, buffer, offset, length);
         } else {
             UNDER_LYING_STREAM.readFully(mergedStart + position, buffer, offset, length);
         }
@@ -201,7 +201,7 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
     }
 
     private boolean isEnableCache() {
-        return SFM_CACHE_MANAGER != null;
+        return READAHEAD_MANAGER != null;
     }
 
     private void validatePosition(final long pos) throws IOException {
