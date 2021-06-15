@@ -78,7 +78,7 @@ public class ReadaheadManager {
 
         public boolean isHit(long offset, long length) {
             read++;
-            if ((offset >= startOffset) && (length <= readaheadLength)) {
+            if ((offset >= startOffset) && ((offset+length) <= (startOffset+readaheadLength))) {
                 hit ++;
                 return true;
             } else {

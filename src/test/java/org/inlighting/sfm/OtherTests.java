@@ -16,12 +16,20 @@ import java.util.List;
 public class OtherTests {
 
     @Test
-    void test() {
-        System.out.println(System.currentTimeMillis());
-        System.out.println(System.nanoTime());
-        System.out.println(System.nanoTime());
-        System.out.println(System.currentTimeMillis());
-
+    void test() throws Exception {
+        Path path = new Path("sfm://single.lab.com:9000/articles.sfm");
+        FileSystem fs = path.getFileSystem(new Configuration());
+        FileStatus[] fileStatuses = fs.listStatus(path);
+        int length = fileStatuses.length;
+        for (int i=0; i<length; i+=10) {
+            FileStatus fileStatus = fileStatuses[i];
+            System.out.println(fileStatus.getLen());
+            byte[] bytes = new byte[(int)fileStatus.getLen()];
+            Path fileStatusPath = fileStatus.getPath();
+            FSDataInputStream inputStream = fs.open(fileStatusPath);
+            inputStream.readFully(0, bytes);
+            inputStream.close();
+        }
     }
 
 //    @Test
