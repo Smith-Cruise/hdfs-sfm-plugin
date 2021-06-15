@@ -42,7 +42,7 @@ public class ReadaheadManager {
 
         int read = UNDER_LYING_STREAM.read(position, byteBuffer);
         // put in cache
-        curReadaheadEntity = new ReadaheadEntity(position, position + read, byteBuffer);
+        curReadaheadEntity = new ReadaheadEntity(position, read, byteBuffer);
         LOG.debug(String.format("Create cache, [%d-%d]", position, position+read));
         return curReadaheadEntity.read(b, position, off, len);
     }
