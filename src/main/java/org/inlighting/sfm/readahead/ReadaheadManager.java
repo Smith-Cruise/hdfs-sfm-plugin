@@ -48,9 +48,9 @@ public class ReadaheadManager {
     }
 
     class ReadaheadEntity {
-        private long offset;
+        private long startOffset;
 
-        private long length;
+        private long readaheadLength;
 
         private ByteBuffer byteBuffer;
 
@@ -59,17 +59,17 @@ public class ReadaheadManager {
         private int hit = 0;
 
         public ReadaheadEntity(long offset, long length, ByteBuffer byteBuffer) {
-            this.offset = offset;
-            this.length = length;
+            this.startOffset = offset;
+            this.readaheadLength = length;
             this.byteBuffer = byteBuffer;
         }
 
-        public long getOffset() {
-            return offset;
+        public long getStartOffset() {
+            return startOffset;
         }
 
-        public long getLength() {
-            return length;
+        public long getReadaheadLength() {
+            return readaheadLength;
         }
 
         public ByteBuffer getByteBuffer() {
@@ -78,7 +78,7 @@ public class ReadaheadManager {
 
         public boolean isHit(long offset, long length) {
             read++;
-            if ((offset >= this.offset) && (length <= this.length)) {
+            if ((offset >= startOffset) && (length <= readaheadLength)) {
                 hit ++;
                 return true;
             } else {
@@ -91,7 +91,7 @@ public class ReadaheadManager {
         }
 
         public int read(byte[] b, long position, int offset, int len) throws IOException {
-            byteBuffer.position((int)(position - offset));
+            byteBuffer.position((int)(position - startOffset));
             int tmpStart = byteBuffer.position();
             byteBuffer.get(b, offset, len);
             int tmpEnd = byteBuffer.position();
