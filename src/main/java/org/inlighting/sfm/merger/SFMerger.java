@@ -111,8 +111,8 @@ public class SFMerger implements Closeable {
 
         FileStatus fileStatus;
         try {
-            LOG.debug("Merged file existed, append it.");
             fileStatus = FS.getFileStatus(mergeFilePath);
+            LOG.debug("Merged file existed, append it.");
         } catch (FileNotFoundException e) {
             LOG.debug("Merged file didn't existed, create it.");
             fileStatus = null;
