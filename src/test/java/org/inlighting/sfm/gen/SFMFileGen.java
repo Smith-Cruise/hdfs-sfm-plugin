@@ -27,7 +27,7 @@ public class SFMFileGen {
 
         FileSystem fs = qualifiedSFMPath.getFileSystem(SFMTestUtils.getDefaultConfiguration());
         FSDataOutputStream out;
-        for (int i=0; i<=1000; i++) {
+        for (int i=0; i<=3000; i++) {
             out = fs.create(new Path(folder, i + ".txt"));
             out.writeBytes(sb.toString());
             out.close();
