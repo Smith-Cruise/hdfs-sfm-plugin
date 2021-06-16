@@ -36,6 +36,19 @@
             <version>5.7.1</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.htrace</groupId>
+            <artifactId>htrace-core4</artifactId>
+            <version>4.2.0-incubating</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.htrace/htrace-zipkin -->
+        <dependency>
+            <groupId>org.apache.htrace</groupId>
+            <artifactId>htrace-zipkin</artifactId>
+            <version>4.2.0-incubating</version>
+        </dependency>
     </dependencies>
 
     <distributionManagement>

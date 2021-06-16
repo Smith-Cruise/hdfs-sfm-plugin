@@ -5,7 +5,10 @@ import org.apache.hadoop.fs.*;
 import org.apache.hadoop.hdfs.DFSClient;
 import org.apache.hadoop.hdfs.protocol.LocatedBlock;
 import org.apache.hadoop.hdfs.protocol.LocatedBlocks;
+import org.apache.htrace.core.TraceScope;
+import org.apache.htrace.core.Tracer;
 import org.inlighting.sfm.merger.FileEntity;
+import org.inlighting.sfm.util.SFMTracer;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -30,6 +33,31 @@ public class OtherTests {
             inputStream.readFully(0, bytes);
             inputStream.close();
         }
+    }
+
+    @Test
+    void htraceTest() throws Exception {
+        Tracer tracer = SFMTracer.get();
+        try(TraceScope ignored = tracer.newScope("phasea")) {
+            System.out.println("xxxx");
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {}
+        }
+        try(TraceScope ignored = tracer.newScope("phasea")) {
+            System.out.println("xxxx");
+            try {
+                Thread.sleep(900);
+            } catch (Exception e) {}
+        }
+        System.out.println("end");
+        try(TraceScope ignored = tracer.newScope("phaseb")) {
+            System.out.println("xxxx");
+            try {
+                Thread.sleep(500);
+            } catch (Exception e) {}
+        }
+        System.out.println("end");
     }
 
 //    @Test
