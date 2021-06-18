@@ -19,7 +19,7 @@ public class ReadaheadManager {
     // 1mb
     private final int MIN_READAHEAD_SIZE = 1024 * 1024;
     // 10mb
-    private final int MAX_READAHEAD_SIZE = 10*1024*1024;
+    private final int MAX_READAHEAD_SIZE = 50*1024*1024;
 
     private int lastReadaheadSize;
 
