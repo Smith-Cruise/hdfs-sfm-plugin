@@ -98,7 +98,7 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
 
         // start to read
         if (isEnableCache()) {
-            ret = READAHEAD_MANAGER.read(mergedPosition, b, off, newLen);
+            ret = READAHEAD_MANAGER.readFully(mergedPosition, b, off, newLen);
         } else {
             ret = UNDER_LYING_STREAM.read(b,off, newLen);
         }
@@ -139,9 +139,9 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
         }
 
         if (isEnableCache()) {
-            return READAHEAD_MANAGER.read(position + mergedStart, buffer, offset, length);
+            return READAHEAD_MANAGER.readFully(position + mergedStart, buffer, offset, nLength);
         } else {
-            return UNDER_LYING_STREAM.read(position + mergedStart, buffer, offset, length);
+            return UNDER_LYING_STREAM.read(position + mergedStart, buffer, offset, nLength);
         }
     }
 
@@ -156,7 +156,7 @@ public class SFMFsInputStream extends FSInputStream implements CanSetDropBehind,
         }
 
         if (isEnableCache()) {
-            READAHEAD_MANAGER.read(mergedStart + position, buffer, offset, length);
+            READAHEAD_MANAGER.readFully(mergedStart + position, buffer, offset, length);
         } else {
             UNDER_LYING_STREAM.readFully(mergedStart + position, buffer, offset, length);
         }
