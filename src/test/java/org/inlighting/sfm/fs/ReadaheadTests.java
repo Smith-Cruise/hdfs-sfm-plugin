@@ -5,6 +5,8 @@ import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.util.LineReader;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,12 +18,16 @@ public class ReadaheadTests {
         Path path = new Path("sfm://single.lab.com:9000/articles.sfm");
         FileSystem fs = path.getFileSystem(new Configuration());
         FileStatus[] fileStatus = fs.listStatus(path);
+        Text text = new Text();
         for (int i=0; i<100; i++) {
             FileStatus file = fileStatus[i];
             FSDataInputStream in = fs.open(file.getPath());
-            byte[] bytes = new byte[(int)file.getLen()];
-            int read = in.read(bytes);
-            assertEquals(read, (int)file.getLen());
+            LineReader reader = new LineReader(in);
+            int count = 0;
+            while (reader.readLine(text) != 0) {
+                count++;
+            }
+            assertEquals(count, 17725);
         }
         fs.close();
     }

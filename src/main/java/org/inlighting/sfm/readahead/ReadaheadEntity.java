@@ -49,10 +49,14 @@ public class ReadaheadEntity {
 
     public int read(byte[] b, long position, int offset, int len) throws IOException {
         byteBuffer.position((int)(position - startPosition));
-        int tmpStart = byteBuffer.position();
-        byteBuffer.get(b, offset, len);
-        int tmpEnd = byteBuffer.position();
-        return tmpEnd - tmpStart;
+        int remain = byteBuffer.remaining();
+        if (len <= remain) {
+            byteBuffer.get(b, offset, len);
+            return len;
+        } else {
+            byteBuffer.get(b, offset, remain);
+            return remain;
+        }
     }
 
 
