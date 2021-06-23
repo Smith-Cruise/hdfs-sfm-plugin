@@ -54,7 +54,9 @@ public class ReadaheadManager {
                 int read = curWindow.read(b, readPosition, readOff, needLen);
                 needLen = needLen - read;
                 if (needLen <= 0) {
-                    return read;
+                    // return read;
+                    // Do not return read, because it may continue the last time read.
+                    return len;
                 } else {
                     readPosition+=read;
                     readOff+=read;
