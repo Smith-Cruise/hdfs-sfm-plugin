@@ -4,14 +4,13 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class ReadaheadEntity {
-    private int read = 0;
-
-    private int hit = 0;
 
     // position in merged file
     private final long startPosition;
 
     private final int readaheadLength;
+
+    private int used;
 
     private final ByteBuffer byteBuffer;
 
@@ -29,22 +28,13 @@ public class ReadaheadEntity {
         return readaheadLength;
     }
 
-    public ByteBuffer getByteBuffer() {
-        return byteBuffer;
-    }
-
     public boolean hit(long position) {
-        read++;
-        if (position >= startPosition && position < startPosition+readaheadLength) {
-            hit++;
-            return true;
-        } else {
-            return false;
-        }
+        return position >= startPosition && position < startPosition + readaheadLength;
     }
 
-    public float getHitRate() {
-        return (float) hit / read;
+    // return in %
+    public double getHitRate() {
+        return (double) used / (double) readaheadLength * 100;
     }
 
     public int read(byte[] b, long position, int offset, int len) throws IOException {
@@ -52,9 +42,11 @@ public class ReadaheadEntity {
         int remain = byteBuffer.remaining();
         if (len <= remain) {
             byteBuffer.get(b, offset, len);
+            used += len;
             return len;
         } else {
             byteBuffer.get(b, offset, remain);
+            used += remain;
             return remain;
         }
     }

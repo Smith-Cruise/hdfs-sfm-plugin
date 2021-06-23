@@ -15,7 +15,7 @@ public class SFMFileGen {
 
     @Test
     void uploadBig() throws IOException {
-        final String folder = "/articles.sfm";
+        final String folder = "/big-articles.sfm";
         final Path qualifiedHDFSPath = SFMTestUtils.genHDFSPath(folder);
         final Path qualifiedSFMPath = SFMTestUtils.genSFMPath(folder);
         final StringBuilder sb = new StringBuilder();
@@ -27,7 +27,7 @@ public class SFMFileGen {
 
         FileSystem fs = qualifiedSFMPath.getFileSystem(SFMTestUtils.getDefaultConfiguration());
         FSDataOutputStream out;
-        for (int i=0; i<=3000; i++) {
+        for (int i=0; i<=10000; i++) {
             out = fs.create(new Path(folder, i + ".txt"));
             out.writeBytes(sb.toString());
             out.close();

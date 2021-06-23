@@ -3,6 +3,8 @@ package org.inlighting.sfm.readahead;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.inlighting.sfm.readahead.component.ReadaheadComponent;
+import org.inlighting.sfm.readahead.component.SPSAComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,21 +18,20 @@ public class ReadaheadManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReadaheadManager.class);
 
-    // 1mb
-    private final int MIN_READAHEAD_SIZE = 1024 * 1024;
-    // 10mb
-    private final int MAX_READAHEAD_SIZE = 10*1024*1024;
-
-    private int lastReadaheadSize;
-
+    private final ReadaheadComponent readaheadComponent;
     private final FSDataInputStream UNDER_LYING_STREAM;
-    private ReadaheadEntity curWindow;
-    private ReadaheadEntity aheadWindow;
 
     private final Lock FETCHER_LOCK = new ReentrantLock();
 
+    private ReadaheadEntity curWindow;
+    private ReadaheadEntity aheadWindow;
+    private double lastHitRate;
+
+
 
     public ReadaheadManager(FileSystem fs, Path mergedFilePath) throws IOException {
+        readaheadComponent = new SPSAComponent();
+        readaheadComponent.initialize(10*1024*1024, 50*1024*1024, 10*1024*1024);
         UNDER_LYING_STREAM = fs.open(mergedFilePath);
         LOG.info("Readahead manager create succeed for: " + mergedFilePath.toUri().getPath());
     }
@@ -40,13 +41,10 @@ public class ReadaheadManager {
         if (curWindow == null) {
             // init window
             LOG.debug("Initialize cur & ahead window");
-            // first read size, 1MB <= size*10 <= 10MB
-            lastReadaheadSize = len*10;
-            lastReadaheadSize = Math.max(MIN_READAHEAD_SIZE, lastReadaheadSize);
-            lastReadaheadSize = Math.min(lastReadaheadSize, MAX_READAHEAD_SIZE);
 
-            ReadaheadEntity readaheadEntity = readahead(position, lastReadaheadSize);
-            triggerAsyncReadahead(position+lastReadaheadSize);
+            int readaheadSize = readaheadComponent.requestNextReadaheadSize();
+            ReadaheadEntity readaheadEntity = readahead(position, readaheadSize);
+            triggerAsyncReadahead(position+readaheadSize);
             curWindow = readaheadEntity;
         }
 
@@ -65,6 +63,8 @@ public class ReadaheadManager {
                     readOff+=read;
                     // need bytes from aheadWindow
                     FETCHER_LOCK.lock();
+                    // get curWindow hit rate before release it
+                    lastHitRate = curWindow.getHitRate();
                     curWindow = aheadWindow;
                     aheadWindow = null;
                     FETCHER_LOCK.unlock();
@@ -93,9 +93,9 @@ public class ReadaheadManager {
                         LOG.debug(String.format("Invalidate aheadWindow, hit rate: %f", aheadWindow.getHitRate()));
                         aheadWindow = null;
                     }
-                    lastReadaheadSize = 0;
                     FETCHER_LOCK.unlock();
-
+                    lastHitRate = 0;
+                    readaheadComponent.reInitialize();
                     readFully(position, b, off, len);
                 }
 
@@ -105,9 +105,7 @@ public class ReadaheadManager {
     }
 
     private void triggerAsyncReadahead(long startPosition) throws IOException {
-        int readaheadSize = Math.max(MIN_READAHEAD_SIZE, lastReadaheadSize*2);
-        readaheadSize = Math.min(readaheadSize, MAX_READAHEAD_SIZE);
-        triggerAsyncReadahead(startPosition, readaheadSize);
+        triggerAsyncReadahead(startPosition, readaheadComponent.requestNextReadaheadSize(lastHitRate));
     }
 
     private void triggerAsyncReadahead(long startPosition, int length) throws IOException {
@@ -146,3 +144,4 @@ public class ReadaheadManager {
         }
     }
 }
+

@@ -5,7 +5,7 @@ import org.apache.hadoop.fs.Path;
 
 public class SFMTestUtils {
 
-    private final static String AUTHORITY = "single.lab.com:9000";
+    private final static String AUTHORITY = "master.lab.com:9000";
 
     public static Path genSFMPath(String folderPath) {
         return new Path("sfm", AUTHORITY, folderPath);
@@ -21,7 +21,7 @@ public class SFMTestUtils {
 
     public static Configuration getDefaultConfiguration() {
         Configuration configuration = new Configuration();
-        configuration.set("dfs.replication", "1");
+        configuration.set("dfs.replication", "2");
         return configuration;
     }
 }
