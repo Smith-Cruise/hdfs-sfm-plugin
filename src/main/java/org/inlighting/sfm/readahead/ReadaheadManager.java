@@ -4,14 +4,13 @@ import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.inlighting.sfm.readahead.component.ReadaheadComponent;
+import org.inlighting.sfm.readahead.component.ReadaheadLock;
 import org.inlighting.sfm.readahead.component.SPSAComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 // ReadaheadManager should created for each sfmBasePath, if enable readahead.
 public class ReadaheadManager {
@@ -21,17 +20,15 @@ public class ReadaheadManager {
     private final ReadaheadComponent readaheadComponent;
     private final FSDataInputStream UNDER_LYING_STREAM;
 
-    private final Lock FETCHER_LOCK = new ReentrantLock();
+    private final ReadaheadLock FETCHER_LOCK = new ReadaheadLock();
+    private final ReadaheadLock FETCHER_RUNNING_LOCK = new ReadaheadLock();
 
     private ReadaheadEntity curWindow;
     private ReadaheadEntity aheadWindow;
-    private double lastHitRate;
-
-
 
     public ReadaheadManager(FileSystem fs, Path mergedFilePath) throws IOException {
         readaheadComponent = new SPSAComponent();
-        readaheadComponent.initialize(10*1024*1024, 50*1024*1024, 10*1024*1024);
+        readaheadComponent.initialize(10, 50, 10);
         UNDER_LYING_STREAM = fs.open(mergedFilePath);
         LOG.info("Readahead manager create succeed for: " + mergedFilePath.toUri().getPath());
     }
@@ -42,10 +39,10 @@ public class ReadaheadManager {
             // init window
             LOG.debug("Initialize cur & ahead window");
 
-            int readaheadSize = readaheadComponent.requestNextReadaheadSize();
-            ReadaheadEntity readaheadEntity = readahead(position, readaheadSize);
-            triggerAsyncReadahead(position+readaheadSize);
-            curWindow = readaheadEntity;
+            int readaheadSizeMB = readaheadComponent.requestNextReadaheadSize();
+            int readaheadSizeBytes = mb2Byte(readaheadSizeMB);
+            curWindow = readahead(position, readaheadSizeBytes);
+            triggerAsyncReadahead(position+readaheadSizeBytes, readaheadSizeBytes);
         }
 
         long readPosition = position;
@@ -61,27 +58,32 @@ public class ReadaheadManager {
                 } else {
                     readPosition+=read;
                     readOff+=read;
+                    // check fetcher is not running first, make sure it existed ahead window
+                    waitFetcherStop();
                     // need bytes from aheadWindow
                     FETCHER_LOCK.lock();
                     // get curWindow hit rate before release it
-                    lastHitRate = curWindow.getHitRate();
+                    double lastHitRate = curWindow.getHitRate();
                     curWindow = aheadWindow;
                     aheadWindow = null;
                     FETCHER_LOCK.unlock();
 
                     // async readahead
-                    triggerAsyncReadahead(curWindow.getStartPosition()+curWindow.getReadaheadLength());
+                    triggerAsyncReadahead(curWindow.getStartPosition()+curWindow.getReadaheadLength(), lastHitRate);
                 }
             } else {
                 // check aheadWindow, first need to acquire lock
+                waitFetcherStop();
                 FETCHER_LOCK.lock();
                 if (aheadWindow != null && aheadWindow.hit(readPosition)) {
                     LOG.debug(String.format("Hit in aheadWindow, position: %d", readPosition));
+                    // release curWindow
+                    double lastHitRate = curWindow.getHitRate();
                     curWindow = aheadWindow;
                     aheadWindow = null;
                     FETCHER_LOCK.unlock();
                     // async readahead
-                    triggerAsyncReadahead(curWindow.getStartPosition()+curWindow.getReadaheadLength());
+                    triggerAsyncReadahead(curWindow.getStartPosition()+curWindow.getReadaheadLength(), lastHitRate);
                 } else {
                     // curWindow & aheadWindow both not hit.
                     // invalid curWindow & aheadWindow
@@ -94,7 +96,6 @@ public class ReadaheadManager {
                         aheadWindow = null;
                     }
                     FETCHER_LOCK.unlock();
-                    lastHitRate = 0;
                     readaheadComponent.reInitialize();
                     readFully(position, b, off, len);
                 }
@@ -104,19 +105,36 @@ public class ReadaheadManager {
         return len;
     }
 
-    private void triggerAsyncReadahead(long startPosition) throws IOException {
-        triggerAsyncReadahead(startPosition, readaheadComponent.requestNextReadaheadSize(lastHitRate));
+    // use Readahead component
+    private void triggerAsyncReadahead(long startPosition, double lastHitRate){
+        int lengthMb = readaheadComponent.requestNextReadaheadSize(lastHitRate);
+        int lengthBytes = mb2Byte(lengthMb);
+        FETCHER_RUNNING_LOCK.lock();
+        new Thread(new Fetcher(startPosition, lengthBytes)).start();
     }
 
-    private void triggerAsyncReadahead(long startPosition, int length) throws IOException {
+    private void triggerAsyncReadahead(long startPosition, int length){
+        FETCHER_RUNNING_LOCK.lock();
         new Thread(new Fetcher(startPosition, length)).start();
     }
 
     private ReadaheadEntity readahead(long startPosition, int size) throws IOException {
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect(size);
+        // todo
 //        UNDER_LYING_STREAM.setReadahead((long) size);
+        LOG.debug(String.format("Readahead get [%d, %d) size:%dBytes", startPosition, startPosition+size, size));
         int read = UNDER_LYING_STREAM.read(startPosition, byteBuffer);
         return new ReadaheadEntity(startPosition, read, byteBuffer);
+    }
+
+    private void waitFetcherStop() {
+        // check fetcher is not running first, make sure it existed ahead window
+        FETCHER_RUNNING_LOCK.lock();
+        FETCHER_RUNNING_LOCK.unlock();
+    }
+
+    private int mb2Byte(int mb) {
+        return mb * 1024 * 1024;
     }
 
     private class Fetcher implements Runnable {
@@ -133,14 +151,16 @@ public class ReadaheadManager {
 
         @Override
         public void run() {
-            FETCHER_LOCK.lock();
             try {
-                aheadWindow = readahead(startPosition, size);
+                ReadaheadEntity tmp = readahead(startPosition, size);
+                FETCHER_LOCK.lock();
+                aheadWindow = tmp;
+                FETCHER_LOCK.unlock();
             } catch (IOException e) {
-               LOG.error(String.format("Readahead fetcher fetch failed. [%d-%d)", startPosition, startPosition+size), e);
+                LOG.error(String.format("Readahead fetcher fetch failed. [%d-%d)", startPosition, startPosition+size), e);
             }
-            LOG.info(String.format("Async readahead fetch succeed! [%d-%d)", startPosition, startPosition+size));
-            FETCHER_LOCK.unlock();
+            LOG.debug(String.format("Async readahead fetch succeed! [%d-%d)", startPosition, startPosition+size));
+            FETCHER_RUNNING_LOCK.unlock();
         }
     }
 }

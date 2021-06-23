@@ -13,21 +13,40 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ReadaheadTests {
 
 
+//    @Test
+//    void read() throws Exception {
+//        Path path = new Path("sfm://single.lab.com:9000/articles.sfm");
+//        FileSystem fs = path.getFileSystem(new Configuration());
+//        FileStatus[] fileStatus = fs.listStatus(path);
+//        Text text = new Text();
+//        for (int i=0; i<500; i++) {
+//            FileStatus file = fileStatus[i];
+//            FSDataInputStream in = fs.open(file.getPath());
+//            LineReader reader = new LineReader(in);
+//            int count = 0;
+//            while (reader.readLine(text) != 0) {
+//                count++;
+//            }
+//            assertEquals(count, 17725);
+//        }
+//        fs.close();
+//    }
+
     @Test
     void read() throws Exception {
         Path path = new Path("sfm://single.lab.com:9000/articles.sfm");
         FileSystem fs = path.getFileSystem(new Configuration());
         FileStatus[] fileStatus = fs.listStatus(path);
-        Text text = new Text();
-        for (int i=0; i<100; i++) {
+        byte[] bytes = new byte[1024*1024];
+        int read;
+        for (int i=0; i<500; i++) {
             FileStatus file = fileStatus[i];
             FSDataInputStream in = fs.open(file.getPath());
-            LineReader reader = new LineReader(in);
             int count = 0;
-            while (reader.readLine(text) != 0) {
-                count++;
+            while ((read = in.read(bytes)) != -1) {
+                count+=read;
             }
-            assertEquals(count, 17725);
+            assertEquals(count, 381486);
         }
         fs.close();
     }

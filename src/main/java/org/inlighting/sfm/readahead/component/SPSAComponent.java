@@ -46,7 +46,7 @@ public class SPSAComponent implements ReadaheadComponent {
         c =(double) (maxReadaheadSize - minReadaheadSize) / 2;
         x = startReadaheadSize;
         nowCursor = NowCursor.left;
-        LOG.info(String.format("Init SPSAComponent max:%f, min:%f, a:%f, c:%f, start:%f", MIN_READAHEAD_SIZE,
+        LOG.info(String.format("Init SPSAComponent max:%fMB, min:%fMB, a:%f, c:%f, startSize:%fMB", MIN_READAHEAD_SIZE,
                 MAX_READAHEAD_SIZE, a, c, x));
     }
 
@@ -55,6 +55,7 @@ public class SPSAComponent implements ReadaheadComponent {
         nowCursor = NowCursor.left;
         x = START_READAHEAD_SIZE;
         k=0;
+        LOG.info("Reinitialize SPSAComponent");
     }
 
     @Override
@@ -64,6 +65,8 @@ public class SPSAComponent implements ReadaheadComponent {
 
     @Override
     public int requestNextReadaheadSize(double lastTimeResult) {
+        // found global minimal
+        lastTimeResult = -lastTimeResult;
         switch (nowCursor) {
             case left:
                 k+=1;
@@ -82,11 +85,13 @@ public class SPSAComponent implements ReadaheadComponent {
                 xMinusResult = lastTimeResult;
                 grad = (xPlusResult-xMinusResult) / (2*ck*delta);
                 x = project(x-ak*grad);
-                LOG.info(String.format("Start %fth iteration, ak:%f, ck:%f, delta:%f, xPlus:%f," +
-                                "xMinus:%f, grad:%f, resultX:%f", k, ak, ck, delta, xPlus, xMinus,
-                        grad, x));
+                LOG.info(String.format("Start %fth iteration, ak:%f, ck:%f, delta:%f, xPlus:%f, xPlusResult:%f, " +
+                                "xMinus:%f, xMinusResult:%f, grad:%f, resultX:%f", k, ak, ck, delta, xPlus, xPlusResult,
+                        xMinus, xMinusResult, grad, x));
                 nowCursor = NowCursor.left;
-                return (int) Math.round(x);
+                // do not return result, jump to next iteration.
+                // return (int) Math.round(x);
+                return requestNextReadaheadSize(lastTimeResult);
         }
         return 0;
     }
