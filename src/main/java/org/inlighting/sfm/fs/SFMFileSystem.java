@@ -120,6 +120,10 @@ public class SFMFileSystem extends FileSystem {
     @Override
     public BlockLocation[] getFileBlockLocations(FileStatus file, long start,
                                                  long len) throws IOException {
+        if (SFMConstants.ENABLE_CACHE) {
+            // todo
+            return new BlockLocation[0];
+        }
         LOG.debug(String.format("GetFileBlockLocations, file path: %s, start: %d, len:%d", file.getPath(),
                 start, len));
         if (start < 0 || len < 0) {
