@@ -50,9 +50,10 @@ public class ReadaheadManager {
         int readOff = off;
         int needLen = len;
         while (needLen > 0) {
+            LOG.debug(String.format("Need to read from readPosition: %d", position));
             if (trashWindow != null && trashWindow.hit(readPosition)) {
-                LOG.debug(String.format("Hit in trashWindow, position: %d", readPosition));
                 int read = trashWindow.read(b, readPosition, readOff, needLen);
+                LOG.debug(String.format("Read from trashWindow, [%d-%d)", readPosition, readPosition+read));
                 needLen = needLen - read;
                 if (needLen <= 0) {
                     // return read;
@@ -63,8 +64,8 @@ public class ReadaheadManager {
                     readOff+=read;
                 }
             } else if (curWindow.hit(readPosition)) {
-                LOG.debug(String.format("Hit in curWindow, position: %d", readPosition));
                 int read = curWindow.read(b, readPosition, readOff, needLen);
+                LOG.debug(String.format("Read from curWindow, [%d-%d)", readPosition, readPosition+read));
                 needLen = needLen - read;
                 if (needLen <= 0) {
                     // return read;
@@ -92,7 +93,7 @@ public class ReadaheadManager {
                 waitFetcherStop();
                 FETCHER_LOCK.lock();
                 if (aheadWindow != null && aheadWindow.hit(readPosition)) {
-                    LOG.debug(String.format("Hit in aheadWindow, position: %d", readPosition));
+                    LOG.debug(String.format("Hit in aheadWindow, position: %d, convert aheadWindow to curWindow", readPosition));
                     // release curWindow
                     double lastHitRate = curWindow.getHitRate();
                     trashWindow = curWindow;
