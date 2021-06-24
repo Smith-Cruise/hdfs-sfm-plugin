@@ -69,6 +69,7 @@ public class SPSAComponent implements ReadaheadComponent {
         lastTimeResult = -lastTimeResult;
         switch (nowCursor) {
             case left:
+                LOG.debug("SPSA left, don't need lastTimeResult.");
                 k+=1;
                 ak = a / Math.pow(k+1.0+A, alpha);
                 ck = c / Math.pow(k+1, gamma);
@@ -78,11 +79,13 @@ public class SPSAComponent implements ReadaheadComponent {
                 return (int) Math.round(xPlus);
             case right:
                 xPlusResult = lastTimeResult;
+                LOG.debug("SPSA right, xPlusResult: "+xPlusResult);
                 xMinus = project(x-ck*delta);
                 nowCursor = NowCursor.none;
                 return (int) Math.round(xMinus);
             case none:
                 xMinusResult = lastTimeResult;
+                LOG.debug("SPSA none, xMinusResult: "+xMinusResult);
                 grad = (xPlusResult-xMinusResult) / (2*ck*delta);
                 x = project(x-ak*grad);
                 LOG.info(String.format("Start %fth iteration, ak:%f, ck:%f, delta:%f, xPlus:%f, xPlusResult:%f, " +

@@ -21,9 +21,6 @@ public class ReadaheadTests {
         Text text = new Text();
         for (int i=0; i<500; i++) {
             FileStatus file = fileStatus[i];
-            if (i==27) {
-                System.out.println("x");
-            }
             FSDataInputStream in = fs.open(file.getPath());
             LineReader reader = new LineReader(in);
             int count = 0;

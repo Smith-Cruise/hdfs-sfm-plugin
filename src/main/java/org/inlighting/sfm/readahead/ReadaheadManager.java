@@ -50,7 +50,7 @@ public class ReadaheadManager {
         int needLen = len;
         while (needLen > 0) {
             if (curWindow.hit(readPosition)) {
-                LOG.debug(String.format("Hit in curWindow, position: %d", readPosition));
+//                LOG.debug(String.format("Hit in curWindow, position: %d", readPosition));
                 int read = curWindow.read(b, readPosition, readOff, needLen);
                 needLen = needLen - read;
                 if (needLen <= 0) {
