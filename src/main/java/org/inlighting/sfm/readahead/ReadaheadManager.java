@@ -23,6 +23,7 @@ public class ReadaheadManager {
     private final ReadaheadLock FETCHER_LOCK = new ReadaheadLock();
     private final ReadaheadLock FETCHER_RUNNING_LOCK = new ReadaheadLock();
 
+    private ReadaheadEntity trashWindow;
     private ReadaheadEntity curWindow;
     private ReadaheadEntity aheadWindow;
 
@@ -49,7 +50,19 @@ public class ReadaheadManager {
         int readOff = off;
         int needLen = len;
         while (needLen > 0) {
-            if (curWindow.hit(readPosition)) {
+            if (trashWindow != null && trashWindow.hit(readPosition)) {
+                LOG.debug(String.format("Hit in trashWindow, position: %d", readPosition));
+                int read = trashWindow.read(b, readPosition, readOff, needLen);
+                needLen = needLen - read;
+                if (needLen <= 0) {
+                    // return read;
+                    // Do not return read, because it may continue the last time read.
+                    return len;
+                } else {
+                    readPosition+=read;
+                    readOff+=read;
+                }
+            } else if (curWindow.hit(readPosition)) {
 //                LOG.debug(String.format("Hit in curWindow, position: %d", readPosition));
                 int read = curWindow.read(b, readPosition, readOff, needLen);
                 needLen = needLen - read;
