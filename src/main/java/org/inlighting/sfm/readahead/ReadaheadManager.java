@@ -63,7 +63,7 @@ public class ReadaheadManager {
                     readOff+=read;
                 }
             } else if (curWindow.hit(readPosition)) {
-//                LOG.debug(String.format("Hit in curWindow, position: %d", readPosition));
+                LOG.debug(String.format("Hit in curWindow, position: %d", readPosition));
                 int read = curWindow.read(b, readPosition, readOff, needLen);
                 needLen = needLen - read;
                 if (needLen <= 0) {
