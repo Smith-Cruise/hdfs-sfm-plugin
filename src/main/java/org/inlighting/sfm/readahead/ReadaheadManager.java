@@ -79,6 +79,7 @@ public class ReadaheadManager {
                     FETCHER_LOCK.lock();
                     // get curWindow hit rate before release it
                     double lastHitRate = curWindow.getHitRate();
+                    trashWindow = curWindow;
                     curWindow = aheadWindow;
                     aheadWindow = null;
                     FETCHER_LOCK.unlock();
@@ -94,6 +95,7 @@ public class ReadaheadManager {
                     LOG.debug(String.format("Hit in aheadWindow, position: %d", readPosition));
                     // release curWindow
                     double lastHitRate = curWindow.getHitRate();
+                    trashWindow = curWindow;
                     curWindow = aheadWindow;
                     aheadWindow = null;
                     FETCHER_LOCK.unlock();
@@ -101,7 +103,11 @@ public class ReadaheadManager {
                     triggerAsyncReadahead(curWindow.getStartPosition()+curWindow.getReadaheadLength(), lastHitRate);
                 } else {
                     // curWindow & aheadWindow both not hit.
-                    // invalid curWindow & aheadWindow
+                    // invalid trashWindow & curWindow & aheadWindow
+                    if (trashWindow != null) {
+                        LOG.debug(String.format("Invalidate trashWindow, hit rate: %f", trashWindow.getHitRate()));
+                        trashWindow = null;
+                    }
                     if (curWindow != null) {
                         LOG.debug(String.format("Invalidate curWindow, hit rate: %f", curWindow.getHitRate()));
                         curWindow = null;
