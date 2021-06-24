@@ -29,8 +29,5 @@ public class HeuristicComponent implements ReadaheadComponent{
         return x;
     }
 
-    @Override
-    public int requestNextReadaheadSize() {
-        return START_READAHEAD_SIZE;
-    }
+
 }

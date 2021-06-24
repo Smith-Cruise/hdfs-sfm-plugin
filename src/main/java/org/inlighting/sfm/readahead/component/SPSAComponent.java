@@ -52,51 +52,58 @@ public class SPSAComponent implements ReadaheadComponent {
 
     @Override
     public void reInitialize() {
-        nowCursor = NowCursor.left;
-        x = START_READAHEAD_SIZE;
-        k=0;
-        LOG.info("Reinitialize SPSAComponent");
+//        nowCursor = NowCursor.left;
+//        x = START_READAHEAD_SIZE;
+//        k=0;
+//        LOG.info("Reinitialize SPSAComponent");
     }
 
-    @Override
-    public int requestNextReadaheadSize() {
-        return (int) Math.round(START_READAHEAD_SIZE);
-    }
 
     @Override
     public int requestNextReadaheadSize(double lastTimeResult) {
         // found global minimal
-        lastTimeResult = -lastTimeResult;
         switch (nowCursor) {
             case left:
-                LOG.debug("SPSA left, don't need lastTimeResult.");
-                k+=1;
-                ak = a / Math.pow(k+1.0+A, alpha);
-                ck = c / Math.pow(k+1, gamma);
-                delta = generateDelta();
-                xPlus = project(x+ck*delta);
-                nowCursor = NowCursor.right;
-                return (int) Math.round(xPlus);
+                return double2Int(calXMinus());
             case right:
-                xPlusResult = lastTimeResult;
-                LOG.debug("SPSA right, xPlusResult: "+xPlusResult);
-                xMinus = project(x-ck*delta);
-                nowCursor = NowCursor.none;
-                return (int) Math.round(xMinus);
+                return double2Int(calXPlus(lastTimeResult));
             case none:
-                xMinusResult = lastTimeResult;
-                LOG.debug("SPSA none, xMinusResult: "+xMinusResult);
-                grad = (xPlusResult-xMinusResult) / (2*ck*delta);
-                x = project(x-ak*grad);
-                LOG.info(String.format("Start %fth iteration, ak:%f, ck:%f, delta:%f, xPlus:%f, xPlusResult:%f, " +
-                                "xMinus:%f, xMinusResult:%f, grad:%f, resultX:%f", k, ak, ck, delta, xPlus, xPlusResult,
-                        xMinus, xMinusResult, grad, x));
-                nowCursor = NowCursor.left;
-                // do not return result, jump to next iteration.
-                // return (int) Math.round(x);
+                calX(lastTimeResult);
                 return requestNextReadaheadSize(lastTimeResult);
         }
         return 0;
+    }
+
+    private double calXMinus() {
+        LOG.debug("SPSA left, don't need lastTimeResult.");
+        k+=1;
+        ak = a / Math.pow(k+1.0+A, alpha);
+        ck = c / Math.pow(k+1, gamma);
+        delta = generateDelta();
+        xMinus = project(x-ck*delta);
+        nowCursor = NowCursor.right;
+        return xMinus;
+    }
+
+    private double calXPlus(double xMinusResultTmp) {
+        this.xMinusResult = -xMinusResultTmp;
+        xPlus = project(x+ck*delta);
+        nowCursor = NowCursor.none;
+        return xPlus;
+    }
+
+    private void calX(double xPlusResultTmp) {
+        xPlusResult = -xPlusResultTmp;
+        grad = (xPlusResult-xMinusResult) / (2*ck*delta);
+        x = project(x-ak*grad);
+        LOG.info(String.format("Start %fth iteration, ak:%f, ck:%f, delta:%f, xPlus:%f, xPlusResult:%f, " +
+                        "xMinus:%f, xMinusResult:%f, grad:%f, resultX:%f", k, ak, ck, delta, xPlus, xPlusResult,
+                xMinus, xMinusResult, grad, x));
+        nowCursor = NowCursor.left;
+    }
+
+    private int double2Int(double num) {
+        return (int) Math.round(num);
     }
 
     private double project(double x) {

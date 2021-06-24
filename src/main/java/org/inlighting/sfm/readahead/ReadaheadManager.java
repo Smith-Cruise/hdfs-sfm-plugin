@@ -23,6 +23,7 @@ public class ReadaheadManager {
     private final ReadaheadLock FETCHER_LOCK = new ReadaheadLock();
     private final ReadaheadLock FETCHER_RUNNING_LOCK = new ReadaheadLock();
 
+    private double lastHitRate = 1000;
     private ReadaheadEntity trashWindow;
     private ReadaheadEntity curWindow;
     private ReadaheadEntity aheadWindow;
@@ -34,16 +35,15 @@ public class ReadaheadManager {
         LOG.info("Readahead manager create succeed for: " + mergedFilePath.toUri().getPath());
     }
 
-
     public synchronized int readFully(long position, byte[] b, int off, int len) throws IOException {
         if (curWindow == null) {
             // init window
             LOG.debug("Initialize cur & ahead window");
 
-            int readaheadSizeMB = readaheadComponent.requestNextReadaheadSize();
+            int readaheadSizeMB = readaheadComponent.requestNextReadaheadSize(lastHitRate);
             int readaheadSizeBytes = mb2Byte(readaheadSizeMB);
             curWindow = readahead(position, readaheadSizeBytes);
-            triggerAsyncReadahead(position+readaheadSizeBytes, readaheadSizeBytes);
+//            triggerAsyncReadahead(position+readaheadSizeBytes, readaheadSizeBytes);
         }
 
         long readPosition = position;

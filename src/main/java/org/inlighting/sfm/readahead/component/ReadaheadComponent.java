@@ -9,7 +9,4 @@ public interface ReadaheadComponent {
 
     int requestNextReadaheadSize(double lastReadaheadHitRate);
 
-    // first time request
-    int requestNextReadaheadSize();
-
 }
