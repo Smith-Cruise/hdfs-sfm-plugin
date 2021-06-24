@@ -122,7 +122,7 @@ public class SFMFileSystem extends FileSystem {
                                                  long len) throws IOException {
         if (SFMConstants.ENABLE_CACHE) {
             // todo
-            return new BlockLocation[0];
+            return super.getFileBlockLocations(file, start, len);
         }
         LOG.debug(String.format("GetFileBlockLocations, file path: %s, start: %d, len:%d", file.getPath(),
                 start, len));
