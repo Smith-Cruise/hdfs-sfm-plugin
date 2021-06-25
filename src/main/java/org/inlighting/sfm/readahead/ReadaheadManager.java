@@ -5,6 +5,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.inlighting.sfm.readahead.component.ReadaheadComponent;
 import org.inlighting.sfm.readahead.component.SPSAComponent;
+import org.inlighting.sfm.readahead.component.StaticComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +24,10 @@ public class ReadaheadManager {
     private ReadaheadEntity curWindow;
 
     public ReadaheadManager(FileSystem fs, Path mergedFilePath) throws IOException {
-        readaheadComponent = new SPSAComponent();
-        readaheadComponent.initialize(1, 30, 5);
+//        readaheadComponent = new SPSAComponent();
+//        readaheadComponent.initialize(1, 30, 5);
+        readaheadComponent = new StaticComponent();
+        readaheadComponent.initialize(1,1,1);
         UNDER_LYING_STREAM = fs.open(mergedFilePath);
         LOG.info("Readahead manager create succeed for: " + mergedFilePath.toUri().getPath());
     }
