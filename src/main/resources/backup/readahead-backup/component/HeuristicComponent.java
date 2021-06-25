@@ -30,8 +30,4 @@ public class HeuristicComponent implements ReadaheadComponent{
     }
 
 
-    @Override
-    public int requestLastReadaheadSize() {
-        return 0;
-    }
 }

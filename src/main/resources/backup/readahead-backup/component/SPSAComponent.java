@@ -74,21 +74,6 @@ public class SPSAComponent implements ReadaheadComponent {
         return 0;
     }
 
-    @Override
-    public int requestLastReadaheadSize() {
-        switch (nowCursor) {
-            case left:
-                return double2Int(xPlus);
-            case right:
-                return double2Int(xMinus);
-            case none:
-                return double2Int(xPlus);
-            default:
-                LOG.error("This should not be happened!");
-                return 0;
-        }
-    }
-
     private double calXMinus() {
         LOG.debug("SPSA left, don't need lastTimeResult.");
         k+=1;
@@ -111,7 +96,7 @@ public class SPSAComponent implements ReadaheadComponent {
         xPlusResult = -xPlusResultTmp;
         grad = (xPlusResult-xMinusResult) / (2*ck*delta);
         x = project(x-ak*grad);
-        LOG.debug(String.format("Start %fth iteration, ak:%f, ck:%f, delta:%f, xPlus:%f, xPlusResult:%f, " +
+        LOG.info(String.format("Start %fth iteration, ak:%f, ck:%f, delta:%f, xPlus:%f, xPlusResult:%f, " +
                         "xMinus:%f, xMinusResult:%f, grad:%f, resultX:%f", k, ak, ck, delta, xPlus, xPlusResult,
                 xMinus, xMinusResult, grad, x));
         nowCursor = NowCursor.left;
