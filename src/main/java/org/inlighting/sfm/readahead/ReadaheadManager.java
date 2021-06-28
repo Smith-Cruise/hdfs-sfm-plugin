@@ -30,10 +30,10 @@ public class ReadaheadManager {
     private ReadaheadEntity curWindow;
 
     public ReadaheadManager(FileSystem fs, Path mergedFilePath) throws IOException {
-//        readaheadComponent = new SPSAComponent();
-//        readaheadComponent.initialize(1, 30, 5);
-        readaheadComponent = new StaticComponent();
-        readaheadComponent.initialize(1.1,1.1,1.1);
+        readaheadComponent = new SPSAComponent();
+        readaheadComponent.initialize(1, 30, 5);
+//        readaheadComponent = new StaticComponent();
+//        readaheadComponent.initialize(1.1,1.1,1.1);
         UNDER_LYING_STREAM = fs.open(mergedFilePath);
         READAHEAD_CACHES = new LruCache<>(10);
         LOG.info("Readahead manager create succeed for: " + mergedFilePath.toUri().getPath());
