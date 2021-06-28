@@ -3,7 +3,7 @@ package org.inlighting.sfm.readahead;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public class ReadaheadEntity {
+public class ReadaheadEntity implements Comparable<ReadaheadEntity> {
 
     // position in merged file
     private final long startPosition;
@@ -63,5 +63,10 @@ public class ReadaheadEntity {
     public String toString() {
         return String.format("Start position: %d, readahead length: %d, used: %d, fetchTime: %d, hit rate: %f, hit spend: %f",
                 startPosition, readaheadLength, used, fetchTime, getHitRate(), getHitSpend());
+    }
+
+    @Override
+    public int compareTo(ReadaheadEntity o) {
+        return Long.compare(startPosition, o.startPosition);
     }
 }
