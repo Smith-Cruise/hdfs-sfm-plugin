@@ -73,7 +73,7 @@ public class ReadaheadManager {
                     readOff+=read;
                     double lastHitSpend = curWindow.getHitSpend();
                     if (trashWindow != null) {
-                        LOG.debug(String.format("Drop trashWin, hit rate: %f, hit spend: %f", trashWindow.getHitRate(), trashWindow.getHitSpend()));
+                        LOG.debug(String.format("Drop trashWindow, %s", trashWindow));
                     }
                     trashWindow = curWindow;
                     int readaheadSizeMB = readaheadComponent.requestNextReadaheadSize(lastHitSpend);
@@ -85,7 +85,7 @@ public class ReadaheadManager {
                 // invalid trashWindow & curWindow
                 LOG.debug("curWindow & trashWindow both not hit.");
                 if (trashWindow != null) {
-                    LOG.debug(String.format("Drop trashWindow, hit rate: %f, hit spend: %f", trashWindow.getHitRate(), trashWindow.getHitSpend()));
+                    LOG.debug(String.format("Drop trashWindow, %s", trashWindow));
                 }
                 trashWindow = curWindow;
                 int readaheadSizeMB = readaheadComponent.requestLastReadaheadSize();
