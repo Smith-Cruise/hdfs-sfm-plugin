@@ -10,13 +10,17 @@ public class ReadaheadEntity {
 
     private final int readaheadLength;
 
+    // mill second
+    private final int fetchTime;
+
     private int used;
 
     private final ByteBuffer byteBuffer;
 
-    public ReadaheadEntity(long startPosition, int readaheadLength, ByteBuffer byteBuffer) {
+    public ReadaheadEntity(long startPosition, int readaheadLength, int fetchTime, ByteBuffer byteBuffer) {
         this.startPosition = startPosition;
         this.readaheadLength = readaheadLength;
+        this.fetchTime = fetchTime;
         this.byteBuffer = byteBuffer;
     }
 
@@ -35,6 +39,10 @@ public class ReadaheadEntity {
     // return in %
     public double getHitRate() {
         return (double) used / (double) readaheadLength * 100;
+    }
+
+    public double getHitSpend() {
+        return (double) used / (double) fetchTime;
     }
 
     public int read(byte[] b, long position, int offset, int len) throws IOException {

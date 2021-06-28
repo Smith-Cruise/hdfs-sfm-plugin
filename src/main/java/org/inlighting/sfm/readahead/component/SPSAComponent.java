@@ -101,14 +101,14 @@ public class SPSAComponent implements ReadaheadComponent {
     }
 
     private double calXPlus(double xMinusResultTmp) {
-        this.xMinusResult = -xMinusResultTmp;
+        this.xMinusResult = xMinusResultTmp;
         xPlus = project(x+ck*delta);
         nowCursor = NowCursor.none;
         return xPlus;
     }
 
     private void calX(double xPlusResultTmp) {
-        xPlusResult = -xPlusResultTmp;
+        xPlusResult = xPlusResultTmp;
         grad = (xPlusResult-xMinusResult) / (2*ck*delta);
         x = project(x-ak*grad);
         LOG.debug(String.format("Start %fth iteration, ak:%f, ck:%f, delta:%f, xPlus:%f, xPlusResult:%f, " +

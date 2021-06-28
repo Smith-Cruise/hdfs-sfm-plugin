@@ -24,10 +24,10 @@ public class ReadaheadManager {
     private ReadaheadEntity curWindow;
 
     public ReadaheadManager(FileSystem fs, Path mergedFilePath) throws IOException {
-//        readaheadComponent = new SPSAComponent();
-//        readaheadComponent.initialize(1, 30, 5);
-        readaheadComponent = new StaticComponent();
-        readaheadComponent.initialize(1,1,1);
+        readaheadComponent = new SPSAComponent();
+        readaheadComponent.initialize(1, 30, 5);
+//        readaheadComponent = new StaticComponent();
+//        readaheadComponent.initialize(1,1,1);
         UNDER_LYING_STREAM = fs.open(mergedFilePath);
         LOG.info("Readahead manager create succeed for: " + mergedFilePath.toUri().getPath());
     }
@@ -71,12 +71,12 @@ public class ReadaheadManager {
                 } else {
                     readPosition+=read;
                     readOff+=read;
-                    double lastHitRate = curWindow.getHitRate();
+                    double lastHitSpend = curWindow.getHitSpend();
                     if (trashWindow != null) {
-                        LOG.debug(String.format("Drop trashWin, hit rate: %f", trashWindow.getHitRate()));
+                        LOG.debug(String.format("Drop trashWin, hit rate: %f, hit spend: %f", trashWindow.getHitRate(), trashWindow.getHitSpend()));
                     }
                     trashWindow = curWindow;
-                    int readaheadSizeMB = readaheadComponent.requestNextReadaheadSize(lastHitRate);
+                    int readaheadSizeMB = readaheadComponent.requestNextReadaheadSize(lastHitSpend);
                     int readaheadSizeBytes = mb2Byte(readaheadSizeMB);
                     curWindow = readahead(trashWindow.getStartPosition()+trashWindow.getReadaheadLength(), readaheadSizeBytes);
                 }
@@ -85,7 +85,7 @@ public class ReadaheadManager {
                 // invalid trashWindow & curWindow
                 LOG.debug("curWindow & trashWindow both not hit.");
                 if (trashWindow != null) {
-                    LOG.debug(String.format("Drop trashWindow, hit rate: %f", trashWindow.getHitRate()));
+                    LOG.debug(String.format("Drop trashWindow, hit rate: %f, hit spend: %f", trashWindow.getHitRate(), trashWindow.getHitSpend()));
                 }
                 trashWindow = curWindow;
                 int readaheadSizeMB = readaheadComponent.requestLastReadaheadSize();
@@ -102,9 +102,12 @@ public class ReadaheadManager {
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect(size);
         // todo
 //        UNDER_LYING_STREAM.setReadahead((long) size);
-        LOG.debug(String.format("Readahead get [%d, %d) size:%dBytes", startPosition, startPosition+size, size));
+        LOG.debug(String.format("Readahead get [%d, %d) size:%dBytes, size:%fKb, size:%fMb", startPosition, startPosition+size,
+                size, (double) size / 1024, (double) size / 1024 / 1024));
+        long start = System.currentTimeMillis();
         int read = UNDER_LYING_STREAM.read(startPosition, byteBuffer);
-        return new ReadaheadEntity(startPosition, read, byteBuffer);
+        long end = System.currentTimeMillis();
+        return new ReadaheadEntity(startPosition, read, (int)(end-start) ,byteBuffer);
     }
 
     private int mb2Byte(int mb) {
