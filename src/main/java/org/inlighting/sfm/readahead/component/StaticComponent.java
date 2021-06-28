@@ -7,11 +7,11 @@ public class StaticComponent implements ReadaheadComponent{
 
     private static final Logger LOG = LoggerFactory.getLogger(StaticComponent.class);
 
-    private int staticReadaheadSize;
+    private double staticReadaheadSize;
 
     @Override
-    public void initialize(int minReadaheadSize, int maxReadaheadSize, int startReadaheadSize) {
-        LOG.debug(String.format("Init static component. Static readahead size is %d", startReadaheadSize));
+    public void initialize(double minReadaheadSize, double maxReadaheadSize, double startReadaheadSize) {
+        LOG.debug(String.format("Init static component. Static readahead size is %f", startReadaheadSize));
         staticReadaheadSize = startReadaheadSize;
     }
 
@@ -22,11 +22,16 @@ public class StaticComponent implements ReadaheadComponent{
 
     @Override
     public int requestNextReadaheadSize(double lastReadaheadHitRate) {
-        return staticReadaheadSize;
+        return mb2Bytes(staticReadaheadSize);
     }
 
     @Override
     public int requestLastReadaheadSize() {
-        return staticReadaheadSize;
+        return requestNextReadaheadSize(0);
+    }
+
+
+    private int mb2Bytes(double mb) {
+        return (int) Math.round(mb*1024*1024);
     }
 }

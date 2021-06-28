@@ -36,14 +36,14 @@ public class SPSAComponent implements ReadaheadComponent {
     private double x;
 
     @Override
-    public void initialize(int minReadaheadSize, int maxReadaheadSize, int startReadaheadSize) {
+    public void initialize(double minReadaheadSize, double maxReadaheadSize, double startReadaheadSize) {
         A=1;
         a=10;
         MIN_READAHEAD_SIZE = minReadaheadSize;
         MAX_READAHEAD_SIZE = maxReadaheadSize;
         START_READAHEAD_SIZE = startReadaheadSize;
         // recommend std
-        c =(double) (maxReadaheadSize - minReadaheadSize) / 2;
+        c = (maxReadaheadSize - minReadaheadSize) / 2;
         x = startReadaheadSize;
         nowCursor = NowCursor.left;
         LOG.info(String.format("Init SPSAComponent max:%fMB, min:%fMB, a:%f, c:%f, startSize:%fMB", MIN_READAHEAD_SIZE,
@@ -64,9 +64,9 @@ public class SPSAComponent implements ReadaheadComponent {
         // found global minimal
         switch (nowCursor) {
             case left:
-                return double2Int(calXMinus());
+                return mb2Bytes(calXMinus());
             case right:
-                return double2Int(calXPlus(lastTimeResult));
+                return mb2Bytes(calXPlus(lastTimeResult));
             case none:
                 calX(lastTimeResult);
                 return requestNextReadaheadSize(lastTimeResult);
@@ -78,11 +78,11 @@ public class SPSAComponent implements ReadaheadComponent {
     public int requestLastReadaheadSize() {
         switch (nowCursor) {
             case left:
-                return double2Int(xPlus);
+                return mb2Bytes(xPlus);
             case right:
-                return double2Int(xMinus);
+                return mb2Bytes(xMinus);
             case none:
-                return double2Int(xPlus);
+                return mb2Bytes(xPlus);
             default:
                 LOG.error("This should not be happened!");
                 return 0;
@@ -117,8 +117,8 @@ public class SPSAComponent implements ReadaheadComponent {
         nowCursor = NowCursor.left;
     }
 
-    private int double2Int(double num) {
-        return (int) Math.round(num);
+    private int mb2Bytes(double mb) {
+        return (int) Math.round(mb*1024*1024);
     }
 
     private double project(double x) {

@@ -27,7 +27,7 @@ public class ReadaheadManager {
 //        readaheadComponent = new SPSAComponent();
 //        readaheadComponent.initialize(1, 30, 5);
         readaheadComponent = new StaticComponent();
-        readaheadComponent.initialize(1,1,1);
+        readaheadComponent.initialize(1.5,1.5,1.5);
         UNDER_LYING_STREAM = fs.open(mergedFilePath);
         LOG.info("Readahead manager create succeed for: " + mergedFilePath.toUri().getPath());
     }
@@ -41,8 +41,7 @@ public class ReadaheadManager {
             // only run once.
             LOG.debug("Initialize cur & ahead window");
 
-            int readaheadSizeMB = readaheadComponent.requestNextReadaheadSize(1000);
-            int readaheadSizeBytes = mb2Byte(readaheadSizeMB);
+            int readaheadSizeBytes = readaheadComponent.requestNextReadaheadSize(1000);
             curWindow = readahead(position, readaheadSizeBytes);
         }
 
@@ -76,8 +75,7 @@ public class ReadaheadManager {
                         LOG.debug(String.format("Drop trashWindow, %s", trashWindow));
                     }
                     trashWindow = curWindow;
-                    int readaheadSizeMB = readaheadComponent.requestNextReadaheadSize(lastHitSpend);
-                    int readaheadSizeBytes = mb2Byte(readaheadSizeMB);
+                    int readaheadSizeBytes = readaheadComponent.requestNextReadaheadSize(lastHitSpend);
                     curWindow = readahead(trashWindow.getStartPosition()+trashWindow.getReadaheadLength(), readaheadSizeBytes);
                 }
             } else {
@@ -88,8 +86,7 @@ public class ReadaheadManager {
                     LOG.debug(String.format("Drop trashWindow, %s", trashWindow));
                 }
                 trashWindow = curWindow;
-                int readaheadSizeMB = readaheadComponent.requestLastReadaheadSize();
-                int readaheadSizeBytes = mb2Byte(readaheadSizeMB);
+                int readaheadSizeBytes = readaheadComponent.requestLastReadaheadSize();
                 LOG.debug(String.format("Get last readahead size %dBytes", readaheadSizeBytes));
                 curWindow = readahead(readPosition, readaheadSizeBytes);
             }
@@ -109,10 +106,5 @@ public class ReadaheadManager {
         long end = System.currentTimeMillis();
         return new ReadaheadEntity(startPosition, read, (int)(end-start) ,byteBuffer);
     }
-
-    private int mb2Byte(int mb) {
-        return mb * 1024 * 1024;
-    }
-
 }
 
