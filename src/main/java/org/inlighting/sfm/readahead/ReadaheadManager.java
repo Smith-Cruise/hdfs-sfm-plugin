@@ -27,7 +27,7 @@ public class ReadaheadManager {
 //        readaheadComponent = new SPSAComponent();
 //        readaheadComponent.initialize(1, 30, 5);
         readaheadComponent = new StaticComponent();
-        readaheadComponent.initialize(1.5,1.5,1.5);
+        readaheadComponent.initialize(1.1,1.1,1.1);
         UNDER_LYING_STREAM = fs.open(mergedFilePath);
         LOG.info("Readahead manager create succeed for: " + mergedFilePath.toUri().getPath());
     }
