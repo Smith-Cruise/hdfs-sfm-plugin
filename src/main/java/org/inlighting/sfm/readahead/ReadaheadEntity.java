@@ -42,7 +42,7 @@ public class ReadaheadEntity {
     }
 
     public double getHitSpend() {
-        return (double) used / (double) fetchTime;
+        return (double) fetchTime / (double) used;
     }
 
     public int read(byte[] b, long position, int offset, int len) throws IOException {
