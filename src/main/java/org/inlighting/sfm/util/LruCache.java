@@ -32,6 +32,4 @@ public class LruCache<K, V> extends LinkedHashMap<K, V> {
             return value;
         }
     }
-
-
 }
