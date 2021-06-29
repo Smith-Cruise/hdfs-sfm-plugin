@@ -2,16 +2,11 @@ package org.inlighting.sfm.readahead;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.inlighting.sfm.SFMConstants;
-import org.inlighting.sfm.util.LruCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class StaticReadaheadManager extends AbstractReadaheadManager {
 
