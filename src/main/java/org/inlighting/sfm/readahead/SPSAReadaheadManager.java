@@ -29,7 +29,7 @@ public class SPSAReadaheadManager extends AbstractReadaheadManager{
     }
 
     @Override
-    public int readFully(long position, byte[] b, int off, int len) throws IOException {
+    public synchronized int readFully(long position, byte[] b, int off, int len) throws IOException {
         long readPosition = position;
         int readOff = off;
         int needLen = len;

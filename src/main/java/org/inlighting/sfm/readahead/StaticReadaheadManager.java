@@ -20,7 +20,7 @@ public class StaticReadaheadManager extends AbstractReadaheadManager {
     }
 
     @Override
-    public int readFully(long position, byte[] b, int off, int len) throws IOException {
+    public synchronized int readFully(long position, byte[] b, int off, int len) throws IOException {
         long readPosition = position;
         int readOff = off;
         int needLen = len;
@@ -62,7 +62,7 @@ public class StaticReadaheadManager extends AbstractReadaheadManager {
                     READAHEAD_CACHES.put(curWindow.getStartPosition(), curWindow);
                     double mb = STATIC_READAHEAD_SIZE;
                     int bytes = mb2Bytes(mb);
-                    LOG.debug(String.format("Cal next readahead size %fMB, %dBytes", mb, bytes));
+                    LOG.debug(String.format("Get static readahead size %fMB, %dBytes", mb, bytes));
                     curWindow = readahead(curWindow.getStartPosition()+curWindow.getReadaheadLength(), bytes);
                 }
             } else {
@@ -70,7 +70,7 @@ public class StaticReadaheadManager extends AbstractReadaheadManager {
                 READAHEAD_CACHES.put(curWindow.getStartPosition(), curWindow);
                 double mb = STATIC_READAHEAD_SIZE;
                 int bytes = mb2Bytes(mb);
-                LOG.debug(String.format("Get last readahead size %fMb, %dBytes", mb, bytes));
+                LOG.debug(String.format("Get static readahead size %fMb, %dBytes", mb, bytes));
                 curWindow = readahead(readPosition, bytes);
             }
         }
