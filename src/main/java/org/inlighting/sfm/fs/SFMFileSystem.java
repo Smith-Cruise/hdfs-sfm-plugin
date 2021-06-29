@@ -14,6 +14,8 @@ import org.inlighting.sfm.merger.FileEntity;
 import org.inlighting.sfm.merger.SFMerger;
 import org.inlighting.sfm.merger.SFMergerFactory;
 import org.inlighting.sfm.readahead.ReadaheadManager;
+import org.inlighting.sfm.readahead.SPSAReadaheadManager;
+import org.inlighting.sfm.readahead.StaticReadaheadManager;
 import org.inlighting.sfm.util.LruCache;
 import org.inlighting.sfm.util.SFMUtil;
 import org.slf4j.Logger;
@@ -434,7 +436,13 @@ public class SFMFileSystem extends FileSystem {
             SFMIndexReader sfmReader = SFMIndexReader.build(underLyingFS, sfmBasePath);
             ReadaheadManager readaheadManager = null;
             if (SFMConstants.ENABLE_CACHE) {
-                readaheadManager = new ReadaheadManager(underLyingFS, new Path(sfmBasePath, SFMConstants.MERGED_FILENAME));
+                switch (SFMConstants.READAHEAD_MANAGER_ENUM) {
+                    case spsa:
+                        readaheadManager = new SPSAReadaheadManager(underLyingFS, new Path(sfmBasePath, SFMConstants.MERGED_FILENAME));
+                        break;
+                    default:
+                        readaheadManager = new StaticReadaheadManager(underLyingFS, new Path(sfmBasePath, SFMConstants.MERGED_FILENAME));
+                }
             }
             SFMetaData newSFMetaData = new SFMetaData(sfmBasePath, sfmReader, readaheadManager);
             metaDataCache.put(sfmBasePath, newSFMetaData);

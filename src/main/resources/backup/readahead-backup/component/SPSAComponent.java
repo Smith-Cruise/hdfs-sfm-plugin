@@ -1,5 +1,6 @@
 package org.inlighting.sfm.readahead.component;
 
+import org.inlighting.sfm.util.SPSAUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,7 +8,7 @@ import java.util.Random;
 
 public class SPSAComponent implements ReadaheadComponent {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SPSAComponent.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SPSAUtil.class);
 
     // 表示将来的
     private NowCursor nowCursor;

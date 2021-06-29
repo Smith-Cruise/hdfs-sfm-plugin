@@ -1,21 +1,21 @@
-package org.inlighting.sfm.readahead.component;
+package org.inlighting.sfm.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Random;
 
-public class SPSAComponent implements ReadaheadComponent {
+public class SPSAUtil {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SPSAComponent.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SPSAUtil.class);
 
     // 表示将来的
     private NowCursor nowCursor;
 
     private final double[] DELTA_ARRAY = new double[]{-1, 1};
-    private double MIN_READAHEAD_SIZE;
-    private double MAX_READAHEAD_SIZE;
-    private double START_READAHEAD_SIZE;
+    private final double MIN_READAHEAD_SIZE;
+    private final double MAX_READAHEAD_SIZE;
+    private final double START_READAHEAD_SIZE;
 
     private double A;
     private double a;
@@ -35,8 +35,7 @@ public class SPSAComponent implements ReadaheadComponent {
     private double grad;
     private double x;
 
-    @Override
-    public void initialize(double minReadaheadSize, double maxReadaheadSize, double startReadaheadSize) {
+    public SPSAUtil(double minReadaheadSize, double maxReadaheadSize, double startReadaheadSize) {
         A=1;
         a=10;
         MIN_READAHEAD_SIZE = minReadaheadSize;
@@ -44,29 +43,19 @@ public class SPSAComponent implements ReadaheadComponent {
         START_READAHEAD_SIZE = startReadaheadSize;
         // recommend std
         c = (maxReadaheadSize - minReadaheadSize) / 2;
-        x = startReadaheadSize;
+        x = START_READAHEAD_SIZE;
         nowCursor = NowCursor.left;
-        LOG.info(String.format("Init SPSAComponent max:%fMB, min:%fMB, a:%f, c:%f, startSize:%fMB", MIN_READAHEAD_SIZE,
-                MAX_READAHEAD_SIZE, a, c, x));
+        LOG.info(String.format("Init SPSAComponent max:%f, min:%f, a:%f, c:%f, startSize:%f", MIN_READAHEAD_SIZE,
+                MAX_READAHEAD_SIZE, a, c, START_READAHEAD_SIZE));
     }
 
-    @Override
-    public void reInitialize() {
-//        nowCursor = NowCursor.left;
-//        x = START_READAHEAD_SIZE;
-//        k=0;
-//        LOG.info("Reinitialize SPSAComponent");
-    }
-
-
-    @Override
-    public int requestNextReadaheadSize(double lastTimeResult) {
+    public double requestNextReadaheadSize(double lastTimeResult) {
         // found global minimal
         switch (nowCursor) {
             case left:
-                return mb2Bytes(calXMinus());
+                return calXMinus();
             case right:
-                return mb2Bytes(calXPlus(lastTimeResult));
+                return calXPlus(lastTimeResult);
             case none:
                 calX(lastTimeResult);
                 return requestNextReadaheadSize(lastTimeResult);
@@ -74,15 +63,14 @@ public class SPSAComponent implements ReadaheadComponent {
         return 0;
     }
 
-    @Override
-    public int requestLastReadaheadSize() {
+    public double requestLastReadaheadSize() {
         switch (nowCursor) {
             case left:
-                return mb2Bytes(xPlus);
+                return xPlus;
             case right:
-                return mb2Bytes(xMinus);
+                return xMinus;
             case none:
-                return mb2Bytes(xPlus);
+                return xPlus;
             default:
                 LOG.error("This should not be happened!");
                 return 0;
@@ -90,7 +78,6 @@ public class SPSAComponent implements ReadaheadComponent {
     }
 
     private double calXMinus() {
-        LOG.debug("SPSA left, don't need lastTimeResult.");
         k+=1;
         ak = a / Math.pow(k+1.0+A, alpha);
         ck = c / Math.pow(k+1, gamma);
@@ -109,16 +96,12 @@ public class SPSAComponent implements ReadaheadComponent {
 
     private void calX(double xPlusResultTmp) {
         xPlusResult = xPlusResultTmp;
-        grad = (xPlusResult-xMinusResult) / (2*ck*delta);
+        grad = (xPlusResult-xMinusResult) / (2*ck) * delta;
         x = project(x-ak*grad);
         LOG.debug(String.format("Start %fth iteration, ak:%f, ck:%f, delta:%f, xPlus:%f, xPlusResult:%f, " +
-                        "xMinus:%f, xMinusResult:%f, grad:%f, resultX:%f", k, ak, ck, delta, xPlus, xPlusResult,
+                        "xMinus:%f, xMinusResult:%f, grad:%f, x:%f", k, ak, ck, delta, xPlus, xPlusResult,
                 xMinus, xMinusResult, grad, x));
         nowCursor = NowCursor.left;
-    }
-
-    private int mb2Bytes(double mb) {
-        return (int) Math.round(mb*1024*1024);
     }
 
     private double project(double x) {

@@ -31,16 +31,16 @@ public class ReadaheadTests {
         }
 
 
-//        for (int i=2000; i<2300; i++) {
-//            FileStatus file = fileStatus[i];
-//            FSDataInputStream in = fs.open(file.getPath());
-//            LineReader reader = new LineReader(in);
-//            int count = 0;
-//            while (reader.readLine(text) != 0) {
-//                count++;
-//            }
-//            assertEquals(count, 17725);
-//        }
+        for (int i=2000; i<2300; i++) {
+            FileStatus file = fileStatus[i];
+            FSDataInputStream in = fs.open(file.getPath());
+            LineReader reader = new LineReader(in);
+            int count = 0;
+            while (reader.readLine(text) != 0) {
+                count++;
+            }
+            assertEquals(count, 17725);
+        }
         fs.close();
     }
 

@@ -5,7 +5,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.inlighting.sfm.readahead.component.ReadaheadComponent;
 import org.inlighting.sfm.readahead.component.ReadaheadLock;
-import org.inlighting.sfm.readahead.component.SPSAComponent;
+import org.inlighting.sfm.util.SPSAUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +15,7 @@ import java.nio.ByteBuffer;
 // ReadaheadManager should created for each sfmBasePath, if enable readahead.
 public class ReadaheadManager {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ReadaheadManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ReadaheadManager11.class);
 
     private final ReadaheadComponent readaheadComponent;
     private final FSDataInputStream UNDER_LYING_STREAM;
@@ -29,7 +29,7 @@ public class ReadaheadManager {
     private ReadaheadEntity aheadWindow;
 
     public ReadaheadManager(FileSystem fs, Path mergedFilePath) throws IOException {
-        readaheadComponent = new SPSAComponent();
+        readaheadComponent = new SPSAUtil();
         readaheadComponent.initialize(10, 50, 10);
         UNDER_LYING_STREAM = fs.open(mergedFilePath);
         LOG.info("Readahead manager create succeed for: " + mergedFilePath.toUri().getPath());
