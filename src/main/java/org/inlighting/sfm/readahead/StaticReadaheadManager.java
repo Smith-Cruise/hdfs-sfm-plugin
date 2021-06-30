@@ -16,7 +16,7 @@ public class StaticReadaheadManager extends AbstractReadaheadManager {
 
     public StaticReadaheadManager(FileSystem fs, Path mergedFilePath) throws IOException {
         super(fs, mergedFilePath);
-        LOG.debug("StaticReadaheadManager initialized.");
+        LOG.debug("StaticReadaheadManager initialized. Static size is "+STATIC_READAHEAD_SIZE+"Mb.");
     }
 
     @Override
