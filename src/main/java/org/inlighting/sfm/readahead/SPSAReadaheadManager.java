@@ -14,17 +14,24 @@ public class SPSAReadaheadManager extends AbstractReadaheadManager{
     private static final Logger LOG = LoggerFactory.getLogger(SPSAReadaheadManager.class);
 
     // unit is MB
-    private final double MIN_READAHEAD_SIZE = 1;
-    private final double MAX_READAHEAD_SIZE = 20;
+    private final double MIN_READAHEAD_SIZE = 0.1;
+    private final double MAX_READAHEAD_SIZE = 10;
     private final double START_READAHEAD_SIZE = 5;
     private final double REAL_START_READAHEAD_SIZE;
 
     private final SPSAUtil SPSA;
 
+    // 1MB
+    private final int START_REMAIN_BYTES = 5*1024*1024;
+    private int remainBytes = START_REMAIN_BYTES;
+    private long remainStartReadTime = 0;
+    private double lastSpeed;
+    private boolean lastUsed = false;
+
     public SPSAReadaheadManager(FileSystem fs, Path mergedFilePath) throws IOException {
         super(fs, mergedFilePath);
         SPSA = new SPSAUtil(MIN_READAHEAD_SIZE, MAX_READAHEAD_SIZE, START_READAHEAD_SIZE);
-        REAL_START_READAHEAD_SIZE = SPSA.requestNextReadaheadSize(111);
+        REAL_START_READAHEAD_SIZE = getReadaheadSize();
         LOG.debug("SPSAReadaheadManager initialized.");
     }
 
@@ -37,6 +44,10 @@ public class SPSAReadaheadManager extends AbstractReadaheadManager{
         if (curWindow == null) {
             // only run once.
             LOG.debug("CurWindow didn't existed, create it only once!");
+
+            // 开始对readahead计时
+            remainStartReadTime = System.currentTimeMillis();
+
             curWindow = readahead(position, mb2Bytes(REAL_START_READAHEAD_SIZE));
         }
 
@@ -48,9 +59,15 @@ public class SPSAReadaheadManager extends AbstractReadaheadManager{
                     int read = readaheadEntity.read(b, readPosition, readOff, needLen);
                     LOG.debug(String.format("Read from cached window, [%d-%d)", readPosition, readPosition+read));
                     needLen = needLen - read;
+
+                    // 减掉成功读取的size
+                    remainBytes-=read;
+                    checkRemainBytes();
+
                     if (needLen <= 0) {
                         // return read;
                         // Do not return read, because it may continue the last time read.
+
                         return len;
                     } else {
                         readPosition+=read;
@@ -61,6 +78,11 @@ public class SPSAReadaheadManager extends AbstractReadaheadManager{
                 int read = curWindow.read(b, readPosition, readOff, needLen);
                 LOG.debug(String.format("Read from curWindow, [%d-%d)", readPosition, readPosition+read));
                 needLen = needLen - read;
+
+                // 减掉成功读取的size
+                remainBytes-=read;
+                checkRemainBytes();
+
                 if (needLen <= 0) {
                     // return read;
                     // Do not return read, because it may continue the last time read.
@@ -68,9 +90,8 @@ public class SPSAReadaheadManager extends AbstractReadaheadManager{
                 } else {
                     readPosition+=read;
                     readOff+=read;
-                    double lastHitSpend = curWindow.getHitSpend();
                     READAHEAD_CACHES.put(curWindow.getStartPosition(), curWindow);
-                    double mb = SPSA.requestNextReadaheadSize(lastHitSpend);
+                    double mb = getReadaheadSize();
                     int bytes = mb2Bytes(mb);
                     LOG.debug(String.format("Cal next readahead size %fMB, %dBytes", mb, bytes));
                     curWindow = readahead(curWindow.getStartPosition()+curWindow.getReadaheadLength(), bytes);
@@ -78,7 +99,7 @@ public class SPSAReadaheadManager extends AbstractReadaheadManager{
             } else {
                 LOG.debug("No window hit.");
                 READAHEAD_CACHES.put(curWindow.getStartPosition(), curWindow);
-                double mb = SPSA.requestLastReadaheadSize();
+                double mb = getReadaheadSize();
                 int bytes = mb2Bytes(mb);
                 LOG.debug(String.format("Get last readahead size %fMb, %dBytes", mb, bytes));
                 curWindow = readahead(readPosition, bytes);
@@ -86,5 +107,35 @@ public class SPSAReadaheadManager extends AbstractReadaheadManager{
         }
 
         throw new IOException("readFully failed.");
+    }
+
+    private void calLastSpeed(int len, long startTime, long endTime) {
+        if (!lastUsed) {
+            LOG.error("Never used last speed.");
+            return;
+        }
+
+        double second = (endTime-startTime) / 1000.0;
+        double mb = len / 1024.0 / 1024.0;
+        lastSpeed =  (mb / second);
+        LOG.info(String.format("Len: %fMb, Seconds: %fSec, Cal speed: %f", mb, second, lastSpeed));
+        lastUsed = false;
+    }
+
+    private double getReadaheadSize() {
+        if (lastUsed) {
+            return SPSA.requestLastReadaheadSize();
+        } else {
+            lastUsed = true;
+            return SPSA.requestNextReadaheadSize(-lastSpeed);
+        }
+    }
+
+    private void checkRemainBytes() {
+        if (remainBytes<=0) {
+            calLastSpeed(START_REMAIN_BYTES, remainStartReadTime, System.currentTimeMillis());
+            remainBytes = START_REMAIN_BYTES;
+            remainStartReadTime = System.currentTimeMillis();
+        }
     }
 }

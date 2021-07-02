@@ -41,10 +41,6 @@ public class ReadaheadEntity implements Comparable<ReadaheadEntity> {
         return (double) used / (double) readaheadLength * 100;
     }
 
-    public double getHitSpend() {
-        return (double) fetchTime / ((double) used / 1024 / 1024);
-    }
-
     public int read(byte[] b, long position, int offset, int len) throws IOException {
         byteBuffer.position((int)(position - startPosition));
         int remain = byteBuffer.remaining();
@@ -61,8 +57,8 @@ public class ReadaheadEntity implements Comparable<ReadaheadEntity> {
 
     @Override
     public String toString() {
-        return String.format("Start position: %d, readahead length: %d, used: %d, fetchTime: %d, hit rate: %f, hit spend: %f",
-                startPosition, readaheadLength, used, fetchTime, getHitRate(), getHitSpend());
+        return String.format("Start position: %d, readahead length: %d, used: %d, fetchTime: %d, hit rate: %f",
+                startPosition, readaheadLength, used, fetchTime, getHitRate());
     }
 
     @Override
