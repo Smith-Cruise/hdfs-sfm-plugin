@@ -12,7 +12,7 @@ public class StaticReadaheadManager extends AbstractReadaheadManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(StaticReadaheadManager.class);
 
-    private final double STATIC_READAHEAD_SIZE = 0.375;
+    private final double STATIC_READAHEAD_SIZE = 0.125;
 
     public StaticReadaheadManager(FileSystem fs, Path mergedFilePath) throws IOException {
         super(fs, mergedFilePath);
