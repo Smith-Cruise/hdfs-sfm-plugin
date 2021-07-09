@@ -15,7 +15,7 @@ public class SPSAReadaheadManager extends AbstractReadaheadManager{
 
     // unit is MB
     private final double MIN_READAHEAD_SIZE = 0.1;
-    private final double MAX_READAHEAD_SIZE = 10;
+    private final double MAX_READAHEAD_SIZE = 2;
     private final double START_READAHEAD_SIZE = 5;
     private final double REAL_START_READAHEAD_SIZE;
 

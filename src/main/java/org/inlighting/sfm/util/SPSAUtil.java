@@ -38,12 +38,12 @@ public class SPSAUtil {
     // a,c = (max-min)/2
     public SPSAUtil(double minReadaheadSize, double maxReadaheadSize, double startReadaheadSize) {
         A=1;
-        a=10;
+        a=(maxReadaheadSize-minReadaheadSize)/2;
         MIN_READAHEAD_SIZE = minReadaheadSize;
         MAX_READAHEAD_SIZE = maxReadaheadSize;
         START_READAHEAD_SIZE = startReadaheadSize;
         // first step size
-        c = 4;
+        c = 1;
         x = START_READAHEAD_SIZE;
         nowCursor = NowCursor.left;
         LOG.info(String.format("Init SPSAComponent max:%f, min:%f, a:%f, c:%f, startSize:%f", MIN_READAHEAD_SIZE,
