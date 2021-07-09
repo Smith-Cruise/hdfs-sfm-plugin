@@ -11,10 +11,13 @@ import java.io.IOException;
 
 public class Uploader {
     public static void main(String[] args) throws IOException {
+        long startTime = System.currentTimeMillis();
         String localFolder = "/home/smith/1w-articles/1w-articles";
-        String hdfsFolder = "/1w-articles.sfm";
+        String hdfsFolder = "/1w-test.sfm";
         Path path = new Path("sfm://master.lab.com:9000"+hdfsFolder);
-        FileSystem fs = path.getFileSystem(new Configuration());
+        Configuration configuration = new Configuration();
+        configuration.set("dfs.replication", "2");
+        FileSystem fs = path.getFileSystem(configuration);
         File dir = new File(localFolder);
         if (! dir.isDirectory()) {
             return;
@@ -27,6 +30,8 @@ public class Uploader {
             out.close();
         }
         fs.close();
+        long endTime = System.currentTimeMillis();
+        System.out.println(endTime-startTime);
     }
 
     private static void write(FSDataOutputStream out, File file) throws IOException {
