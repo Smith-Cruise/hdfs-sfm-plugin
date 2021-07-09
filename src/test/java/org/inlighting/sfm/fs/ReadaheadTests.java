@@ -15,7 +15,7 @@ public class ReadaheadTests {
 
     @Test
     void read() throws Exception {
-        Path path = new Path("sfm://single.lab.com:9000/articles.sfm");
+        Path path = new Path("sfm://master.lab.com:9000/2w-articles.sfm");
         FileSystem fs = path.getFileSystem(new Configuration());
         FileStatus[] fileStatus = fs.listStatus(path);
         Text text = new Text();
