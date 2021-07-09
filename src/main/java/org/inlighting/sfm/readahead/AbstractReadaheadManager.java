@@ -33,7 +33,7 @@ public abstract class AbstractReadaheadManager implements ReadaheadManager {
     public ReadaheadEntity readahead(long startPosition, int size) throws IOException {
         ByteBuffer byteBuffer = ByteBuffer.allocateDirect(size);
         // todo
-        UNDER_LYING_STREAM.setReadahead((long) size);
+//        UNDER_LYING_STREAM.setReadahead((long) size);
         LOG.debug(String.format("Readahead get [%d, %d) size:%dBytes, size:%fKb, size:%fMb", startPosition, startPosition+size,
                 size, (double) size / 1024, (double) size / 1024 / 1024));
         long start = System.currentTimeMillis();
