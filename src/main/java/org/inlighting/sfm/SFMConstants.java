@@ -24,5 +24,5 @@ public class SFMConstants {
     // readahead
     public static final boolean ENABLE_CACHE = true;
     public static final int READAHEAD_CACHE_NUM = 10;
-    public static final ReadaheadManagerEnum READAHEAD_MANAGER_ENUM = ReadaheadManagerEnum.spsa;
+    public static final ReadaheadManagerEnum READAHEAD_MANAGER_ENUM = ReadaheadManagerEnum.single;
 }
