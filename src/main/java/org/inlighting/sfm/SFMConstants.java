@@ -22,7 +22,7 @@ public class SFMConstants {
     public static final int MAX_NUM_INDEX = 100000;
 
     // readahead
-    public static final boolean ENABLE_CACHE = true;
+    public static final boolean ENABLE_CACHE = false;
     public static final int READAHEAD_CACHE_NUM = 10;
     public static final ReadaheadManagerEnum READAHEAD_MANAGER_ENUM = ReadaheadManagerEnum.spsa;
 }
