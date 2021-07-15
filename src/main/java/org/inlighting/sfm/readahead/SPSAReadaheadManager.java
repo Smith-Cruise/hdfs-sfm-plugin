@@ -22,7 +22,7 @@ public class SPSAReadaheadManager extends AbstractReadaheadManager{
     private final SPSAUtil SPSA;
 
     // 1MB
-    private final int START_REMAIN_BYTES = 5*1024*1024;
+    private final int START_REMAIN_BYTES = 20*1024*1024;
     private int remainBytes = START_REMAIN_BYTES;
     private long remainStartReadTime = 0;
     private double lastSpeed;
