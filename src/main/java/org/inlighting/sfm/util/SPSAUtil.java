@@ -39,7 +39,7 @@ public class SPSAUtil {
     public SPSAUtil(double minReadaheadSize, double maxReadaheadSize, double startReadaheadSize) {
         A=1;
 //        a=(maxReadaheadSize-minReadaheadSize)/2;
-        a=5;
+        a=8;
         MIN_READAHEAD_SIZE = minReadaheadSize;
         MAX_READAHEAD_SIZE = maxReadaheadSize;
         START_READAHEAD_SIZE = startReadaheadSize;

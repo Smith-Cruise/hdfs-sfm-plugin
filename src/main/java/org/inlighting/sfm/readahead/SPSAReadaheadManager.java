@@ -117,7 +117,7 @@ public class SPSAReadaheadManager extends AbstractReadaheadManager{
 
         double second = (endTime-startTime) / 1000.0;
         double mb = len / 1024.0 / 1024.0;
-        lastSpeed =  (mb / second) / 50;
+        lastSpeed =  (mb / second) / 30;
         LOG.info(String.format("Len: %fMb, Seconds: %fSec, Cal speed: %f", mb, second, lastSpeed));
         lastUsed = false;
     }
