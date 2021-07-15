@@ -10,7 +10,7 @@ public class SPSAUtilTests {
         SPSAUtil spsa = new SPSAUtil(1, 10, 5);
         double firstNum = spsa.requestNextReadaheadSize(111);
         double lastResult = func(firstNum);
-        for (int i=0; i<2000; i++) {
+        for (int i=0; i<1000; i++) {
             double num = spsa.requestNextReadaheadSize(lastResult);
             lastResult = func(num);
         }

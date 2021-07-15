@@ -39,7 +39,7 @@ public class SPSAUtil {
     public SPSAUtil(double minReadaheadSize, double maxReadaheadSize, double startReadaheadSize) {
         A=1;
 //        a=(maxReadaheadSize-minReadaheadSize)/2;
-        a=2;
+        a=5;
         MIN_READAHEAD_SIZE = minReadaheadSize;
         MAX_READAHEAD_SIZE = maxReadaheadSize;
         START_READAHEAD_SIZE = startReadaheadSize;
@@ -82,7 +82,7 @@ public class SPSAUtil {
     private double calXMinus() {
         k+=1;
         ak = a / Math.pow(k+1.0+A, alpha);
-        ck = c / Math.pow(k+1, gamma);
+        ck = c / Math.pow(k+1.0, gamma);
         delta = generateDelta();
         xMinus = project(x-ck*delta);
         nowCursor = NowCursor.right;
