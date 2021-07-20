@@ -1,2 +1,2 @@
 # SFM
-Developing...
+The document is preparing.
